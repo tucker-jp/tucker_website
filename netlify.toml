@@ -1,6 +1,6 @@
 [build]
   publish = "."
-  command = "node generate-index.js"
+  command = "npm install && node scripts/optimize-images.js && node generate-index.js"
 
 [[redirects]]
   from = "/admin"

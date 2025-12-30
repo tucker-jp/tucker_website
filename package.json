@@ -1,0 +1,15 @@
+{
+  "name": "tucker-pippin-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tucker Pippin personal website with CMS",
+  "scripts": {
+    "build": "node scripts/optimize-images.js && node generate-index.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
