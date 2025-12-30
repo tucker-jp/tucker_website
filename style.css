@@ -270,7 +270,7 @@ main {
     height: 100%;
     width: 280px;
     overflow: hidden;
-    opacity: 0.15;
+    opacity: 0.9;
 }
 
 .rail-left {
