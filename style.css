@@ -242,10 +242,57 @@ blockquote {
     margin: 0 auto;
     padding: var(--spacing-xl) var(--spacing-md);
     flex: 1;
+    position: relative;
+    z-index: 1;
 }
 
 main {
     min-height: 60vh;
+}
+
+/* ===================================
+   HOMEPAGE PHOTO RAILS
+   =================================== */
+
+.photo-rails {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.rail {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 280px;
+    overflow: hidden;
+    opacity: 0.15;
+}
+
+.rail-left {
+    left: 0;
+}
+
+.rail-right {
+    right: 0;
+}
+
+.rail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Hide rails on tablets and mobile */
+@media (max-width: 1400px) {
+    .photo-rails {
+        display: none;
+    }
 }
 
 /* ===================================
