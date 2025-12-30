@@ -3,14 +3,6 @@
   command = "node generate-index.js"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
-  conditions = {Role = ["admin"]}
-
-# Redirect /admin to /admin/index.html
-[[redirects]]
   from = "/admin"
   to = "/admin/index.html"
   status = 200
