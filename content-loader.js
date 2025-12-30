@@ -155,14 +155,22 @@ async function loadCollection(collectionName) {
             files.map(async (filename) => {
                 const path = `/content/${collectionName}/${filename}`;
                 try {
-                    const { frontmatter, html } = await fetchMarkdownFile(path);
+                    const response = await fetch(path);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch ${path}`);
+                    }
+                    const fullMarkdown = await response.text();
+                    const { frontmatter, body, html } = parseFrontmatter(fullMarkdown);
+                    const htmlContent = markdownToHtml(body);
+
                     return {
                         slug: getSlug(filename),
                         title: frontmatter.title || 'Untitled',
                         date: frontmatter.date || '',
                         description: frontmatter.description || '',
                         cover_image: frontmatter.cover_image || '',
-                        html,
+                        readingTime: calculateReadingTime(fullMarkdown),
+                        html: htmlContent,
                         frontmatter
                     };
                 } catch (error) {
@@ -186,7 +194,13 @@ async function loadCollection(collectionName) {
 // Load a single content item by slug
 async function loadSingleContent(collectionName, slug) {
     const path = `/content/${collectionName}/${slug}.md`;
-    const { frontmatter, html } = await fetchMarkdownFile(path);
+    const response = await fetch(path);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch ${path}`);
+    }
+    const fullMarkdown = await response.text();
+    const { frontmatter, body } = parseFrontmatter(fullMarkdown);
+    const html = markdownToHtml(body);
 
     return {
         slug,
@@ -194,6 +208,7 @@ async function loadSingleContent(collectionName, slug) {
         date: frontmatter.date || '',
         description: frontmatter.description || '',
         cover_image: frontmatter.cover_image || '',
+        readingTime: calculateReadingTime(fullMarkdown),
         html,
         frontmatter
     };
@@ -206,6 +221,30 @@ function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
+}
+
+// Calculate reading time from markdown content
+// Assumes ~200 words per minute
+function calculateReadingTime(markdown) {
+    if (!markdown) return 0;
+
+    // Remove frontmatter
+    const contentOnly = markdown.replace(/^---[\s\S]*?---/, '');
+
+    // Remove markdown syntax for more accurate word count
+    const cleanText = contentOnly
+        .replace(/```[\s\S]*?```/g, '') // Remove code blocks
+        .replace(/`[^`]+`/g, '') // Remove inline code
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '$1') // Images -> alt text
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1') // Links -> link text
+        .replace(/[#*_~`]/g, '') // Remove markdown symbols
+        .replace(/\n+/g, ' '); // Newlines to spaces
+
+    const words = cleanText.trim().split(/\s+/).filter(word => word.length > 0);
+    const wordCount = words.length;
+    const minutes = Math.ceil(wordCount / 200);
+
+    return minutes || 1; // Minimum 1 minute
 }
 
 // HTML escape utility
@@ -224,4 +263,5 @@ function escapeHtml(text) {
 window.loadCollection = loadCollection;
 window.loadSingleContent = loadSingleContent;
 window.formatDate = formatDate;
+window.calculateReadingTime = calculateReadingTime;
 window.escapeHtml = escapeHtml;

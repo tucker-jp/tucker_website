@@ -45,12 +45,12 @@
 
     <script src="/content-loader.js"></script>
     <script>
-        // Load 3 most recent blog posts for homepage
+        // Load 5 most recent blog posts for homepage
         window.addEventListener('DOMContentLoaded', async () => {
             const container = document.getElementById('recent-posts');
             try {
                 const posts = await loadCollection('blog');
-                const recent = posts.slice(0, 3);
+                const recent = posts.slice(0, 5);
 
                 if (recent.length === 0) {
                     container.innerHTML = '<p class="empty">No posts yet. Check back soon!</p>';
@@ -60,8 +60,12 @@
                 container.innerHTML = recent.map(post => `
                     <article class="post-preview">
                         <h3><a href="/blog.html?post=${post.slug}">${escapeHtml(post.title)}</a></h3>
-                        <time class="post-date">${formatDate(post.date)}</time>
-                        <p>${escapeHtml(post.description || '')}</p>
+                        <div class="post-meta">
+                            <time>${formatDate(post.date)}</time>
+                            <span class="separator">•</span>
+                            <span class="reading-time">${post.readingTime} min read</span>
+                        </div>
+                        <p class="post-description">${escapeHtml(post.description || '')}</p>
                     </article>
                 `).join('');
             } catch (error) {
