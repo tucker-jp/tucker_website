@@ -4,9 +4,10 @@ A clean, editorial-style personal website with integrated CMS. Built with static
 
 ## Architecture
 
-- **Frontend**: Static HTML + CSS + JavaScript (no build step)
+- **Frontend**: Static HTML + CSS + JavaScript
 - **CMS**: Decap CMS at `/admin` for blog and essay management
 - **Content**: Markdown files with YAML frontmatter
+- **Build**: Tiny Node.js script to auto-generate post indexes
 - **Hosting**: Netlify (static deployment)
 - **Auth**: Netlify Identity + Git Gateway
 
@@ -16,9 +17,10 @@ A clean, editorial-style personal website with integrated CMS. Built with static
 - Long-form reading optimized typography
 - Client-side Markdown rendering
 - CMS-driven Blog and Essays sections
+- Automatic post index generation on every deploy
 - Static Projects and Photos pages (placeholders)
 - Mobile-friendly and accessible
-- No build pipeline or bundlers required
+- No framework, no bundlers—just vanilla HTML/CSS/JS
 
 ## CMS-Driven Content
 
@@ -42,10 +44,12 @@ See [CMS-SETUP.md](./CMS-SETUP.md) for complete deployment instructions.
 **Quick start:**
 
 1. Push to GitHub
-2. Deploy to Netlify (no build command, publish from root)
+2. Deploy to Netlify (build command: `node generate-index.js`, publish from root)
 3. Enable Netlify Identity + Git Gateway
 4. Invite yourself as a CMS user
 5. Log in at `/admin` and start writing
+
+**Note**: The build command runs automatically on every deploy to generate post indexes. This is NOT a framework build step—it's a tiny 30-line Node.js script that reads markdown files and creates index.json files. You never need to touch it.
 
 ## Local Development
 
@@ -75,10 +79,10 @@ Then visit `http://localhost:8000`
 │   └── config.yml          # CMS configuration
 ├── content/
 │   ├── blog/
-│   │   ├── manifest.json   # Blog post listing
+│   │   ├── index.json      # Auto-generated post index
 │   │   └── *.md           # Blog post files
 │   └── essays/
-│       ├── manifest.json   # Essay listing
+│       ├── index.json      # Auto-generated essay index
 │       └── *.md           # Essay files
 ├── uploads/                # CMS-uploaded images
 ├── index.html              # Homepage
@@ -89,6 +93,7 @@ Then visit `http://localhost:8000`
 ├── 404.html                # 404 error page
 ├── style.css               # Site-wide styles
 ├── content-loader.js       # Markdown parser + content loader
+├── generate-index.js       # Build script (auto-generates index.json files)
 ├── netlify.toml            # Netlify config
 ├── robots.txt              # SEO
 ├── CMS-SETUP.md            # Deployment guide

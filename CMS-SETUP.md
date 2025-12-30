@@ -44,7 +44,7 @@ This guide walks you through deploying your personal website to Netlify with Dec
    - Select your `tucker-pippin-website` repository
 
 3. **Configure build settings**:
-   - **Build command**: Leave EMPTY (no build step required)
+   - **Build command**: `node generate-index.js` (auto-generates post indexes)
    - **Publish directory**: `.` (dot means root)
    - **Branch to deploy**: `main`
 
@@ -107,8 +107,8 @@ Netlify Identity is required for CMS authentication.
 3. **How it works**:
    - When you publish, Decap CMS commits the Markdown file to your GitHub repo
    - Netlify automatically rebuilds and deploys your site (usually within 30 seconds)
+   - The build step auto-generates post indexes—you never need to touch it
    - Your new post appears on your live site automatically
-   - Posts are discovered automatically—no manual configuration needed
 
 ---
 
@@ -208,7 +208,6 @@ Same as blog posts, but click "Essays" instead.
 - Check the "Deploys" tab in Netlify dashboard
 - Look for failed builds
 - If a new post still doesn't appear, hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R)
-- New posts are cached in browser localStorage for performance—refresh clears the cache
 
 ### Images not loading
 - Check that image paths start with `/uploads/`

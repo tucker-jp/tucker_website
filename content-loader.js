@@ -1,8 +1,8 @@
 /**
  * CONTENT LOADER
  * Client-side Markdown content loader for Tucker Pippin website
- * Auto-discovers posts via GitHub API (works with Netlify/Decap CMS)
- * No manual manifest files required
+ * Fetches auto-generated index files to discover posts
+ * No manual configuration required
  */
 
 // Simple YAML frontmatter parser
@@ -132,98 +132,23 @@ function getSlug(filename) {
     return filename.replace('.md', '');
 }
 
-// Auto-discover markdown files in a directory
-// Uses a simple approach: try to fetch common file patterns
-// Works because Decap CMS creates files with predictable naming
-async function discoverMarkdownFiles(collectionName) {
-    const files = [];
-
-    // Strategy: Use Netlify's /.netlify/functions/list-files endpoint if available
-    // Otherwise, fall back to trying known files from the initial content
-
-    // First, try to use a serverless function if it exists
-    try {
-        const response = await fetch(`/.netlify/functions/list-files?collection=${collectionName}`);
-        if (response.ok) {
-            const data = await response.json();
-            return data.files || [];
-        }
-    } catch (e) {
-        // Serverless function doesn't exist, use fallback
-    }
-
-    // Fallback: Try to fetch a directory listing via GitHub API for deployed sites
-    // This works if the site is public and we can construct the GitHub raw URL
-    const currentUrl = window.location.origin;
-
-    // For local development and deployed sites: scan for files by attempting fetches
-    // We'll use a smart approach: start with known files, then cache discovered files
-    const knownFiles = getKnownFiles(collectionName);
-
-    for (const filename of knownFiles) {
-        const path = `/content/${collectionName}/${filename}`;
-        try {
-            const response = await fetch(path, { method: 'HEAD' });
-            if (response.ok) {
-                files.push(filename);
-            }
-        } catch (e) {
-            // File doesn't exist, skip
-        }
-    }
-
-    return files;
-}
-
-// Get list of known files (initially from example content)
-// This list will grow as users add more content via CMS
-function getKnownFiles(collectionName) {
-    // Start with initial example files
-    const initialFiles = {
-        'blog': [
-            '2025-01-15-welcome.md',
-            '2025-01-20-building-in-public.md'
-        ],
-        'essays': [
-            '2025-01-10-attention-as-currency.md'
-        ]
-    };
-
-    // Try to load from localStorage cache (updated when we discover new files)
-    const cacheKey = `files_${collectionName}`;
-    const cached = localStorage.getItem(cacheKey);
-
-    if (cached) {
-        try {
-            const cachedFiles = JSON.parse(cached);
-            // Merge with initial files to ensure we don't lose any
-            const allFiles = new Set([...initialFiles[collectionName] || [], ...cachedFiles]);
-            return Array.from(allFiles);
-        } catch (e) {
-            // Invalid cache, ignore
-        }
-    }
-
-    return initialFiles[collectionName] || [];
-}
-
-// Update the cache of known files
-function updateFileCache(collectionName, files) {
-    const cacheKey = `files_${collectionName}`;
-    localStorage.setItem(cacheKey, JSON.stringify(files));
-}
-
 // Load all posts from a collection (blog or essays)
 async function loadCollection(collectionName) {
     try {
-        const files = await discoverMarkdownFiles(collectionName);
+        // Fetch the auto-generated index file
+        const indexPath = `/content/${collectionName}/index.json`;
+        const indexResponse = await fetch(indexPath);
 
-        if (files.length === 0) {
+        if (!indexResponse.ok) {
+            console.warn(`No index found at ${indexPath}`);
             return [];
         }
 
-        // Update cache for next time
-        updateFileCache(collectionName, files);
+        const files = await indexResponse.json();
+
+        if (!Array.isArray(files) || files.length === 0) {
+            return [];
+        }
 
         // Fetch all markdown files
         const posts = await Promise.all(
@@ -294,16 +219,6 @@ function escapeHtml(text) {
     };
     return String(text).replace(/[&<>"']/g, m => map[m]);
 }
-
-// Manual cache refresh function (for use in CMS workflow)
-// Call this after publishing new content to discover new files
-window.refreshContentCache = async function() {
-    const collections = ['blog', 'essays'];
-    for (const collection of collections) {
-        await loadCollection(collection);
-    }
-    console.log('Content cache refreshed');
-};
 
 // Export functions to global scope
 window.loadCollection = loadCollection;
