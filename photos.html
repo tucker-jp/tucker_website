@@ -26,13 +26,214 @@
             <p class="page-intro">Images worth remembering.</p>
         </header>
 
-        <div class="static-content">
-            <p>This section is under construction. I'll be adding a curated selection of photography soon.</p>
+        <div id="photo-grid" class="photo-grid">
+            <p class="loading">Loading photos...</p>
         </div>
     </main>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+        <button class="lightbox-prev" aria-label="Previous photo">‹</button>
+        <button class="lightbox-next" aria-label="Next photo">›</button>
+        <div class="lightbox-content">
+            <img id="lightbox-image" src="" alt="">
+            <div class="lightbox-info">
+                <h2 id="lightbox-title"></h2>
+                <p id="lightbox-caption"></p>
+                <div class="lightbox-meta">
+                    <span id="lightbox-location"></span>
+                    <span id="lightbox-date"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <p>&copy; 2025 Tucker Pippin. All rights reserved.</p>
     </footer>
+
+    <script src="/content-loader.js"></script>
+    <script>
+        let photos = [];
+        let currentPhotoIndex = 0;
+
+        // Load and display photos
+        window.addEventListener('DOMContentLoaded', async () => {
+            const container = document.getElementById('photo-grid');
+
+            try {
+                // Fetch the photo index
+                const indexResponse = await fetch('/content/photos/index.json');
+
+                if (!indexResponse.ok) {
+                    container.innerHTML = '<p class="empty">No photos yet. Check back soon!</p>';
+                    return;
+                }
+
+                const files = await indexResponse.json();
+
+                if (!Array.isArray(files) || files.length === 0) {
+                    container.innerHTML = '<p class="empty">No photos yet. Check back soon!</p>';
+                    return;
+                }
+
+                // Fetch all photo files
+                const photoPromises = files.map(async (filename) => {
+                    const path = `/content/photos/${filename}`;
+                    try {
+                        const response = await fetch(path);
+                        if (!response.ok) return null;
+
+                        const markdown = await response.text();
+                        const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
+                        const match = markdown.match(frontmatterRegex);
+
+                        if (!match) return null;
+
+                        const frontmatterText = match[1];
+                        const frontmatter = {};
+
+                        frontmatterText.split('\n').forEach(line => {
+                            const colonIndex = line.indexOf(':');
+                            if (colonIndex === -1) return;
+
+                            const key = line.substring(0, colonIndex).trim();
+                            let value = line.substring(colonIndex + 1).trim();
+
+                            if ((value.startsWith('"') && value.endsWith('"')) ||
+                                (value.startsWith("'") && value.endsWith("'"))) {
+                                value = value.slice(1, -1);
+                            }
+
+                            frontmatter[key] = value;
+                        });
+
+                        return {
+                            title: frontmatter.title || 'Untitled',
+                            date: frontmatter.date || '',
+                            photo: frontmatter.photo || '',
+                            caption: frontmatter.caption || '',
+                            location: frontmatter.location || '',
+                            description: frontmatter.description || ''
+                        };
+                    } catch (error) {
+                        console.error(`Error loading ${path}:`, error);
+                        return null;
+                    }
+                });
+
+                photos = (await Promise.all(photoPromises))
+                    .filter(photo => photo !== null && photo.photo)
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (photos.length === 0) {
+                    container.innerHTML = '<p class="empty">No photos yet. Check back soon!</p>';
+                    return;
+                }
+
+                // Render photos
+                container.innerHTML = '';
+                photos.forEach((photo, index) => {
+                    const photoItem = document.createElement('div');
+                    photoItem.className = 'photo-item';
+                    photoItem.setAttribute('data-index', index);
+
+                    const img = document.createElement('img');
+                    img.src = photo.photo;
+                    img.alt = photo.title;
+                    img.loading = 'lazy';
+
+                    // Calculate masonry row span after image loads
+                    img.onload = function() {
+                        const rowHeight = 10; // matches grid-auto-rows in CSS
+                        const rowGap = 32; // matches gap in CSS (2rem = 32px)
+                        const rowSpan = Math.ceil((this.clientHeight + rowGap) / (rowHeight + rowGap));
+                        photoItem.style.gridRowEnd = `span ${rowSpan}`;
+                    };
+
+                    photoItem.appendChild(img);
+                    photoItem.addEventListener('click', () => openLightbox(index));
+                    container.appendChild(photoItem);
+                });
+
+            } catch (error) {
+                console.error('Error loading photos:', error);
+                container.innerHTML = '<p class="error">Unable to load photos.</p>';
+            }
+        });
+
+        // Lightbox functions
+        function openLightbox(index) {
+            currentPhotoIndex = index;
+            const photo = photos[index];
+
+            document.getElementById('lightbox-image').src = photo.photo;
+            document.getElementById('lightbox-image').alt = photo.title;
+            document.getElementById('lightbox-title').textContent = photo.title;
+            document.getElementById('lightbox-caption').textContent = photo.caption;
+            document.getElementById('lightbox-location').textContent = photo.location;
+            document.getElementById('lightbox-date').textContent = formatDate(photo.date);
+
+            document.getElementById('lightbox').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function nextPhoto() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+            openLightbox(currentPhotoIndex);
+        }
+
+        function prevPhoto() {
+            currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+            openLightbox(currentPhotoIndex);
+        }
+
+        // Event listeners for lightbox
+        document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+        document.querySelector('.lightbox-next').addEventListener('click', nextPhoto);
+        document.querySelector('.lightbox-prev').addEventListener('click', prevPhoto);
+
+        // Close on background click
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox.style.display !== 'flex') return;
+
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextPhoto();
+            if (e.key === 'ArrowLeft') prevPhoto();
+        });
+
+        // Touch swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('lightbox').addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.getElementById('lightbox').addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchEndX < touchStartX - swipeThreshold) nextPhoto();
+            if (touchEndX > touchStartX + swipeThreshold) prevPhoto();
+        }
+    </script>
 </body>
 </html>

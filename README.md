@@ -28,6 +28,7 @@ You can edit these sections via the CMS at `/admin`:
 
 - **Blog** (`/blog.html`) — Shorter posts and updates
 - **Essays** (`/essays.html`) — Longer-form writing
+- **Photos** (`/photos.html`) — Photography gallery with masonry layout
 
 ## Static Content
 
@@ -35,7 +36,6 @@ These pages require code edits:
 
 - **Home** (`/index.html`) — Landing page with intro
 - **Projects** (`/projects.html`) — Portfolio/work showcase
-- **Photos** (`/photos.html`) — Photography gallery
 
 ## Deployment
 
@@ -49,7 +49,7 @@ See [CMS-SETUP.md](./CMS-SETUP.md) for complete deployment instructions.
 4. Invite yourself as a CMS user
 5. Log in at `/admin` and start writing
 
-**Note**: The build command runs automatically on every deploy to generate post indexes. This is NOT a framework build step—it's a tiny 30-line Node.js script that reads markdown files and creates index.json files. You never need to touch it.
+**Note**: The build command runs automatically on every deploy to generate content indexes for blog, essays, and photos. This is NOT a framework build step—it's a tiny 40-line Node.js script that reads markdown files and creates index.json files. You never need to touch it.
 
 ## Local Development
 
@@ -81,9 +81,12 @@ Then visit `http://localhost:8000`
 │   ├── blog/
 │   │   ├── index.json      # Auto-generated post index
 │   │   └── *.md           # Blog post files
-│   └── essays/
-│       ├── index.json      # Auto-generated essay index
-│       └── *.md           # Essay files
+│   ├── essays/
+│   │   ├── index.json      # Auto-generated essay index
+│   │   └── *.md           # Essay files
+│   └── photos/
+│       ├── index.json      # Auto-generated photo index
+│       └── *.md           # Photo metadata files
 ├── uploads/                # CMS-uploaded images
 ├── index.html              # Homepage
 ├── blog.html               # Blog listing + single view
@@ -102,7 +105,7 @@ Then visit `http://localhost:8000`
 
 ## Content Model
 
-Blog posts and essays use this frontmatter structure:
+### Blog Posts and Essays
 
 ```yaml
 ---
@@ -115,6 +118,19 @@ cover_image: /uploads/image.jpg  # optional
 Markdown content here...
 ```
 
+### Photos
+
+```yaml
+---
+title: Photo Title
+date: 2025-01-15
+photo: /uploads/photo.jpg  # required
+caption: Optional caption text
+location: Optional location
+description: Optional longer description
+---
+```
+
 ## Image Guidelines
 
 **Important**: Upload web-sized images only (2000–3000px max, under 500KB).
@@ -123,6 +139,12 @@ Do NOT upload:
 - RAW camera files
 - Full-resolution photos
 - Files over 5MB
+
+**Photo Capacity**:
+- **Recommended**: 50-150 curated photos for optimal performance
+- **Maximum**: 500+ photos before bandwidth concerns
+- **Each photo**: ~200-500 KB when web-optimized
+- **Netlify limits**: 100 GB/month bandwidth (free tier)
 
 Use [Squoosh.app](https://squoosh.app) or similar to compress images before uploading.
 

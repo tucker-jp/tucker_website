@@ -31,3 +31,16 @@ collections:
       - { label: "Description", name: "description", widget: "text", required: false }
       - { label: "Cover Image", name: "cover_image", widget: "image", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "photos"
+    label: "Photos"
+    folder: "content/photos"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Upload Date", name: "date", widget: "datetime" }
+      - { label: "Photo", name: "photo", widget: "image", required: true }
+      - { label: "Caption", name: "caption", widget: "text", required: false }
+      - { label: "Location", name: "location", widget: "string", required: false }
+      - { label: "Description", name: "description", widget: "text", required: false }

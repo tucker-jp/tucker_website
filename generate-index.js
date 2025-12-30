@@ -2,7 +2,7 @@
 
 /**
  * GENERATE INDEX FILES
- * Automatically generates index.json files for blog and essay collections
+ * Automatically generates index.json files for blog, essay, and photo collections
  * Runs on every Netlify deploy to keep content listings up to date
  */
 
@@ -31,8 +31,9 @@ function generateIndex(collectionName) {
     console.log(`✓ Generated ${collectionName}/index.json with ${files.length} files`);
 }
 
-// Generate indexes for both collections
+// Generate indexes for all collections
 console.log('Generating content indexes...');
 generateIndex('blog');
 generateIndex('essays');
+generateIndex('photos');
 console.log('Done!');

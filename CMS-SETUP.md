@@ -99,8 +99,9 @@ Netlify Identity is required for CMS authentication.
    - Log in with the email and password you just created
 
 2. **Start creating content**:
-   - Click "Blog" or "Essays" to create new posts
-   - Use the Markdown editor to write
+   - Click "Blog", "Essays", or "Photos" to create new content
+   - Use the Markdown editor for blog/essay posts
+   - Upload photos with metadata (title, caption, location, date)
    - Add cover images if desired (see image guidelines below)
    - Click "Publish" → "Publish now" to make it live
 
@@ -151,10 +152,16 @@ When uploading images via the CMS:
 - Full-resolution photos straight from your camera
 - Files over 5MB
 
-**Why?**
+**Photo Capacity Guidelines**:
+- **Recommended**: 50-150 curated photos for optimal performance
+- **Maximum**: 500+ photos before bandwidth/storage concerns
+- **Each photo**: ~200-500 KB when web-optimized
+- **Netlify limits**: 100 GB/month bandwidth (free tier)
+
+**Why web-sized images matter**:
 - Large images slow down your website
 - They consume unnecessary bandwidth
-- Netlify has free tier storage limits
+- Better user experience on mobile devices
 
 **How to resize images**:
 - **Mac**: Use Preview → Tools → Adjust Size
@@ -180,6 +187,21 @@ When uploading images via the CMS:
 ### Creating a New Essay
 
 Same as blog posts, but click "Essays" instead.
+
+### Uploading a New Photo
+
+1. Go to `/admin`
+2. Click "Photos" → "New Photos"
+3. Fill in:
+   - **Title**: Photo title or subject
+   - **Upload Date**: When the photo was taken or uploaded
+   - **Photo**: Upload the image file (web-sized!)
+   - **Caption**: Optional description or story
+   - **Location**: Optional location where photo was taken
+   - **Description**: Optional additional details
+4. Click "Publish" → "Publish now"
+
+Photos appear in a masonry grid layout, sorted by date (newest first).
 
 ### Editing Existing Content
 
@@ -221,10 +243,10 @@ Same as blog posts, but click "Essays" instead.
 ### CMS-Driven (Editable via /admin)
 - **Blog posts** (`content/blog/*.md`)
 - **Essays** (`content/essays/*.md`)
+- **Photos** (`content/photos/*.md`)
 
 ### Static (Edit code directly)
 - **Projects page** (`projects.html`)
-- **Photos page** (`photos.html`)
 - **Homepage intro** (`index.html`)
 - **Site navigation**
 - **All styling** (`style.css`)
