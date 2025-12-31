@@ -548,7 +548,7 @@ main {
 
 .single-post {
     margin-top: var(--spacing-md);
-    max-width: 680px;
+    max-width: var(--content-width);
 }
 
 .post-header {
@@ -571,7 +571,7 @@ main {
     font-family: var(--font-serif);
     font-size: 1.125rem;
     line-height: 1.8;
-    max-width: 680px;
+    max-width: var(--content-width);
 }
 
 .post-body img {
