@@ -46,6 +46,7 @@
         <p>&copy; 2025 Tucker Pippin. All rights reserved.</p>
     </footer>
 
+    <script src="/js/utils.js"></script>
     <script src="/content-loader.js"></script>
     <script>
         const POSTS_PER_PAGE = 10;
@@ -84,7 +85,7 @@
                                 <time>${formatDate(post.date)}</time>
                             </div>
                             ${coverImageHtml}
-                            <div class="blog-post-content">
+                            <div class="post-content">
                                 ${post.html}
                             </div>
                         </article>
