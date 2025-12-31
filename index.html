@@ -48,6 +48,7 @@
                 <p class="quote-text" id="quote-text">Loading quote...</p>
                 <p class="quote-author" id="quote-author"></p>
             </div>
+            <button id="next-quote-btn" class="next-quote-btn" style="display: none;">Next Quote →</button>
         </section>
 
         <!-- Mobile-only navigation buttons -->
@@ -131,11 +132,14 @@
     </script>
 
     <script>
-        // Daily Quote Rotation
+        // Daily Quote Rotation with Navigation
+        let allQuotes = [];
+        let currentQuoteIndex = 0;
+
         window.addEventListener('DOMContentLoaded', async () => {
             try {
                 const response = await fetch('/data/quotes.json');
-                const quotes = await response.json();
+                allQuotes = await response.json();
 
                 // Get day of year (0-365)
                 const now = new Date();
@@ -144,18 +148,35 @@
                 const oneDay = 1000 * 60 * 60 * 24;
                 const dayOfYear = Math.floor(diff / oneDay);
 
-                // Pick quote based on day (same quote all day)
-                const quoteIndex = dayOfYear % quotes.length;
-                const quote = quotes[quoteIndex];
+                // Pick quote based on day (same quote all day on initial load)
+                currentQuoteIndex = dayOfYear % allQuotes.length;
 
                 // Display the quote
-                document.getElementById('quote-text').textContent = `"${quote.text}"`;
-                document.getElementById('quote-author').textContent = `— ${quote.author}`;
+                displayQuote(currentQuoteIndex);
+
+                // Show the next quote button
+                document.getElementById('next-quote-btn').style.display = 'inline-block';
             } catch (error) {
                 console.error('Error loading quote:', error);
                 document.getElementById('quote-text').textContent = '"The only way to do great work is to love what you do."';
                 document.getElementById('quote-author').textContent = '— Steve Jobs';
             }
+        });
+
+        function displayQuote(index) {
+            const quote = allQuotes[index];
+            document.getElementById('quote-text').textContent = `"${quote.text}"`;
+            document.getElementById('quote-author').textContent = `— ${quote.author}`;
+        }
+
+        function nextQuote() {
+            currentQuoteIndex = (currentQuoteIndex + 1) % allQuotes.length;
+            displayQuote(currentQuoteIndex);
+        }
+
+        // Event listener for next quote button
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('next-quote-btn').addEventListener('click', nextQuote);
         });
     </script>
 </body>

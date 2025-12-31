@@ -374,6 +374,31 @@ main {
     margin: 0;
 }
 
+.next-quote-btn {
+    margin-top: var(--spacing-md);
+    padding: 0.5rem 1.25rem;
+    background-color: var(--cream-dark);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.next-quote-btn:hover {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.next-quote-btn:active {
+    transform: translateY(0);
+}
+
 .about-section {
     margin-top: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
