@@ -6,6 +6,7 @@
     <title>Tucker Pippin</title>
     <meta name="description" content="Personal website of Tucker Pippin — writing, projects, and photography.">
     <link rel="stylesheet" href="/style.css">
+    <link rel="preload" as="image" href="/uploads/main_bumper_1_mobile.jpg" media="(max-width: 1099px)">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
@@ -27,15 +28,39 @@
                 <a href="/essays.html">Essays</a>
                 <a href="/projects.html">Projects</a>
                 <a href="/photos.html">Photos</a>
+                <a href="/admin" class="admin-link">Admin</a>
             </div>
         </div>
     </nav>
 
     <main class="container">
-        <section class="intro">
-            <h1>Hello, I'm Tucker</h1>
-            <p class="lead">I write about ideas, build things, and occasionally take photos worth sharing.</p>
-            <p>This is my corner of the internet—a space for longer thoughts, experiments, and the work I'm proud of.</p>
+        <div class="hero">
+            <section class="intro">
+                <h1>Hello, I'm Tucker</h1>
+                <p class="lead">I write about ideas, build things, and occasionally take photos worth sharing.</p>
+                <p>This is my corner of the internet—a space for longer thoughts, experiments, and the work I'm proud of.</p>
+            </section>
+        </div>
+
+        <!-- Mobile-only navigation buttons -->
+        <nav class="mobile-nav-buttons">
+            <a href="/blog.html" class="mobile-nav-button">Blog</a>
+            <a href="/essays.html" class="mobile-nav-button">Essays</a>
+            <a href="/projects.html" class="mobile-nav-button">Projects</a>
+            <a href="/photos.html" class="mobile-nav-button">Photos</a>
+        </nav>
+
+        <section class="about-section">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About</h2>
+                    <p>Add your bio here. You can edit this section directly in index.html, or describe yourself, your work, and what you're passionate about.</p>
+                    <p>This is a great place to share your background, current projects, or what drives your writing and photography.</p>
+                </div>
+                <div class="about-image">
+                    <img src="/uploads/headshot.jpg" alt="Tucker Pippin" />
+                </div>
+            </div>
         </section>
 
         <section class="latest-posts">

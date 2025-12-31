@@ -38,8 +38,8 @@
     --spacing-xl: 4rem;
 
     /* Content width */
-    --content-width: 680px;
-    --wide-width: 960px;
+    --content-width: 1020px;
+    --wide-width: 1200px;
 }
 
 /* ===================================
@@ -233,6 +233,21 @@ blockquote {
     color: var(--accent);
 }
 
+.nav-links a.admin-link {
+    color: var(--text-tertiary);
+    font-size: 0.875rem;
+    margin-left: auto;
+}
+
+.nav-links a.admin-link::before {
+    content: '🔐 ';
+    font-size: 0.875rem;
+}
+
+.nav-links a.admin-link:hover {
+    color: var(--accent);
+}
+
 /* ===================================
    LAYOUT
    =================================== */
@@ -299,6 +314,10 @@ main {
    HOMEPAGE
    =================================== */
 
+.hero {
+    position: relative;
+}
+
 .intro {
     margin-bottom: var(--spacing-xl);
     padding-bottom: var(--spacing-xl);
@@ -317,17 +336,55 @@ main {
     color: var(--text-secondary);
 }
 
+/* Mobile navigation buttons - hidden on desktop */
+.mobile-nav-buttons {
+    display: none;
+}
+
 .about-section {
     margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
     padding: var(--spacing-lg);
     background-color: var(--cream-light);
     border-radius: 8px;
     border: 1px solid var(--border-subtle);
 }
 
-.about-section h2 {
+.about-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
+    align-items: center;
+}
+
+.about-text h2 {
     margin-top: 0;
-    font-size: 1.5rem;
+    margin-bottom: var(--spacing-md);
+    font-size: 2rem;
+}
+
+.about-text p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-sm);
+}
+
+.about-image {
+    text-align: center;
+}
+
+.about-image img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: var(--shadow-subtle);
+    transition: all 0.2s ease;
+}
+
+.about-image img:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
 }
 
 .latest-posts {
@@ -797,8 +854,17 @@ main {
         padding-bottom: var(--spacing-md);
     }
 
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
     .about-section {
-        padding: var(--spacing-sm);
+        padding: var(--spacing-md);
+    }
+
+    .about-image img {
+        max-width: 200px;
     }
 
     .post-body {
@@ -849,5 +915,90 @@ main {
         width: 36px;
         height: 36px;
         font-size: 1.25rem;
+    }
+}
+
+/* ===================================
+   MOBILE-ONLY HOMEPAGE ENHANCEMENTS
+   Applied only on screens < 1100px
+   =================================== */
+
+@media (max-width: 1099px) {
+    /* Hero section with background image and overlay */
+    .hero {
+        position: relative;
+        background-image: url('/uploads/main_bumper_1_mobile.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    /* Paper tint overlay for text readability */
+    .hero::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: rgba(250, 248, 243, 0.92);
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* Ensure intro content is above overlay */
+    .hero .intro {
+        position: relative;
+        z-index: 1;
+        border-bottom: none;
+        padding: var(--spacing-lg) var(--spacing-md);
+        margin-bottom: 0;
+    }
+
+    /* Mobile navigation buttons - large and tappable */
+    .mobile-nav-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .mobile-nav-button {
+        padding: var(--spacing-md);
+        background-color: var(--cream-light);
+        border: 2px solid var(--border-subtle);
+        border-radius: 12px;
+        text-align: center;
+        font-family: var(--font-serif);
+        font-size: 1.375rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: var(--shadow-subtle);
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobile-nav-button:hover,
+    .mobile-nav-button:active {
+        background-color: var(--cream-bg);
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    /* Keyboard focus styles for accessibility */
+    .mobile-nav-button:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    /* Hide side rails completely on mobile */
+    .photo-rails {
+        display: none;
     }
 }

@@ -2,6 +2,13 @@
   publish = "."
   command = "npm install && node scripts/optimize-images.js && node generate-index.js"
 
+# Force HTTPS redirect
+[[redirects]]
+  from = "http://tucker-pippin-website.netlify.app/*"
+  to = "https://tucker-pippin-website.netlify.app/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/admin"
   to = "/admin/index.html"

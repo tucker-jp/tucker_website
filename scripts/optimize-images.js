@@ -23,6 +23,8 @@ const JPEG_QUALITY = 80;
 const PNG_COMPRESSION = 9;
 const MAX_WIDTH_LARGE = 2000;
 const MAX_WIDTH_MEDIUM = 1600;
+const MOBILE_WIDTH = 800; // For mobile-specific versions
+const MOBILE_QUALITY = 75; // Slightly lower quality for mobile
 
 // Statistics tracking
 let stats = {
@@ -105,6 +107,49 @@ function needsOptimization(filePath, cache) {
   }
 
   return false; // File unchanged since last optimization
+}
+
+/**
+ * Create mobile-optimized version for bumper images
+ */
+async function createMobileVersion(filePath) {
+  const dir = path.dirname(filePath);
+  const ext = path.extname(filePath);
+  const basename = path.basename(filePath, ext);
+
+  // Only create mobile versions for bumper images
+  if (!basename.includes('bumper')) {
+    return;
+  }
+
+  const mobileFilePath = path.join(dir, `${basename}_mobile${ext}`);
+
+  try {
+    const metadata = await sharp(filePath).metadata();
+
+    // Only create if original is large enough
+    if (metadata.width <= MOBILE_WIDTH) {
+      return;
+    }
+
+    if (metadata.format === 'jpeg' || metadata.format === 'jpg') {
+      await sharp(filePath)
+        .resize(MOBILE_WIDTH, null, {
+          withoutEnlargement: true,
+          fit: 'inside'
+        })
+        .jpeg({
+          quality: MOBILE_QUALITY,
+          mozjpeg: true
+        })
+        .toFile(mobileFilePath);
+
+      const mobileStat = fs.statSync(mobileFilePath);
+      console.log(`  📱 Created mobile version: ${path.basename(mobileFilePath)} (${formatBytes(mobileStat.size)})`);
+    }
+  } catch (error) {
+    console.error(`  ✗ Failed to create mobile version for ${path.basename(filePath)}:`, error.message);
+  }
 }
 
 /**
@@ -198,6 +243,9 @@ async function optimizeImage(filePath, cache) {
 
       console.log(`  ✓ Optimized: ${relativePath}`);
       console.log(`    ${formatBytes(originalSize)} → ${formatBytes(optimizedSize)} (${savedPercent}% smaller)`);
+
+      // Create mobile version for bumper images
+      await createMobileVersion(filePath);
     } else {
       // Optimized version is larger, keep original
       fs.unlinkSync(tempPath);
@@ -211,6 +259,9 @@ async function optimizeImage(filePath, cache) {
 
       stats.skipped++;
       console.log(`  ⊘ Skipped (no improvement): ${relativePath}`);
+
+      // Still try to create mobile version
+      await createMobileVersion(filePath);
     }
 
   } catch (error) {
