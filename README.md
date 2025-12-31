@@ -115,8 +115,12 @@ Then visit `http://localhost:8000`
 │   └── photos/
 │       ├── index.json      # Auto-generated photo index
 │       └── *.md            # Photo metadata files (one per photo)
+├── js/
+│   └── utils.js            # Shared utilities (frontmatter parser, etc.)
 ├── scripts/
 │   └── optimize-images.js  # Image optimization + mobile version generation
+├── data/
+│   └── quotes.json         # Daily quote rotation data
 ├── uploads/                # CMS-uploaded images (optimized at build time)
 │   ├── *.jpg               # Regular images (auto-optimized to max 2000px)
 │   └── *_mobile.jpg        # Mobile versions (800px wide, quality 75)
@@ -201,7 +205,7 @@ Pre-compress before upload using [Squoosh.app](https://squoosh.app) for faster u
 2. Use CMS Media Library to upload multiple images
 3. Manually create markdown files in `content/photos/` for batch uploads
 
-See `scripts/optimize-images.js` for implementation details.
+**Note**: The legacy `scripts/bulk-photo-upload.js` tool has been removed (superseded by Decap CMS). See `scripts/optimize-images.js` for image optimization details.
 
 ## Responsive Design
 
@@ -282,15 +286,48 @@ Works in all modern browsers:
 - Safari (last 2 versions)
 - Mobile Safari/Chrome
 
+## Code Architecture
+
+### JavaScript Organization
+The site uses **classic scripts** (not ES modules) for maximum compatibility with static hosting:
+
+- **`js/utils.js`** - Shared utility functions under `window.siteUtils` namespace
+  - `parseFrontmatter()` - YAML frontmatter parser (handles both Unix/Windows line endings)
+  - Namespaced to avoid global pollution while maintaining classic script compatibility
+
+- **`content-loader.js`** - Content loading and rendering
+  - Uses `window.siteUtils.parseFrontmatter()` for all markdown parsing
+  - Loads and caches blog/essay/photo content from JSON indexes
+
+- **Inline scripts** - Page-specific functionality (quotes, photo gallery, lightbox)
+  - All pages load `js/utils.js` before `content-loader.js` to ensure proper load order
+
+### CSS Architecture
+The site uses a **modular CSS** approach with base classes and variants:
+
+- **Base classes**: `.quote-box`, `.btn-base`, `.post-content`
+- **Size variants**: `.btn-small`, `.btn-medium`
+- **Style variants**: `.btn-accent`
+- **Media queries**: Organized in descending order (1400px → 1099px → 768px → 480px)
+
+This reduces CSS duplication and makes styling consistent across the site.
+
 ## Recent Updates
 
-### December 2025
+### December 31, 2025 - Major Refactoring
+- ✅ **Code cleanup** - Removed 326 net lines of duplicate/unused code (-16.6%)
+- ✅ **JavaScript refactoring** - Extracted shared frontmatter parser to `js/utils.js`
+- ✅ **CSS consolidation** - Created base button/quote classes, reduced style.css by 104 lines
+- ✅ **Bug fixes** - Fixed undefined CSS variable, improved Windows line ending support
+- ✅ **Code organization** - Reorganized media queries in logical descending order
+- ✅ **DRY principles** - Single source of truth for frontmatter parsing, consolidated duplicate styles
+
+### Earlier December 2025
 - ✅ **Mobile homepage redesign** - Hero background, large nav buttons, optimized UX
 - ✅ **Automatic image optimization** - Build-time compression and mobile version generation
 - ✅ **Performance improvements** - 90% smaller images on mobile, preloading, lazy loading
 - ✅ **Accessibility enhancements** - Focus states, semantic HTML, WCAG compliance
 - ✅ **Photo gallery** - Masonry layout with lightbox modal and keyboard navigation
-- ✅ **Code cleanup** - Removed unused CSS, modern syntax (inset), optimized selectors
 
 ## License
 
@@ -300,7 +337,6 @@ All content and code © 2025 Tucker Pippin. All rights reserved.
 
 Potential additions (not currently implemented):
 
-- **Bulk photo upload tool** - Node.js script to batch-create photo entries
 - **RSS feeds** - Auto-generate RSS for blog and essays
 - **Search functionality** - Client-side search across posts
 - **Tags/categories** - Taxonomy system for posts and photos
@@ -310,3 +346,4 @@ Potential additions (not currently implemented):
 - **PWA support** - Service worker and manifest.json
 - **WebP support** - Modern image format alongside JPEG
 - **Photo EXIF data** - Auto-extract camera settings from photos
+- **Comments system** - Lightweight commenting (utterances, giscus, etc.)
