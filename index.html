@@ -42,6 +42,14 @@
             </section>
         </div>
 
+        <!-- Daily Quote Section -->
+        <section class="daily-quote">
+            <div class="quote-content">
+                <p class="quote-text" id="quote-text">Loading quote...</p>
+                <p class="quote-author" id="quote-author"></p>
+            </div>
+        </section>
+
         <!-- Mobile-only navigation buttons -->
         <nav class="mobile-nav-buttons">
             <a href="/blog.html" class="mobile-nav-button">Blog</a>
@@ -120,6 +128,35 @@
           }
         });
       }
+    </script>
+
+    <script>
+        // Daily Quote Rotation
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/data/quotes.json');
+                const quotes = await response.json();
+
+                // Get day of year (0-365)
+                const now = new Date();
+                const start = new Date(now.getFullYear(), 0, 0);
+                const diff = now - start;
+                const oneDay = 1000 * 60 * 60 * 24;
+                const dayOfYear = Math.floor(diff / oneDay);
+
+                // Pick quote based on day (same quote all day)
+                const quoteIndex = dayOfYear % quotes.length;
+                const quote = quotes[quoteIndex];
+
+                // Display the quote
+                document.getElementById('quote-text').textContent = `"${quote.text}"`;
+                document.getElementById('quote-author').textContent = `— ${quote.author}`;
+            } catch (error) {
+                console.error('Error loading quote:', error);
+                document.getElementById('quote-text').textContent = '"The only way to do great work is to love what you do."';
+                document.getElementById('quote-author').textContent = '— Steve Jobs';
+            }
+        });
     </script>
 </body>
 </html>
