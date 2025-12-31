@@ -480,10 +480,11 @@ main {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
+    max-width: var(--content-width);
 }
 
 .post-preview {
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg);
     border-radius: 8px;
     border: 1px solid var(--border-subtle);
     background-color: var(--cream-light);
@@ -505,6 +506,14 @@ main {
 
 .post-preview h3 {
     font-size: 1.5rem;
+}
+
+.post-preview-image {
+    width: 100%;
+    height: auto;
+    margin: var(--spacing-md) 0 0 0;
+    border-radius: 4px;
+    object-fit: cover;
 }
 
 /* ===================================
@@ -840,6 +849,74 @@ main {
 .static-content {
     margin-top: var(--spacing-lg);
     color: var(--text-secondary);
+}
+
+/* ===================================
+   PROJECTS
+   =================================== */
+
+.projects-list {
+    margin-top: var(--spacing-lg);
+}
+
+.project-item {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-xl);
+    border-bottom: 2px solid var(--border-subtle);
+}
+
+.project-item:last-child {
+    border-bottom: none;
+}
+
+.project-item h2 {
+    font-size: 1.875rem;
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--text-primary);
+}
+
+.project-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.project-status {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.project-year {
+    color: var(--text-tertiary);
+}
+
+.project-description {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tech-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--cream-dark);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 /* ===================================
