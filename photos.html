@@ -25,6 +25,13 @@
         <header class="page-header">
             <h1>Photos</h1>
             <p class="page-intro">Images worth remembering.</p>
+
+            <!-- Photography Quote -->
+            <div class="photo-quote" id="photo-quote" style="display: none;">
+                <p class="photo-quote-text">"Photography is the story I fail to put into words."</p>
+                <p class="photo-quote-author">— Destin Sparks</p>
+            </div>
+
             <button id="random-photo-btn" class="random-photo-btn" style="display: none;">
                 🎲 Random Photo
             </button>
@@ -34,9 +41,13 @@
             <p class="loading">Loading photos...</p>
         </div>
 
-        <div id="load-more-container" class="load-more-container" style="display: none;">
-            <button id="load-more-btn" class="load-more-btn">Load More Photos</button>
-            <p class="photo-count"></p>
+        <div id="pagination-container" class="pagination-container" style="display: none;">
+            <button id="prev-page-btn" class="pagination-btn" disabled>← Previous</button>
+            <span class="page-info">
+                <span class="page-number">Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+                <span class="photo-count-info">(<span id="photo-range">1-50</span> of <span id="total-photos">0</span> photos)</span>
+            </span>
+            <button id="next-page-btn" class="pagination-btn">Next →</button>
         </div>
     </main>
 
@@ -66,7 +77,7 @@
     <script>
         let photos = [];
         let currentPhotoIndex = 0;
-        let displayedPhotos = 0;
+        let currentPage = 1;
         const PHOTOS_PER_PAGE = 50;
 
         // Load and display photos
@@ -143,15 +154,12 @@
                     return;
                 }
 
-                // Show random photo button
+                // Show quote and random photo button
+                document.getElementById('photo-quote').style.display = 'block';
                 document.getElementById('random-photo-btn').style.display = 'inline-block';
 
-                // Render initial batch of photos
-                container.innerHTML = '';
-                renderPhotos(PHOTOS_PER_PAGE);
-
-                // Show "Load More" button if there are more photos
-                updateLoadMoreButton();
+                // Render first page
+                renderPage(1);
 
             } catch (error) {
                 console.error('Error loading photos:', error);
@@ -159,12 +167,17 @@
             }
         });
 
-        // Render a batch of photos
-        function renderPhotos(count) {
+        // Render a specific page of photos
+        function renderPage(pageNum) {
             const container = document.getElementById('photo-grid');
-            const endIndex = Math.min(displayedPhotos + count, photos.length);
+            container.innerHTML = '';
 
-            for (let i = displayedPhotos; i < endIndex; i++) {
+            const totalPages = Math.ceil(photos.length / PHOTOS_PER_PAGE);
+            const startIndex = (pageNum - 1) * PHOTOS_PER_PAGE;
+            const endIndex = Math.min(startIndex + PHOTOS_PER_PAGE, photos.length);
+
+            // Render photos for this page
+            for (let i = startIndex; i < endIndex; i++) {
                 const photo = photos[i];
                 const photoItem = document.createElement('div');
                 photoItem.className = 'photo-item';
@@ -188,22 +201,34 @@
                 container.appendChild(photoItem);
             }
 
-            displayedPhotos = endIndex;
-            updateLoadMoreButton();
+            currentPage = pageNum;
+            updatePaginationControls();
+
+            // Scroll to top of photo grid
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Update the load more button visibility and text
-        function updateLoadMoreButton() {
-            const loadMoreContainer = document.getElementById('load-more-container');
-            const loadMoreBtn = document.getElementById('load-more-btn');
-            const photoCount = loadMoreContainer.querySelector('.photo-count');
+        // Update pagination controls
+        function updatePaginationControls() {
+            const totalPages = Math.ceil(photos.length / PHOTOS_PER_PAGE);
+            const startIndex = (currentPage - 1) * PHOTOS_PER_PAGE + 1;
+            const endIndex = Math.min(currentPage * PHOTOS_PER_PAGE, photos.length);
 
-            if (displayedPhotos < photos.length) {
-                loadMoreContainer.style.display = 'block';
-                const remaining = photos.length - displayedPhotos;
-                photoCount.textContent = `Showing ${displayedPhotos} of ${photos.length} photos`;
-            } else {
-                loadMoreContainer.style.display = 'none';
+            document.getElementById('current-page').textContent = currentPage;
+            document.getElementById('total-pages').textContent = totalPages;
+            document.getElementById('photo-range').textContent = `${startIndex}-${endIndex}`;
+            document.getElementById('total-photos').textContent = photos.length;
+
+            // Update button states
+            const prevBtn = document.getElementById('prev-page-btn');
+            const nextBtn = document.getElementById('next-page-btn');
+
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+
+            // Show pagination if more than one page
+            if (totalPages > 1) {
+                document.getElementById('pagination-container').style.display = 'flex';
             }
         }
 
@@ -214,11 +239,24 @@
             openLightbox(randomIndex);
         }
 
-        // Event listeners for random photo and load more
+        // Pagination navigation
+        function goToNextPage() {
+            const totalPages = Math.ceil(photos.length / PHOTOS_PER_PAGE);
+            if (currentPage < totalPages) {
+                renderPage(currentPage + 1);
+            }
+        }
+
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                renderPage(currentPage - 1);
+            }
+        }
+
+        // Event listeners
         document.getElementById('random-photo-btn').addEventListener('click', openRandomPhoto);
-        document.getElementById('load-more-btn').addEventListener('click', () => {
-            renderPhotos(PHOTOS_PER_PAGE);
-        });
+        document.getElementById('next-page-btn').addEventListener('click', goToNextPage);
+        document.getElementById('prev-page-btn').addEventListener('click', goToPrevPage);
 
         // Lightbox functions
         function openLightbox(index) {
