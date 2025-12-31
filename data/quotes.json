@@ -1,42 +1,876 @@
 [
   {
-    "text": "The only way to do great work is to love what you do.",
-    "author": "Steve Jobs"
+    "text": "You couldn't squeeze a dime between what they already know and what they will never learn.",
+    "author": "Philip Wylie"
   },
   {
-    "text": "In the middle of difficulty lies opportunity.",
-    "author": "Albert Einstein"
+    "text": "Friendship is unnecessary, like philosophy, like art, like the universe itself… It has no survival value; rather it is one of those things which give value to survival.",
+    "author": "C.S. Lewis"
   },
   {
-    "text": "What we think, we become.",
-    "author": "Buddha"
+    "text": "Everything in moderation, including moderation.",
+    "author": "Oscar Wilde"
   },
   {
-    "text": "The best time to plant a tree was 20 years ago. The second best time is now.",
-    "author": "Chinese Proverb"
+    "text": "Some lessons have to be experienced before they can be understood.",
+    "author": "Michael Batnick"
   },
   {
-    "text": "Everything you can imagine is real.",
-    "author": "Pablo Picasso"
+    "text": "A Genius is the man who can do the average thing when everyone else around him is losing his mind.",
+    "author": "Napoleon"
   },
   {
-    "text": "Do not wait to strike till the iron is hot; but make it hot by striking.",
-    "author": "William Butler Yeats"
+    "text": "Your personal experiences with money make up maybe 0.000000001% of what's happened in the world but maybe 80% of how you think the world works.",
+    "author": "Morgan Housel"
   },
   {
-    "text": "Whether you think you can or you think you can't, you're right.",
-    "author": "Henry Ford"
+    "text": "The world is full of obvious things which nobody by any chance ever observes.",
+    "author": "Sherlock Holmes"
   },
   {
-    "text": "The two most important days in your life are the day you are born and the day you find out why.",
+    "text": "Nature cures the disease while the remedy amuses the patient.",
+    "author": "Will Durant"
+  },
+  {
+    "text": "The young man knows the rules, the old man knows the exceptions.",
+    "author": "Charlie Munger"
+  },
+  {
+    "text": "There is nothing men will not do, there is nothing they have not done, to recover their health and save their lives. They have submitted to be half-drowned in water and half-choked with gasses, to be buried up to their chins in earth, to be seared with hot irons like galley-slaves, to be crimped with knives like codfish, to have needles thrust into their flesh, and bonfires kindled on their skin, to swallow all sorts of abominations, and to pay for all this as if to be singed and scalded were a costly privilege, as if blisters were a blessing and leeches a luxury.",
+    "author": "Oliver Wendell Holmes"
+  },
+  {
+    "text": "It may be that when we no longer know which way to go that we have come to our real journey. The mind that is not baffled is not employed. The impeded stream is the one that sings.",
+    "author": "Wendell Berry"
+  },
+
+
+  {
+    "text": "The best that is known and taught in the world—nothing less can satisfy a teacher worthy of the name.",
+    "author": "Sir William Osler"
+  },
+  {
+    "text": "Many activities are dignified by the fact that you earn money.",
+    "author": "Charlie Munger"
+  },
+  {
+    "text": "Look at Berkshire Hathaway. I call it the ultimate didactic enterprise. Warren's never going to spend any money. He's going to give it all back to society. He's just building a platform so people will listen to his notions.",
+    "author": "Charlie Munger"
+  },
+  {
+    "text": "It's hard for an empty sack to stand upright.",
+    "author": "Benjamin Franklin"
+  },
+  {
+    "text": "I wear the chains I forged in life.",
+    "author": "Jacob Marley"
+  },
+  {
+    "text": "What a man wishes, that also will he believe.",
+    "author": "Demosthenes"
+  },
+  {
+    "text": "The very first step towards success in any occupation is to become interested in it.",
+    "author": "Sir William Osler"
+  },
+  {
+    "text": "These are sad days in literature. Homer is dead. Shakespeare is dead. And I myself am not feeling well.",
     "author": "Mark Twain"
   },
   {
-    "text": "Whatever you are, be a good one.",
-    "author": "Abraham Lincoln"
+    "text": "I don't want to belong to any club that would accept me as one of its members.",
+    "author": "Groucho Marx"
   },
   {
-    "text": "Your time is limited, don't waste it living someone else's life.",
-    "author": "Steve Jobs"
+    "text": "It's not the notes you play, it's the notes you don't play.",
+    "author": "Miles Davis"
+  },
+  {
+    "text": "Kicking the can doesn't stop when you reach the wall. It stops when you break your toes.",
+    "author": "Giovanni Ponzetto"
+  },
+  {
+    "text": "God himself was content with 10 commandments. Wilson modestly inflicted fourteen points on us…the fourteen commandments of the most empty theory!",
+    "author": "Georges Clemenceau"
+  },
+  {
+    "text": "Chains of habit are too light to be felt until they are too heavy to be broken.",
+    "author": "Warren Buffett"
+  },
+  {
+    "text": "The Romans were warriors that took oaths seriously not priests who took swordsmanship seriously.",
+    "author": "Mike Duncan"
+  },
+  {
+    "text": "Cato paused a speech he was giving in the Senate when he saw that Julius Caesar had been passed a note. He challenged Caesar to read it aloud, sure it contained details of some conspiracy, but it turned out to be a racy love-letter from Cato's sister.",
+    "author": "Plutarch"
+  },
+  {
+    "text": "The idealization of every era is usually the cover story of its greatest thefts.",
+    "author": "Eric Weinstein"
+  },
+  {
+    "text": "An investment is a speculation gone bad.",
+    "author": "George Soros"
+  },
+  {
+    "text": "An invasion is a coup gone bad in the Ukrainian case.",
+    "author": "Stephen Kotkin"
+  },
+  {
+    "text": "The Leninist structure never went away, which is the party's monopoly on power. You can't be half communist just like you can't be half pregnant.",
+    "author": "Stephen Kotkin"
+  },
+  {
+    "text": "The human understanding still has this peculiar and perpetual fault of being more moved and excited by affirmatives than by negatives, whereas rightly and properly it ought to give equal weight to both.",
+    "author": "Sir Francis Bacon"
+  },
+  {
+    "text": "A house is just a place to keep the TV dry.",
+    "author": "Unknown"
+  },
+  {
+    "text": "If your psychological insight is not already known by people in advertising or used car sales people then it's probably not true.",
+    "author": "Nassim Taleb"
+  },
+  {
+    "text": "Wherever your life ends, it is all there. The utility of living consists not in the length of days, but in the use of time; a man may have lived long, and yet lived but a little. Make use of time while it is present with you. It depends upon your will, and not upon the number of days, to have a sufficient length of life.",
+    "author": "Montaigne"
+  },
+  {
+    "text": "Guilt is knowing you are not what you could have been.",
+    "author": "Michael Sugrue"
+  },
+  {
+    "text": "I would rather have men ask why I have no statue than have men ask why I have one.",
+    "author": "Cato"
+  },
+  {
+    "text": "A budget reserve is to contractors what red meat is to lions and they will devour it.",
+    "author": "Flyvbjerg"
+  },
+  {
+    "text": "One swallow does not make a summer.",
+    "author": "Aristotle"
+  },
+  {
+    "text": "Piety requires us to honor truth above our friends.",
+    "author": "Aristotle"
+  },
+  {
+    "text": "Wine comes from god, drunkards come from the Bible.",
+    "author": "Massachusetts Puritans"
+  },
+  {
+    "text": "The leaves of a tree delight us more than the roots.",
+    "author": "Tolstoy"
+  },
+  {
+    "text": "The good we divine as something proper to a man and not easily taken away from him.",
+    "author": "Aristotle"
+  },
+  {
+    "text": "And the more luck was involved, the less there is to be learned.",
+    "author": "Daniel Kahneman"
+  },
+  {
+    "text": "The ultimate test of an explanation is where it would have made the event predictable in advance.",
+    "author": "Daniel Kahneman"
+  },
+  {
+    "text": "If any man will do God's will, he shall know of the doctrine whether it be of God.",
+    "author": "St. John vii 17"
+  },
+  {
+    "text": "The rabbit runs faster than the fox because the rabbit is running for its life while the fox is only running for its dinner.",
+    "author": "Aesop"
+  },
+  {
+    "text": "If you give us the boy we'll vouch for the man.",
+    "author": "Jesuit Priests"
+  },
+  {
+    "text": "The only one of the deadly sins you're never gonna have fun with at all is envy. Pick one of the others.",
+    "author": "Charlie Munger"
+  },
+  {
+    "text": "I'm no genius, I'm smart in spots and I stay around those spots.",
+    "author": "Thomas Watson Sr."
+  },
+  {
+    "text": "When we try to pick out anything by itself we find it hitched to everything else in the universe.",
+    "author": "John Muir"
+  },
+  {
+    "text": "Take a simple idea and take it seriously.",
+    "author": "Charlie Munger"
+  },
+  {
+    "text": "The best armor of old age is a greater spent life preceding it.",
+    "author": "Cicero"
+  },
+  {
+    "text": "Life's tragedy is that we get old too soon and wise too late. When you're finished changing you're finished.",
+    "author": "Benjamin Franklin"
+  },
+  {
+    "text": "No man should quit his post but at the command of his general; that is god himself.",
+    "author": "Pythagoras"
+  },
+  {
+    "text": "I was so fond of hearing him speak that I feared that when he was taken from us, I should never find another such man to improve by.",
+    "author": "Cato"
+  },
+  {
+    "text": "The main purpose of religion is not to affirm that there is a God, but to prevent humans from thinking they are Gods. Likewise the purpose of a modern king is not to rule, but to prevent politicians & office climbers from thinking that they are kings.",
+    "author": "Nassim Taleb"
+  },
+  {
+    "text": "Subject's unwillingness to deduce the particular from the general was matched only by their willingness to infer the general from the particular.",
+    "author": "Nisbett and Bordiga"
+  },
+  {
+    "text": "This is a story of reincarnation. If you're an economist and you're a morally good economist then you come back as a physicist. If you are a morally bad economist you come back as a sociologist.",
+    "author": "Unknown"
+  },
+  {
+    "text": "Last communist dictator of Albania was a pure communist and he finally threw out the Russian embassy because they lost the pure faith. Then he threw out the Chinese embassy because they'd lost the pure faith. And finally he was only comfortable with two places in the world… One was the communist dictatorship of North Korea and the other was the English department at Yale.",
+    "author": "P.J. O'Rourke"
+  },
+  {
+    "text": "To a man with a hammer every problem looks like a nail.",
+    "author": "Unknown"
+  },
+  {
+    "text": "At some point your temporal horizon flips, you don't live from birth you live towards death.",
+    "author": "Unknown"
+  },
+  {
+    "text": "Universal history, the history of what man has accomplished in this world, is at bottom the history of the great men who have worked here.",
+    "author": "Thomas Carlyle"
+  },
+  {
+    "text": "The statesman's task is to hear God's footsteps marching through history, and to try to catch on to his coattails as he marched past.",
+    "author": "Otto von Bismarck"
+  },
+  {
+    "text": "The days move slow and the years move fast.",
+    "author": "Unknown"
+  },
+  {
+    "text": "A man that doesn't know what happened before he was born, he goes through life as a child.",
+    "author": "Cicero"
+  },
+  {
+    "text": "Poets and novelists are the unelected politicians of the world.",
+    "author": "Unknown"
+  },
+  {
+    "text": "You can tell even more about a man from what he reads in public than from what he reads in private.",
+    "author": "Unknown"
+  },
+  {
+    "text": "When the wife of a great Austrian physicist Wolfgang Pauli left him for a chemist, he was staggered with belief. 'Had she taken a bullfighter I would have understood' he remarked to a friend. 'But a chemist'.",
+    "author": "Wolfgang Pauli"
+  },
+  {
+    "text": "Perhaps an even more effective way of grasping our extreme recentness as a part of this 4.5 billion year old picture is to stretch your arms to their fullest extent and imagine that width as the entire history of the earth. On this scale the distance from the fingertips of one hand to the wrist of the other is Precambrian. All of complex life is in one hand and in a single stroke with a medium grained nail file you could eradicate human history.",
+    "author": "John McPhee"
+  },
+  {
+    "text": "There are three stages in scientific discovery: first, people deny that it is true, then they deny that it is important; finally they credit the wrong person.",
+    "author": "Alexander von Humboldt"
+  },
+  {
+    "text": "Time spent on revenge is never wasted. Revenge is a moral obligation.",
+    "author": "Nassim Taleb"
+  },
+  {
+    "text": "He's the bull, I'm the matador.",
+    "author": "Muhammad Ali"
+  },
+  {
+    "text": "Revenge is an act of passion. Vengeance is an act of justice.",
+    "author": "Samuel Johnson"
+  },
+  {
+    "text": "He owed his virtues to nature, his vices to fortune.",
+    "author": "Michel de Montaigne"
+  },
+  {
+    "text": "A supporter once called out, 'governor Stevenson, all thinking people are for you!' And Adlai Stevenson answered 'that's not enough, I need a majority!'",
+    "author": "Adlai Stevenson"
+  },
+  {
+    "text": "If you're too busy to run, you need to run twice as long.",
+    "author": "Unknown"
+  },
+  {
+    "text": "If hard liquor, tar or sauna do not help, then the disease is fatal.",
+    "author": "Finnish saying"
+  },
+  {
+    "text": "You can't go back and change the beginning but you can start where you are and change the ending.",
+    "author": "C.S. Lewis"
+  },
+  {
+    "text": "An empty barrel always makes more noise than a full one.",
+    "author": "Krylov"
+  },
+  {
+    "text": "It is easy to live for others, everybody does. I call on you to live for yourself.",
+    "author": "Ralph Waldo Emerson"
+  },
+  {
+    "text": "A great man is always willing to be little.",
+    "author": "Ralph Waldo Emerson"
+  },
+  {
+    "text": "Keep away from people who try to belittle your ambitions. Small people always do that, but the really great make you feel that you, too, can become great.",
+    "author": "Mark Twain"
+  },
+  {
+    "text": "You must live in the present, launch yourself on every wave, find your eternity in each moment. Fools stand on their island of opportunities and look toward another land. There is no other land; there is no other life but this.",
+    "author": "Henry David Thoreau"
+  },
+  {
+    "text": "Make your own Bible. Select and collect all the words and sentences that in all your readings have been to you like the blast of a trumpet.",
+    "author": "Ralph Waldo Emerson"
+  },
+  {
+    "text": "Cherish your solitude. Take trains by yourself to places you have never been. Sleep out alone under the stars. Learn how to drive a stick shift. Go so far away that you stop being afraid of not coming back. Say no when you don't want to do something. Say yes if your instincts are strong, even if everyone around you disagrees. Decide whether you want to be liked or admired. Decide if fitting in is more important than finding out what you're doing here. Believe in kissing.",
+    "author": "Eve Ensler"
+  },
+  {
+    "text": "A man can be himself only so long as he is alone; and if he does not love solitude, he will not love freedom; for it is only when he is alone that he is really free.",
+    "author": "Arthur Schopenhauer"
+  },
+  {
+    "text": "The more powerful and original a mind, the more it will incline towards the religion of solitude.",
+    "author": "Aldous Huxley"
+  },
+  {
+    "text": "There is a pleasure in the pathless woods, There is a rapture on the lonely shore, There is society, where none intrudes, By the deep sea, and music in its roar: I love not man the less, but Nature more.",
+    "author": "Lord Byron"
+  },
+  {
+    "text": "You see, the point is that the strongest man in the world is he who stands most alone.",
+    "author": "Henrik Ibsen"
+  },
+  {
+    "text": "The majority is never right. Never, I tell you! That's one of these lies in society that no free and intelligent man can help rebelling against. Who are the people that make up the biggest proportion of the population -- the intelligent ones or the fools?",
+    "author": "Henrik Ibsen"
+  },
+  {
+    "text": "Who then is invincible? The one who cannot be upset outside their reasoned choice.",
+    "author": "Epictetus"
+  },
+  {
+    "text": "You either gotta get better at harvesting in the spring, or begging in the fall.",
+    "author": "Jim Rohn"
+  },
+  {
+    "text": "Let me tell you the secret that has led to my goal. My strength lies solely in my tenacity.",
+    "author": "Louis Pasteur"
+  },
+  {
+    "text": "You've got to say I'll do whatever it takes.",
+    "author": "Arnold Schwarzenegger"
+  },
+  {
+    "text": "Do not wait to strike while the iron is hot, but make it hot by striking.",
+    "author": "William B. Sprague"
+  },
+  {
+    "text": "Keep your face always toward the sunshine ― and shadows will fall behind you.",
+    "author": "Walt Whitman"
+  },
+  {
+    "text": "Strategy is the art of making use of time and space. I am less concerned about the latter than the former. Space we can recover, lost time never.",
+    "author": "Napoleon Bonaparte"
+  },
+  {
+    "text": "It requires more courage to suffer than to die.",
+    "author": "Napoleon"
+  },
+  {
+    "text": "God is on the side with the best artillery.",
+    "author": "Napoleon"
+  },
+  {
+    "text": "Six hours sleep for a man, seven for a woman and eight for a fool.",
+    "author": "Napoleon Bonaparte"
+  },
+  {
+    "text": "We walk faster when we walk alone.",
+    "author": "Napoleon Bonaparte"
+  },
+  {
+    "text": "When the ending is unknown and the distance is unknown, that's when you know who the fuck you are.",
+    "author": "David Goggins"
+  },
+  {
+    "text": "For what is high and good is on my side.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "Wash yourself clean. With simplicity, with humility, with indifference to everything but right and wrong. Care for other human beings. Follow God.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "Well-being is good luck or good character.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "Straight, not straightened.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "The fool has one great advantage over the man of sense; he is always satisfied with himself.",
+    "author": "Napoleon"
+  },
+  {
+    "text": "The truest wisdom is a resolute determination.",
+    "author": "Napoleon"
+  },
+  {
+    "text": "Great ambition is the passion of great character. Those endowed with it may perform very good or very bad acts. All depends on the principles which direct them.",
+    "author": "Napoleon"
+  },
+  {
+    "text": "Throw me to the wolves and I will return leading the pack.",
+    "author": "Seneca"
+  },
+  {
+    "text": "A gem cannot be polished without friction, nor a man perfected without trials.",
+    "author": "Seneca"
+  },
+  {
+    "text": "Sometimes even to live is an act of courage.",
+    "author": "Seneca"
+  },
+  {
+    "text": "The superior man is distressed by the limitations of his ability; he is not distressed by the fact that men do not recognize the ability that he has.",
+    "author": "Confucius"
+  },
+  {
+    "text": "Only when the tide goes out do you discover who's been swimming naked.",
+    "author": "Warren Buffett"
+  },
+  {
+    "text": "Wrong does not cease to be wrong because the majority share in it.",
+    "author": "Leo Tolstoy"
+  },
+  {
+    "text": "It's a disgrace in this life when the soul surrenders first while the body refuses to.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "If god did not exist, he would have to be invented.",
+    "author": "Voltaire"
+  },
+  {
+    "text": "Nothing in this world can take the place of persistence. Talent will not nothing is more common than unsuccessful people with talent. Genius will not unrewarded genius is almost a proverb. Education will not the world is full of educated failures. Persistence and determination alone are omnipotent.",
+    "author": "Calvin Coolidge"
+  },
+  {
+    "text": "I hate quotation, tell me what you know.",
+    "author": "Ralph Waldo Emerson"
+  },
+  {
+    "text": "For it's disgrace for an old person, or one in sight of old age, to have only the knowledge carried in their notebooks. Zeno said this... what do you say? Clean this said that... what do you say? How long will you be compelled by the claims of others? Take charge and stake your own claim―something posterity will carry in its notebook.",
+    "author": "Seneca"
+  },
+  {
+    "text": "Imperious Caesar, dead and turn'd to clay, Might stop a hole to keep the wind away: O, that that earth, which kept the world in awe, Should patch a wall to expel the winter flaw!",
+    "author": "Shakespeare"
+  },
+  {
+    "text": "Both Alexander the Great and his mule-keeper were brought to the same place by death―they were either received into the all generative reason, or scattered among the atoms.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "Death lies heavy upon one who, known exceedingly well by all, dies unknown to himself.",
+    "author": "Seneca"
+  },
+  {
+    "text": "Life is long if you know how to use it.",
+    "author": "Seneca"
+  },
+  {
+    "text": "It's so easy to be great nowadays because most people are weak.",
+    "author": "David Goggins"
+  },
+  {
+    "text": "A man with a nice smile but iron teeth.",
+    "author": "Andrei Gromyko"
+  },
+  {
+    "text": "This is not a way of life at all, in any true sense. Under the cloud of threatening war, it is humanity hanging from a cross of iron.",
+    "author": "Dwight Eisenhower"
+  },
+  {
+    "text": "Death is only dangerous to the unlived life.",
+    "author": "Unknown"
+  },
+  {
+    "text": "I say, let no one rob me of a single day who isn't going to make a full return on the loss.",
+    "author": "Seneca"
+  },
+  {
+    "text": "Everybody wants to go to heaven, but nobody wants to die.",
+    "author": "Unknown"
+  },
+  {
+    "text": "No my boys, said the merchant, it is hard to live by right, it is easier to live by wrong. We are cheated, and we must cheat others too.",
+    "author": "Red Plenty"
+  },
+  {
+    "text": "After a long time or a short time-for speedily a tale is spun, with much less speed a deed is done.",
+    "author": "Red Plenty"
+  },
+  {
+    "text": "The power of accurate observation is commonly called cynicism by those who have not got it.",
+    "author": "George Bernard Shaw"
+  },
+  {
+    "text": "They overlook the wood in their precise and minute examination of particular trees.",
+    "author": "Henry Hazlitt"
+  },
+  {
+    "text": "The notion that we can dismiss the views of all previous thinkers surely leaves no basis for the hope that our own work will prove of any value to others.",
+    "author": "Morris R. Cohen"
+  },
+  {
+    "text": "Death is one prophecy that never fails.",
+    "author": "Edmund Wilson"
+  },
+  {
+    "text": "Let each thing you would do, say, or intend be like that of a dying person.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "We who cut mere stones must always be envisioning cathedrals.",
+    "author": "Medieval Quarry Workers Creed"
+  },
+  {
+    "text": "We are like many pellets of incense falling on the same altar. Some collapse sooner, others later, but it makes no difference.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "As for me, I would choose being sick over living in luxury, for being sick only harms the body, whereas luxury destroys both the body and soul, causing weakness and incapacity in the body, and lack of control and cowardice in the soul. What's more, luxury breeds injustice because it also breeds greediness.",
+    "author": "Musonius Rufus"
+  },
+  {
+    "text": "There is one thing and only one thing that causes unhappiness. The name of that thing is attachment.",
+    "author": "Anthony De Mello"
+  },
+  {
+    "text": "We are all worms, but I believe I am a glow worm.",
+    "author": "Winston Churchill"
+  },
+  {
+    "text": "If it pleases the gods so be it. They may well kill me but they can't hurt me.",
+    "author": "Socrates"
+  },
+  {
+    "text": "Only those who will risk going too far will find out how far one can go.",
+    "author": "T.S. Eliot"
+  },
+  {
+    "text": "Our rational nature moves forward in its impressions when it: accepts nothing false or uncertain, directs its impulses only to acts for the common good, limits its desired and aversions only to what's in its own power, embraced everything nature assigns it.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "New things are old things happening to new people.",
+    "author": "John Lennox"
+  },
+  {
+    "text": "Don't allow yourself to be heard any longer griping about public life, not even with your own ears!",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "Never complain, never explain.",
+    "author": "Benjamin Disraeli"
+  },
+  {
+    "text": "One generation passeth, and another generation cometh; but the earth abideth forever. The sun also riseth , and the sun goeth down, and resteth to the place where he arose.",
+    "author": "Ernest Hemingway"
+  },
+  {
+    "text": "Don't trust in your reputation, money, or position, but in the strength that is yours―namely, your judgments about the things that you control and don't control. For this alone is what makes us free and unfettered, that picks us up by the neck from the depths and lifts us eye to eye with the rich and powerful.",
+    "author": "Epictetus"
+  },
+  {
+    "text": "Would you have a great empire? Rule over yourself!",
+    "author": "Publilius Syrus"
+  },
+  {
+    "text": "The constitution of [Soviet Union] 1936 proclaimed, 'He who does not work, does not eat.' A peasant woman from Voronezh suggested that the clause should be rephrased, 'He who works should eat'.",
+    "author": "Ronald Suny"
+  },
+  {
+    "text": "Every damn person who said I wouldn't be anything, I'm crushing them everyday.",
+    "author": "Henry Rollins"
+  },
+  {
+    "text": "Till you've built one house with your own hands you're no engineer.",
+    "author": "Alexander Solzhenitsyn"
+  },
+  {
+    "text": "Character is fate.",
+    "author": "Heraclitus"
+  },
+  {
+    "text": "Dig deep within yourself, for there is a fountain of goodness ever ready to flow if you will keep digging.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "text": "Worthless people live only to eat and drink, people of worth eat and drink only to live.",
+    "author": "Seneca"
+  },
+  {
+    "text": "Dignity does not consist in possessing honors, but in deserving them.",
+    "author": "Aristotle"
+  },
+  {
+    "text": "The darker the night, the brighter the stars.",
+    "author": "Fyodor Dostoevsky"
+  },
+  {
+    "text": "Dying is nothing new in this life, but then living is nothing new either.",
+    "author": "Sergei Esenin"
+  },
+  {
+    "text": "Beware those who seek constant crowds, for they are nothing alone.",
+    "author": "Charles Bukowski"
+  },
+  {
+    "text": "Don't try. If you are going to try go all the way. Otherwise, don't even start.",
+    "author": "Charles Bukowski"
+  },
+  {
+    "text": "Everything you ever wanted is on the other side of fear.",
+    "author": "George Addair"
+  },
+  {
+    "text": "You can't beat death, but you can beat death in life.",
+    "author": "Charles Bukowski"
+  },
+  {
+    "text": "Like science, art must provide knowledge, 'cognition of life' and an understanding of reality. But whereas science analyzes, art synthesizes; whereas science is abstract, art is concrete.",
+    "author": "Ronald Suny"
+  },
+  {
+    "text": "I don't tell people 'you are alright the way you are.' That's not the right story. The right story is 'You're way less than you could be'.",
+    "author": "Jordan Peterson"
+  },
+  {
+    "text": "Not everything that is faced can be changed, but nothing can be changed until it is faced.",
+    "author": "James Baldwin"
+  },
+  {
+    "text": "The only intelligent tactical response to life's horror is to laugh tactically at it.",
+    "author": "Søren Kierkegaard"
+  },
+  {
+    "text": "Man is a mystery. It needs to be unraveled, and if you spend your whole life unraveling it don't say that you've wasted time. I am studying that mystery because I want to be a human being.",
+    "author": "Fyodor Dostoevsky"
+  },
+  {
+    "text": "The man of knowledge must be able not only to love his enemies but also to hate his friends.",
+    "author": "Friedrich Nietzsche"
+  },
+  {
+    "text": "There is always some madness in love, but there is also always some reason in madness.",
+    "author": "Friedrich Nietzsche"
+  },
+  {
+    "text": "Write about how this young man squeezes the slave out of himself drop by drop and how one fine morning he wakes to find that the blood coursing through his veins is no longer the blood of a slave, but that of a real human being.",
+    "author": "Anton Chekhov"
+  },
+  {
+    "text": "Marx famously called religion the opiate of the masses, if so then nationalism was the cocaine of the middle classes.",
+    "author": "Niall Ferguson"
+  },
+  {
+    "text": "Utopias are an expression of aspirations that cannot be realized, of efforts that are not equal to the resistance they encounter.",
+    "author": "Aleksandr Bogdanov"
+  },
+  {
+    "text": "Authority is legitimized power.",
+    "author": "George Breslauer"
+  },
+  {
+    "text": "No matter what you feed a wolf, he still looks to the forest.",
+    "author": "Provincial Soviet Deputy"
+  },
+  {
+    "text": "You become way less concerned with what other people think of you when you realize how seldom they do.",
+    "author": "David Foster Wallace"
+  },
+  {
+    "text": "Anti-social behavior is a trait of intelligence in a world full of conformists.",
+    "author": "Nikola Tesla"
+  },
+  {
+    "text": "The fear of finding oneself alone - that is what they suffer from - and so they don't find themselves at all.",
+    "author": "André Gide"
+  },
+  {
+    "text": "Speak not of gifts or innate talents! One can name all kinds of great men who were not very gifted. But they acquired greatness, became 'geniuses'.",
+    "author": "Friedrich Nietzsche"
+  },
+  {
+    "text": "Man is nothing else but what he makes of himself.",
+    "author": "Jean-Paul Sartre"
+  },
+  {
+    "text": "The struggle itself towards the heights is enough to fill a man's heart.",
+    "author": "Albert Camus"
+  },
+  {
+    "text": "A man can do as he wills, but not will as he wills.",
+    "author": "Arthur Schopenhauer"
+  },
+  {
+    "text": "No tree can grow to heaven, unless its roots reach down to hell.",
+    "author": "Carl Jung"
+  },
+  {
+    "text": "Bring with you a heart that watches and receives.",
+    "author": "William Wordsworth"
+  },
+  {
+    "text": "You might say the road to hell is paved with Ivy League degrees.",
+    "author": "Thomas Sowell"
+  },
+  {
+    "text": "But don't look analytically; we tell them. Don't look as scientists, even as gardeners. Liberate yourselves from everything you know and look with complete strangers innocence at this infinitely improbable thing before you.",
+    "author": "Aldous Huxley"
+  },
+  {
+    "text": "It's like being a mosquito at a nudist colony. You don't know where to start.",
+    "author": "Unknown"
+  },
+  {
+    "text": "There can be no more positive neutrality than there can be a vegetarian tiger.",
+    "author": "V.K. Krishna Menon"
+  },
+  {
+    "text": "Men are not hanged for stealing horses, but that horses may not be stolen.",
+    "author": "George Savile"
+  },
+  {
+    "text": "In a war of ideas it is people who get killed.",
+    "author": "Stanisław Jerzy Lec"
+  },
+  {
+    "text": "The best argument against democracy is a five-minute conversation with the average voter.",
+    "author": "Winston Churchill"
+  },
+  {
+    "text": "History will be kind to me for I intend to write it.",
+    "author": "Winston Churchill"
+  },
+  {
+    "text": "History was hell for everyone, and we cannot do an audit sheet.",
+    "author": "Douglas Murray"
+  },
+  {
+    "text": "The man that masters himself through self-discipline can never be mastered by others.",
+    "author": "Napoleon Hill"
+  },
+  {
+    "text": "Seeing is very difficult, so you must choose what to see and let the rest go.",
+    "author": "Jordan Peterson"
+  },
+  {
+    "text": "You can boast about anything if it's all you have. Maybe the less you have the more you're required to boast.",
+    "author": "John Steinbeck"
+  },
+  {
+    "text": "No porcupine can defeat a dog, but it takes a very stupid dog to maul a porcupine.",
+    "author": "Unknown"
+  },
+  {
+    "text": "Adversity introduces a man to himself.",
+    "author": "Albert Einstein"
+  },
+  {
+    "text": "Three people can keep a secret if two of them are dead.",
+    "author": "Benjamin Franklin"
+  },
+  {
+    "text": "If you could kick the person in the pants responsible for most of your trouble, you wouldn't sit for a month.",
+    "author": "Theodore Roosevelt"
+  },
+  {
+    "text": "We have two lives, and the second begins when we realize we only have one.",
+    "author": "Confucius"
+  },
+  {
+    "text": "Getting old beats the alternative.",
+    "author": "Unknown"
+  },
+  {
+    "text": "Do not regret growing older. It is a privilege denied to many.",
+    "author": "Unknown"
+  },
+  {
+    "text": "The real man smiles in trouble, gathers strength from distress, and grows brave by reflection.",
+    "author": "Thomas Paine"
+  },
+  {
+    "text": "When the aristocracy catches a cold, the working class dies of pneumonia.",
+    "author": "Unknown"
+  },
+  {
+    "text": "Friendly old dogs can still bite, old and trusted friends can still deceive, new ideas can destroy old and comfortable certainties.",
+    "author": "Jordan Peterson"
+  },
+  {
+    "text": "You get in more trouble with a good idea than a bad idea, because the good idea works.",
+    "author": "Warren Buffett"
+  },
+  {
+    "text": "It will always feel easier to put something off, and it will always be better to just get it done.",
+    "author": "Unknown"
+  },
+  {
+    "text": "Keep looking for a unicorn, but all you need is a horse.",
+    "author": "Unknown"
+  },
+  {
+    "text": "Life happens wherever you are. Whether you make it or not.",
+    "author": "Uncle Iroh"
+  },
+  {
+    "text": "That's how you devour a whale, one bite at a time.",
+    "author": "Francis Underwood"
+  },
+  {
+    "text": "Shake with your right hand, but hold a rock in your left.",
+    "author": "Frank Underwood"
+  },
+  {
+    "text": "You can't turn a no to a yes without a maybe in between.",
+    "author": "Unknown"
+  },
+  {
+    "text": "The society that puts equality before freedom will end up with neither. The society that puts freedom before equality will end up with a great measure of both.",
+    "author": "Milton Friedman"
+  },
+  {
+    "text": "It's easier to fool people than to convince them they've been fooled.",
+    "author": "Mark Twain"
+  },
+  {
+    "text": "It is better to be a warrior in a garden than a gardener in a war.",
+    "author": "Unknown"
+  },
+  {
+    "text": "I have never killed a man, but I have read many obituaries with great pleasure.",
+    "author": "Clarence Darrow"
   }
 ]
