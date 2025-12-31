@@ -480,7 +480,6 @@ main {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
-    max-width: var(--content-width);
 }
 
 .post-preview {
