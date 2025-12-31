@@ -25,10 +25,18 @@
         <header class="page-header">
             <h1>Photos</h1>
             <p class="page-intro">Images worth remembering.</p>
+            <button id="random-photo-btn" class="random-photo-btn" style="display: none;">
+                🎲 Random Photo
+            </button>
         </header>
 
         <div id="photo-grid" class="photo-grid">
             <p class="loading">Loading photos...</p>
+        </div>
+
+        <div id="load-more-container" class="load-more-container" style="display: none;">
+            <button id="load-more-btn" class="load-more-btn">Load More Photos</button>
+            <p class="photo-count"></p>
         </div>
     </main>
 
@@ -58,6 +66,8 @@
     <script>
         let photos = [];
         let currentPhotoIndex = 0;
+        let displayedPhotos = 0;
+        const PHOTOS_PER_PAGE = 50;
 
         // Load and display photos
         window.addEventListener('DOMContentLoaded', async () => {
@@ -133,35 +143,81 @@
                     return;
                 }
 
-                // Render photos
+                // Show random photo button
+                document.getElementById('random-photo-btn').style.display = 'inline-block';
+
+                // Render initial batch of photos
                 container.innerHTML = '';
-                photos.forEach((photo, index) => {
-                    const photoItem = document.createElement('div');
-                    photoItem.className = 'photo-item';
-                    photoItem.setAttribute('data-index', index);
+                renderPhotos(PHOTOS_PER_PAGE);
 
-                    const img = document.createElement('img');
-                    img.src = photo.photo;
-                    img.alt = photo.title;
-                    img.loading = 'lazy';
-
-                    // Calculate masonry row span after image loads
-                    img.onload = function() {
-                        const rowHeight = 10; // matches grid-auto-rows in CSS
-                        const rowGap = 32; // matches gap in CSS (2rem = 32px)
-                        const rowSpan = Math.ceil((this.clientHeight + rowGap) / (rowHeight + rowGap));
-                        photoItem.style.gridRowEnd = `span ${rowSpan}`;
-                    };
-
-                    photoItem.appendChild(img);
-                    photoItem.addEventListener('click', () => openLightbox(index));
-                    container.appendChild(photoItem);
-                });
+                // Show "Load More" button if there are more photos
+                updateLoadMoreButton();
 
             } catch (error) {
                 console.error('Error loading photos:', error);
                 container.innerHTML = '<p class="error">Unable to load photos.</p>';
             }
+        });
+
+        // Render a batch of photos
+        function renderPhotos(count) {
+            const container = document.getElementById('photo-grid');
+            const endIndex = Math.min(displayedPhotos + count, photos.length);
+
+            for (let i = displayedPhotos; i < endIndex; i++) {
+                const photo = photos[i];
+                const photoItem = document.createElement('div');
+                photoItem.className = 'photo-item';
+                photoItem.setAttribute('data-index', i);
+
+                const img = document.createElement('img');
+                img.src = photo.photo;
+                img.alt = photo.title;
+                img.loading = 'lazy';
+
+                // Calculate masonry row span after image loads
+                img.onload = function() {
+                    const rowHeight = 10; // matches grid-auto-rows in CSS
+                    const rowGap = 32; // matches gap in CSS (2rem = 32px)
+                    const rowSpan = Math.ceil((this.clientHeight + rowGap) / (rowHeight + rowGap));
+                    photoItem.style.gridRowEnd = `span ${rowSpan}`;
+                };
+
+                photoItem.appendChild(img);
+                photoItem.addEventListener('click', () => openLightbox(i));
+                container.appendChild(photoItem);
+            }
+
+            displayedPhotos = endIndex;
+            updateLoadMoreButton();
+        }
+
+        // Update the load more button visibility and text
+        function updateLoadMoreButton() {
+            const loadMoreContainer = document.getElementById('load-more-container');
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            const photoCount = loadMoreContainer.querySelector('.photo-count');
+
+            if (displayedPhotos < photos.length) {
+                loadMoreContainer.style.display = 'block';
+                const remaining = photos.length - displayedPhotos;
+                photoCount.textContent = `Showing ${displayedPhotos} of ${photos.length} photos`;
+            } else {
+                loadMoreContainer.style.display = 'none';
+            }
+        }
+
+        // Random photo function
+        function openRandomPhoto() {
+            if (photos.length === 0) return;
+            const randomIndex = Math.floor(Math.random() * photos.length);
+            openLightbox(randomIndex);
+        }
+
+        // Event listeners for random photo and load more
+        document.getElementById('random-photo-btn').addEventListener('click', openRandomPhoto);
+        document.getElementById('load-more-btn').addEventListener('click', () => {
+            renderPhotos(PHOTOS_PER_PAGE);
         });
 
         // Lightbox functions
