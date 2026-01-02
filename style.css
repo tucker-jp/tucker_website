@@ -677,7 +677,7 @@ main {
    =================================== */
 
 .blog-feed {
-    max-width: var(--content-width);
+    /* Removed max-width to match Projects/Photos alignment */
 }
 
 .blog-post-full {
