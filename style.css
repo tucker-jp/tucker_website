@@ -672,6 +672,30 @@ main {
     object-fit: cover;
 }
 
+/* Essays list: match spacing with other sections */
+.essays-page .post-list {
+    gap: 0;
+}
+
+.essays-page .post-preview {
+    padding: var(--spacing-lg) 0;
+    border: none;
+    border-bottom: 2px solid var(--border-subtle);
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.essays-page .post-preview:hover {
+    box-shadow: none;
+    border-bottom-color: var(--accent);
+    transform: none;
+}
+
+.essays-page .post-preview:last-child {
+    border-bottom: none;
+}
+
 /* ===================================
    BLOG FEED (Marginal Revolution style)
    =================================== */
@@ -1309,6 +1333,10 @@ main {
 
     .post-preview {
         padding: var(--spacing-sm);
+    }
+
+    .essays-page .post-preview {
+        padding: var(--spacing-sm) 0;
     }
 
     .post-preview h2 {
