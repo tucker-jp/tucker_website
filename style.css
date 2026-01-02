@@ -185,15 +185,40 @@ blockquote {
 
 .site-title {
     font-family: var(--font-serif);
-    font-size: 1.375rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 500;
     color: var(--text-primary);
     text-decoration: none;
     transition: color 0.2s ease;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.site-title::before {
+    content: 'TP';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--accent);
 }
 
 .site-title:hover {
     color: var(--accent);
+}
+
+.site-title:hover::before {
+    background-color: var(--accent);
+    color: var(--cream-light);
 }
 
 .nav-links {
@@ -203,7 +228,7 @@ blockquote {
 
 .nav-links a {
     font-family: var(--font-sans);
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--text-secondary);
     text-decoration: none;
@@ -1156,6 +1181,7 @@ main {
     overflow: hidden;
     transition: all 0.2s ease;
     background-color: var(--cream-light);
+    position: relative;
 }
 
 .photo-item:hover {
@@ -1167,6 +1193,30 @@ main {
     width: 100%;
     height: auto;
     display: block;
+}
+
+.photo-caption-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+    padding: 1.5rem 1rem 0.75rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.photo-item:hover .photo-caption-overlay {
+    opacity: 1;
+}
+
+.photo-caption-overlay-text {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    margin: 0;
 }
 
 /* Pagination Controls */

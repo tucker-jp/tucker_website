@@ -188,6 +188,18 @@
                 };
 
                 photoItem.appendChild(img);
+
+                // Add caption overlay if caption exists
+                if (photo.caption) {
+                    const overlay = document.createElement('div');
+                    overlay.className = 'photo-caption-overlay';
+                    const captionText = document.createElement('p');
+                    captionText.className = 'photo-caption-overlay-text';
+                    captionText.textContent = photo.caption;
+                    overlay.appendChild(captionText);
+                    photoItem.appendChild(overlay);
+                }
+
                 photoItem.addEventListener('click', () => openLightbox(i));
                 container.appendChild(photoItem);
             }
