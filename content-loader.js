@@ -187,8 +187,13 @@ function formatDate(dateString) {
     if (!dateString) return '';
 
     const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+
+    const datePart = date.toLocaleDateString('en-US', dateOptions);
+    const timePart = date.toLocaleTimeString('en-US', timeOptions);
+
+    return `${datePart} at ${timePart}`;
 }
 
 // Calculate reading time from markdown content

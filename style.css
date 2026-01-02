@@ -729,13 +729,15 @@ main {
 }
 
 .blog-post-full {
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-lg);
-    border-bottom: 3px solid var(--accent);
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background-color: var(--cream-light);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
 }
 
 .blog-post-full:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .blog-post-title {
