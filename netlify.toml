@@ -2,6 +2,15 @@
   publish = "."
   command = "npm install && node scripts/optimize-images.js && node generate-index.js"
 
+# Disable deploy previews to save build credits
+[context.deploy-preview]
+  publish = "."
+  command = "echo 'Skipping deploy preview build'"
+
+[context.branch-deploy]
+  publish = "."
+  command = "echo 'Skipping branch deploy build'"
+
 # Force HTTPS redirect
 [[redirects]]
   from = "http://tucker-pippin-website.netlify.app/*"
