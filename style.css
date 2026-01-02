@@ -632,9 +632,14 @@ main {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    align-items: stretch;
 }
 
 .post-preview {
+    width: 100%;
     padding: var(--spacing-lg);
     border-radius: 8px;
     border: 1px solid var(--border-subtle);
@@ -857,6 +862,12 @@ main {
    SINGLE POST
    =================================== */
 
+#single-post-view {
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto;
+}
+
 .back-link {
     display: inline-block;
     font-family: var(--font-sans);
@@ -876,6 +887,9 @@ main {
 .single-post {
     margin-top: var(--spacing-md);
     max-width: var(--wide-width);
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .post-header {
@@ -1041,7 +1055,9 @@ main {
    =================================== */
 
 .photo-quote {
-    margin: 0 0 var(--spacing-md) 0;
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto var(--spacing-md);
     border-left: 3px solid var(--accent);
     text-align: center;
 }
