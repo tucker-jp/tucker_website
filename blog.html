@@ -22,10 +22,10 @@
         <div class="nav-container">
             <a href="/" class="site-title">Tucker Pippin</a>
             <div class="nav-links">
-                <a href="/blog.html" class="active">Blog</a>
-                <a href="/essays.html">Essays</a>
-                <a href="/projects.html">Projects</a>
                 <a href="/photos.html">Photos</a>
+                <a href="/projects.html">Projects</a>
+                <a href="/essays.html">Essays</a>
+                <a href="/blog.html" class="active">Blog</a>
                 <a href="/admin" class="admin-link">Login</a>
                 <span class="contact-link" id="contact-btn">Contact</span>
             </div>
@@ -36,6 +36,14 @@
         <header class="page-header">
             <h1>Blog</h1>
             <p class="page-intro">Shorter thoughts, updates, and things worth sharing.</p>
+
+            <!-- Taleb Quote -->
+            <div class="photo-quote quote-box">
+                <p class="photo-quote-text">"The minute I was bored with a book or a subject I moved to another one, instead of giving up on reading altogether...</p>
+                <p class="photo-quote-text" style="margin-top: 0.5rem;">The trick is to be bored with a specific book, rather than with the act of reading. So the number of the pages absorbed could grow faster than otherwise. And you find gold, so to speak, effortlessly, just as in rational but undirected trial-and-error-based research...</p>
+                <p class="photo-quote-text" style="margin-top: 0.5rem;">Trial and error is freedom."</p>
+                <p class="photo-quote-author">— Nassim Taleb</p>
+            </div>
         </header>
 
         <div id="blog-feed" class="blog-feed">
@@ -115,5 +123,8 @@
         }
     </script>
     <script src="/js/contact-modal.js"></script>
+
+    <!-- Instant page navigation - preloads links on hover -->
+    <script src="//instant.page/5.2.0" type="module" data-instant-intensity="mousedown"></script>
 </body>
 </html>
