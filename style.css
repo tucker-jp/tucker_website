@@ -729,6 +729,12 @@ main {
     color: #551a8b;
 }
 
+.read-more {
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
 /* Inline images in blog posts */
 .blog-post-image,
 .post-content img {
