@@ -184,13 +184,12 @@ blockquote {
 }
 
 .site-title {
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
-    font-weight: 500;
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    font-weight: 600;
     color: var(--text-primary);
     text-decoration: none;
     transition: color 0.2s ease;
-    letter-spacing: 0.02em;
     display: flex;
     align-items: center;
     gap: 0.75rem;
