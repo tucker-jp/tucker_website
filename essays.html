@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essays — Tucker Pippin</title>
+    <meta name="description" content="Longer form writing and thoughts from Tucker Pippin.">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Background photo rails (desktop only) -->
+    <div class="photo-rails">
+        <div class="rail rail-left">
+            <img src="/uploads/blog_bumper_1.jpg" alt="">
+        </div>
+        <div class="rail rail-right">
+            <img src="/uploads/blog_bumper_2.jpg" alt="">
+        </div>
+    </div>
+
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="/" class="site-title">Tucker Pippin</a>
+            <div class="nav-links">
+                <a href="/blog.html">Blog</a>
+                <a href="/essays.html" class="active">Essays</a>
+                <a href="/projects.html">Projects</a>
+                <a href="/photos.html">Photos</a>
+                <a href="/admin" class="admin-link">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <header class="page-header">
+            <h1>Essays</h1>
+            <p class="page-intro">Longer form writing and deeper thoughts.</p>
+        </header>
+
+        <div id="essay-feed" class="blog-feed">
+            <p class="loading">Loading essays...</p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 Tucker Pippin. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/utils.js"></script>
+    <script src="/content-loader.js"></script>
+    <script>
+        const POSTS_PER_PAGE = 10;
+        const EXCERPT_WORDS = 250;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadEssayFeed();
+        });
+
+        function truncateToWords(html, wordLimit) {
+            // Create a temporary div to parse HTML
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+
+            // Get text content and split into words
+            const text = temp.textContent || temp.innerText || '';
+            const words = text.trim().split(/\s+/);
+
+            if (words.length <= wordLimit) {
+                return { html, isTruncated: false };
+            }
+
+            // Truncate to word limit
+            const truncatedText = words.slice(0, wordLimit).join(' ');
+            return { html: truncatedText + '...', isTruncated: true };
+        }
+
+        async function loadEssayFeed() {
+            const container = document.getElementById('essay-feed');
+
+            try {
+                const posts = await loadCollection('essays');
+
+                if (posts.length === 0) {
+                    container.innerHTML = '<p class="empty">No essays yet.</p>';
+                    return;
+                }
+
+                // Load full content for first 10 posts
+                const recentPosts = posts.slice(0, POSTS_PER_PAGE);
+                const fullPosts = await Promise.all(
+                    recentPosts.map(post => loadSingleContent('essays', post.slug))
+                );
+
+                container.innerHTML = fullPosts.map((post, index) => {
+                    let coverImageHtml = '';
+                    if (post.cover_image) {
+                        coverImageHtml = `<img src="${escapeHtml(post.cover_image)}" alt="${escapeHtml(post.title)}" class="blog-post-image">`;
+                    }
+
+                    const { html: excerpt, isTruncated } = truncateToWords(post.html, EXCERPT_WORDS);
+                    const readMoreButton = isTruncated ?
+                        `<a href="#" class="read-more-link" data-index="${index}">Read more →</a>` :
+                        '';
+
+                    return `
+                        <article class="blog-post-full" data-index="${index}">
+                            <h2 class="blog-post-title">${escapeHtml(post.title)}</h2>
+                            <div class="post-meta">
+                                <time>${formatDate(post.date)}</time>
+                                <span class="separator">•</span>
+                                <span class="reading-time">${post.readingTime} min read</span>
+                            </div>
+                            ${coverImageHtml}
+                            <div class="post-content">
+                                <div class="excerpt-content">${excerpt}</div>
+                                <div class="full-content" style="display: none;">${post.html}</div>
+                            </div>
+                            ${readMoreButton}
+                        </article>
+                    `;
+                }).join('');
+
+                // Add click handlers for "Read more" links
+                document.querySelectorAll('.read-more-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const index = e.target.getAttribute('data-index');
+                        const article = document.querySelector(`article[data-index="${index}"]`);
+                        const excerptDiv = article.querySelector('.excerpt-content');
+                        const fullDiv = article.querySelector('.full-content');
+
+                        // Toggle visibility
+                        excerptDiv.style.display = 'none';
+                        fullDiv.style.display = 'block';
+                        e.target.style.display = 'none';
+                    });
+                });
+
+            } catch (error) {
+                console.error('Error loading essay feed:', error);
+                container.innerHTML = '<p class="error">Unable to load essays.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
