@@ -253,6 +253,15 @@ blockquote {
     border-radius: 2px;
 }
 
+.nav-links a.contact-link {
+    color: var(--accent);
+}
+
+.nav-links a.contact-link:hover {
+    color: var(--accent-hover);
+    border-bottom-color: var(--accent-hover);
+}
+
 .nav-links a.admin-link {
     color: var(--text-tertiary);
     font-size: 0.875rem;
