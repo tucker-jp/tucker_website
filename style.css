@@ -1043,6 +1043,35 @@ main {
     font-weight: 500;
 }
 
+.project-image {
+    max-width: 100%;
+    max-height: 400px;
+    width: auto;
+    height: auto;
+    margin: var(--spacing-md) 0;
+    border-radius: 4px;
+    display: block;
+    object-fit: contain;
+}
+
+.project-links {
+    margin-top: var(--spacing-sm);
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.project-links a {
+    color: #0066cc;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.project-links a:hover {
+    color: #0052a3;
+}
+
 /* ===================================
    FOOTER
    =================================== */

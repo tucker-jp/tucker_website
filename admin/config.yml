@@ -32,6 +32,22 @@ collections:
       - { label: "Cover Image", name: "cover_image", widget: "image", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
 
+  - name: "projects"
+    label: "Projects"
+    folder: "content/projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Status", name: "status", widget: "select", options: ["Active", "Completed", "Archived"], default: "Active" }
+      - { label: "Year", name: "year", widget: "number", value_type: "int", min: 2000, max: 2100 }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Technologies", name: "technologies", widget: "list", required: false }
+      - { label: "Project Link", name: "link", widget: "string", required: false }
+      - { label: "GitHub Repo", name: "github", widget: "string", required: false }
+      - { label: "Cover Image", name: "cover_image", widget: "image", required: false }
+      - { label: "Details", name: "body", widget: "markdown", required: false }
+
   - name: "photos"
     label: "Photos"
     folder: "content/photos"

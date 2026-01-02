@@ -37,26 +37,93 @@
             <p class="page-intro">Personal Projects I am working on</p>
         </header>
 
-        <div class="projects-list">
-            <article class="project-item">
-                <h2>Personal Website</h2>
-                <div class="project-meta">
-                    <span class="project-status">Active</span>
-                    <span class="separator">•</span>
-                    <span class="project-year">2025</span>
-                </div>
-                <p class="project-description">A clean, editorial-style personal website built with vanilla HTML, CSS, and JavaScript. Features a custom CMS integration, automatic image optimization, and a photography gallery with masonry layout.</p>
-                <div class="project-tech">
-                    <span class="tech-tag">HTML/CSS/JS</span>
-                    <span class="tech-tag">Decap CMS</span>
-                    <span class="tech-tag">Netlify</span>
-                </div>
-            </article>
+        <div id="projects-list" class="projects-list">
+            <p class="loading">Loading projects...</p>
         </div>
     </main>
 
     <footer class="site-footer">
         <p>&copy; 2025 Tucker Pippin. All rights reserved.</p>
     </footer>
+
+    <script src="/js/utils.js"></script>
+    <script src="/content-loader.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadProjectsList();
+        });
+
+        async function loadProjectsList() {
+            const container = document.getElementById('projects-list');
+
+            try {
+                const projects = await loadCollection('projects');
+
+                if (projects.length === 0) {
+                    container.innerHTML = '<p class="empty">No projects yet.</p>';
+                    return;
+                }
+
+                // Load full content for all projects
+                const fullProjects = await Promise.all(
+                    projects.map(project => loadSingleContent('projects', project.slug))
+                );
+
+                // Sort by year (newest first), then by status (Active first)
+                fullProjects.sort((a, b) => {
+                    if (b.year !== a.year) return b.year - a.year;
+                    const statusOrder = { 'Active': 0, 'Completed': 1, 'Archived': 2 };
+                    return (statusOrder[a.status] || 999) - (statusOrder[b.status] || 999);
+                });
+
+                container.innerHTML = fullProjects.map(project => {
+                    let coverImageHtml = '';
+                    if (project.cover_image) {
+                        coverImageHtml = `<img src="${escapeHtml(project.cover_image)}" alt="${escapeHtml(project.title)}" class="project-image">`;
+                    }
+
+                    let techTagsHtml = '';
+                    if (project.technologies && project.technologies.length > 0) {
+                        techTagsHtml = `
+                            <div class="project-tech">
+                                ${project.technologies.map(tech => `<span class="tech-tag">${escapeHtml(tech)}</span>`).join('')}
+                            </div>
+                        `;
+                    }
+
+                    let linksHtml = '';
+                    const links = [];
+                    if (project.link) {
+                        links.push(`<a href="${escapeHtml(project.link)}" target="_blank" rel="noopener">View Project →</a>`);
+                    }
+                    if (project.github) {
+                        links.push(`<a href="${escapeHtml(project.github)}" target="_blank" rel="noopener">GitHub →</a>`);
+                    }
+                    if (links.length > 0) {
+                        linksHtml = `<div class="project-links">${links.join(' ')}</div>`;
+                    }
+
+                    return `
+                        <article class="project-item">
+                            <h2>${escapeHtml(project.title)}</h2>
+                            <div class="project-meta">
+                                <span class="project-status">${escapeHtml(project.status)}</span>
+                                <span class="separator">•</span>
+                                <span class="project-year">${project.year}</span>
+                            </div>
+                            ${coverImageHtml}
+                            <p class="project-description">${escapeHtml(project.description)}</p>
+                            ${techTagsHtml}
+                            ${linksHtml}
+                        </article>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                container.innerHTML = '<p class="error">Unable to load projects.</p>';
+            }
+        }
+    </script>
 </body>
 </html>
