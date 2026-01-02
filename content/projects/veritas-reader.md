@@ -10,6 +10,7 @@ technologies:
   - PDF.js
   - ePub.js
   - Vector Search
+github: https://github.com/tuckerpippin
 ---
 
 Veritas Reader is a web-based reading platform that combines a curated library of open-source books with powerful AI capabilities for deeper understanding and exploration.

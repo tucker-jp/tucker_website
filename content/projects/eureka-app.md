@@ -9,6 +9,7 @@ technologies:
   - Speech Recognition
   - CoreML
   - OpenAI API
+github: https://github.com/tuckerpippin
 ---
 
 Eureka is an iOS journaling app that captures thoughts through voice, transcribes them in real-time, and uses AI to automatically categorize and surface insights from your journal entries.

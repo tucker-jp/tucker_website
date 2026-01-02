@@ -22,10 +22,10 @@
         <div class="nav-container">
             <a href="/" class="site-title">Tucker Pippin</a>
             <div class="nav-links">
-                <a href="/blog.html">Blog</a>
-                <a href="/essays.html">Essays</a>
-                <a href="/projects.html" class="active">Projects</a>
                 <a href="/photos.html">Photos</a>
+                <a href="/projects.html" class="active">Projects</a>
+                <a href="/essays.html">Essays</a>
+                <a href="/blog.html">Blog</a>
                 <a href="/admin" class="admin-link">Login</a>
                 <span class="contact-link" id="contact-btn">Contact</span>
             </div>
@@ -90,8 +90,13 @@
                 });
 
                 container.innerHTML = fullProjects.map((project, index) => {
+                    // Determine if we have sidebar content (image or links)
+                    const hasCoverImage = project.cover_image;
+                    const hasLinks = project.link || project.github;
+                    const hasSidebar = hasCoverImage || hasLinks;
+
                     let coverImageHtml = '';
-                    if (project.cover_image) {
+                    if (hasCoverImage) {
                         coverImageHtml = `<img src="${escapeHtml(project.cover_image)}" alt="${escapeHtml(project.title)}" class="project-image">`;
                     }
 
@@ -113,27 +118,41 @@
                         links.push(`<a href="${escapeHtml(project.github)}" target="_blank" rel="noopener">GitHub →</a>`);
                     }
                     if (links.length > 0) {
-                        linksHtml = `<div class="project-links">${links.join(' ')}</div>`;
+                        linksHtml = `<div class="project-links">${links.join('')}</div>`;
+                    }
+
+                    // Build sidebar HTML
+                    let sidebarHtml = '';
+                    if (hasSidebar) {
+                        sidebarHtml = `
+                            <div class="project-sidebar">
+                                ${coverImageHtml}
+                                ${linksHtml}
+                            </div>
+                        `;
                     }
 
                     return `
                         <article class="project-item">
-                            <h2 class="project-title-clickable" data-project-index="${index}">
-                                ${escapeHtml(project.title)}
-                                <span class="expand-indicator">+</span>
-                            </h2>
-                            <div class="project-meta">
-                                <span class="project-status">${escapeHtml(project.status)}</span>
-                                <span class="separator">•</span>
-                                <span class="project-year">${project.year}</span>
+                            <div class="project-header${hasSidebar ? ' has-sidebar' : ''}">
+                                <div class="project-main">
+                                    <h2 class="project-title-clickable" data-project-index="${index}">
+                                        ${escapeHtml(project.title)}
+                                        <span class="expand-indicator">+</span>
+                                    </h2>
+                                    <div class="project-meta">
+                                        <span class="project-status">${escapeHtml(project.status)}</span>
+                                        <span class="separator">•</span>
+                                        <span class="project-year">${project.year}</span>
+                                    </div>
+                                    <p class="project-description">${escapeHtml(project.description)}</p>
+                                    ${techTagsHtml}
+                                </div>
+                                ${sidebarHtml}
                             </div>
-                            ${coverImageHtml}
-                            <p class="project-description">${escapeHtml(project.description)}</p>
                             <div class="project-details" id="project-details-${index}" style="display: none;">
                                 <div class="project-full-content">${project.html}</div>
                             </div>
-                            ${techTagsHtml}
-                            ${linksHtml}
                         </article>
                     `;
                 }).join('');
@@ -162,5 +181,8 @@
         }
     </script>
     <script src="/js/contact-modal.js"></script>
+
+    <!-- Instant page navigation - preloads links on hover -->
+    <script src="//instant.page/5.2.0" type="module" data-instant-intensity="mousedown"></script>
 </body>
 </html>
