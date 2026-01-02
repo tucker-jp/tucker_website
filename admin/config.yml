@@ -20,18 +20,6 @@ collections:
       - { label: "Cover Image", name: "cover_image", widget: "image", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
 
-  - name: "essays"
-    label: "Essays"
-    folder: "content/essays"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Publish Date", name: "date", widget: "datetime" }
-      - { label: "Description", name: "description", widget: "text", required: false }
-      - { label: "Cover Image", name: "cover_image", widget: "image", required: false }
-      - { label: "Body", name: "body", widget: "markdown" }
-
   - name: "photos"
     label: "Photos"
     folder: "content/photos"
