@@ -26,8 +26,8 @@
                 <a href="/essays.html">Essays</a>
                 <a href="/projects.html" class="active">Projects</a>
                 <a href="/photos.html">Photos</a>
-                <a href="mailto:tuckerepippin@gmail.com" class="contact-link">Get in touch</a>
-                <a href="/admin" class="admin-link">Admin</a>
+                <a href="/admin" class="admin-link">Login</a>
+                <span class="contact-link" id="contact-btn">Contact</span>
             </div>
         </div>
     </nav>
@@ -35,7 +35,6 @@
     <main class="container">
         <header class="page-header">
             <h1>Projects</h1>
-            <p class="page-intro">Personal Projects I am working on</p>
         </header>
 
         <div id="projects-list" class="projects-list">
@@ -46,6 +45,19 @@
     <footer class="site-footer">
         <p>&copy; 2025 Tucker Pippin. All rights reserved.</p>
     </footer>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="contact-modal">
+        <div class="contact-modal-content">
+            <h3>Get in Touch</h3>
+            <p>Send me an email at:</p>
+            <div class="email-display" id="email-display">tuckerepippin@gmail.com</div>
+            <div class="contact-modal-buttons">
+                <button class="copy-email-btn" id="copy-email-btn">Copy Email</button>
+                <button class="close-modal-btn" id="close-modal-btn">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script src="/js/utils.js"></script>
     <script src="/content-loader.js"></script>
@@ -77,7 +89,7 @@
                     return (statusOrder[a.status] || 999) - (statusOrder[b.status] || 999);
                 });
 
-                container.innerHTML = fullProjects.map(project => {
+                container.innerHTML = fullProjects.map((project, index) => {
                     let coverImageHtml = '';
                     if (project.cover_image) {
                         coverImageHtml = `<img src="${escapeHtml(project.cover_image)}" alt="${escapeHtml(project.title)}" class="project-image">`;
@@ -106,7 +118,10 @@
 
                     return `
                         <article class="project-item">
-                            <h2>${escapeHtml(project.title)}</h2>
+                            <h2 class="project-title-clickable" data-project-index="${index}">
+                                ${escapeHtml(project.title)}
+                                <span class="expand-indicator">+</span>
+                            </h2>
                             <div class="project-meta">
                                 <span class="project-status">${escapeHtml(project.status)}</span>
                                 <span class="separator">•</span>
@@ -114,11 +129,31 @@
                             </div>
                             ${coverImageHtml}
                             <p class="project-description">${escapeHtml(project.description)}</p>
+                            <div class="project-details" id="project-details-${index}" style="display: none;">
+                                <div class="project-full-content">${project.html}</div>
+                            </div>
                             ${techTagsHtml}
                             ${linksHtml}
                         </article>
                     `;
                 }).join('');
+
+                // Add click handlers for expandable projects
+                document.querySelectorAll('.project-title-clickable').forEach(title => {
+                    title.addEventListener('click', () => {
+                        const index = title.getAttribute('data-project-index');
+                        const details = document.getElementById(`project-details-${index}`);
+                        const indicator = title.querySelector('.expand-indicator');
+
+                        if (details.style.display === 'none') {
+                            details.style.display = 'block';
+                            indicator.textContent = '−';
+                        } else {
+                            details.style.display = 'none';
+                            indicator.textContent = '+';
+                        }
+                    });
+                });
 
             } catch (error) {
                 console.error('Error loading projects:', error);
@@ -126,5 +161,6 @@
             }
         }
     </script>
+    <script src="/js/contact-modal.js"></script>
 </body>
 </html>

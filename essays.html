@@ -26,8 +26,8 @@
                 <a href="/essays.html" class="active">Essays</a>
                 <a href="/projects.html">Projects</a>
                 <a href="/photos.html">Photos</a>
-                <a href="mailto:tuckerepippin@gmail.com" class="contact-link">Get in touch</a>
-                <a href="/admin" class="admin-link">Admin</a>
+                <a href="/admin" class="admin-link">Login</a>
+                <span class="contact-link" id="contact-btn">Contact</span>
             </div>
         </div>
     </nav>
@@ -45,8 +45,33 @@
             <p class="photo-quote-author">— Blaise Pascal</p>
         </div>
 
-        <div id="essay-feed" class="blog-feed">
-            <p class="loading">Loading essays...</p>
+        <!-- Single Essay View (hidden by default) -->
+        <div id="single-essay-view" style="display: none;">
+            <a href="/essays.html" class="back-link">← Back to Essays</a>
+            <article class="single-post">
+                <header class="post-header">
+                    <h1 id="essay-title"></h1>
+                    <div class="post-meta" id="essay-meta"></div>
+                    <img id="essay-cover" src="" alt="" class="cover-image" style="display: none;">
+                </header>
+                <div class="post-body" id="essay-body"></div>
+            </article>
+        </div>
+
+        <!-- Essay List View (default) -->
+        <div id="essay-list-view">
+            <div id="essay-feed" class="post-list">
+                <p class="loading">Loading essays...</p>
+            </div>
+
+            <!-- Pagination -->
+            <div id="essay-pagination" class="pagination-container" style="display: none;">
+                <button id="essay-prev-btn" class="btn-base btn-medium" disabled>← Previous</button>
+                <span class="page-info">
+                    <span class="page-number">Page <span id="essay-current-page">1</span> of <span id="essay-total-pages">1</span></span>
+                </span>
+                <button id="essay-next-btn" class="btn-base btn-medium">Next →</button>
+            </div>
         </div>
     </main>
 
@@ -54,22 +79,42 @@
         <p>&copy; 2025 Tucker Pippin. All rights reserved.</p>
     </footer>
 
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="contact-modal">
+        <div class="contact-modal-content">
+            <h3>Get in Touch</h3>
+            <p>Send me an email at:</p>
+            <div class="email-display" id="email-display">tuckerepippin@gmail.com</div>
+            <div class="contact-modal-buttons">
+                <button class="copy-email-btn" id="copy-email-btn">Copy Email</button>
+                <button class="close-modal-btn" id="close-modal-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script src="/js/utils.js"></script>
     <script src="/content-loader.js"></script>
     <script>
-        const POSTS_PER_PAGE = 10;
+        const ESSAYS_PER_PAGE = 5;
         const EXCERPT_WORDS = 250;
+        let allEssays = [];
+        let currentPage = 1;
 
         window.addEventListener('DOMContentLoaded', async () => {
-            await loadEssayFeed();
+            // Check if viewing a single essay
+            const urlParams = new URLSearchParams(window.location.search);
+            const essaySlug = urlParams.get('essay');
+
+            if (essaySlug) {
+                await loadSingleEssay(essaySlug);
+            } else {
+                await loadEssayList();
+            }
         });
 
         function truncateToWords(html, wordLimit) {
-            // Create a temporary div to parse HTML
             const temp = document.createElement('div');
             temp.innerHTML = html;
-
-            // Get text content and split into words
             const text = temp.textContent || temp.innerText || '';
             const words = text.trim().split(/\s+/);
 
@@ -77,78 +122,119 @@
                 return { html, isTruncated: false };
             }
 
-            // Truncate to word limit
             const truncatedText = words.slice(0, wordLimit).join(' ');
             return { html: truncatedText + '...', isTruncated: true };
         }
 
-        async function loadEssayFeed() {
+        async function loadEssayList() {
             const container = document.getElementById('essay-feed');
 
             try {
-                const posts = await loadCollection('essays');
+                const essays = await loadCollection('essays');
+                allEssays = essays;
 
-                if (posts.length === 0) {
+                if (essays.length === 0) {
                     container.innerHTML = '<p class="empty">No essays yet.</p>';
                     return;
                 }
 
-                // Load full content for first 10 posts
-                const recentPosts = posts.slice(0, POSTS_PER_PAGE);
-                const fullPosts = await Promise.all(
-                    recentPosts.map(post => loadSingleContent('essays', post.slug))
-                );
-
-                container.innerHTML = fullPosts.map((post, index) => {
-                    let coverImageHtml = '';
-                    if (post.cover_image) {
-                        coverImageHtml = `<img src="${escapeHtml(post.cover_image)}" alt="${escapeHtml(post.title)}" class="blog-post-image">`;
-                    }
-
-                    const { html: excerpt, isTruncated } = truncateToWords(post.html, EXCERPT_WORDS);
-                    const readMoreButton = isTruncated ?
-                        `<a href="#" class="read-more-link" data-index="${index}">Read more →</a>` :
-                        '';
-
-                    return `
-                        <article class="blog-post-full" data-index="${index}">
-                            <h2 class="blog-post-title">${escapeHtml(post.title)}</h2>
-                            <div class="post-meta">
-                                <time>${formatDate(post.date)}</time>
-                                <span class="separator">•</span>
-                                <span class="reading-time">${post.readingTime} min read</span>
-                            </div>
-                            ${coverImageHtml}
-                            <div class="post-content">
-                                <div class="excerpt-content">${excerpt}</div>
-                                <div class="full-content" style="display: none;">${post.html}</div>
-                            </div>
-                            ${readMoreButton}
-                        </article>
-                    `;
-                }).join('');
-
-                // Add click handlers for "Read more" links
-                document.querySelectorAll('.read-more-link').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const index = e.target.getAttribute('data-index');
-                        const article = document.querySelector(`article[data-index="${index}"]`);
-                        const excerptDiv = article.querySelector('.excerpt-content');
-                        const fullDiv = article.querySelector('.full-content');
-
-                        // Toggle visibility
-                        excerptDiv.style.display = 'none';
-                        fullDiv.style.display = 'block';
-                        e.target.style.display = 'none';
-                    });
-                });
-
+                renderEssayPage(1);
             } catch (error) {
-                console.error('Error loading essay feed:', error);
+                console.error('Error loading essays:', error);
                 container.innerHTML = '<p class="error">Unable to load essays.</p>';
             }
         }
+
+        async function renderEssayPage(page) {
+            currentPage = page;
+            const container = document.getElementById('essay-feed');
+            const totalPages = Math.ceil(allEssays.length / ESSAYS_PER_PAGE);
+
+            const startIndex = (page - 1) * ESSAYS_PER_PAGE;
+            const endIndex = Math.min(startIndex + ESSAYS_PER_PAGE, allEssays.length);
+            const pageEssays = allEssays.slice(startIndex, endIndex);
+
+            // Load full content for essays on this page
+            const fullEssays = await Promise.all(
+                pageEssays.map(essay => loadSingleContent('essays', essay.slug))
+            );
+
+            container.innerHTML = fullEssays.map(essay => {
+                const { html: excerpt, isTruncated } = truncateToWords(essay.html, EXCERPT_WORDS);
+                const readMoreLink = isTruncated ?
+                    `<a href="/essays.html?essay=${essay.slug}" class="read-more-link">Read more →</a>` : '';
+
+                return `
+                    <article class="post-preview">
+                        <h3><a href="/essays.html?essay=${essay.slug}">${escapeHtml(essay.title)}</a></h3>
+                        <div class="post-meta">
+                            <time>${formatDate(essay.date)}</time>
+                            <span class="separator">•</span>
+                            <span class="reading-time">${essay.readingTime} min read</span>
+                        </div>
+                        <div class="post-content">${excerpt}</div>
+                        ${readMoreLink}
+                    </article>
+                `;
+            }).join('');
+
+            // Update pagination
+            document.getElementById('essay-current-page').textContent = currentPage;
+            document.getElementById('essay-total-pages').textContent = totalPages;
+            document.getElementById('essay-prev-btn').disabled = currentPage === 1;
+            document.getElementById('essay-next-btn').disabled = currentPage === totalPages;
+
+            if (totalPages > 1) {
+                document.getElementById('essay-pagination').style.display = 'flex';
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function loadSingleEssay(slug) {
+            try {
+                const essay = await loadSingleContent('essays', slug);
+
+                document.getElementById('essay-title').textContent = essay.title;
+                document.getElementById('essay-meta').innerHTML = `
+                    <time>${formatDate(essay.date)}</time>
+                    <span class="separator">•</span>
+                    <span class="reading-time">${essay.readingTime} min read</span>
+                `;
+
+                if (essay.cover_image) {
+                    const coverImg = document.getElementById('essay-cover');
+                    coverImg.src = essay.cover_image;
+                    coverImg.alt = essay.title;
+                    coverImg.style.display = 'block';
+                }
+
+                document.getElementById('essay-body').innerHTML = essay.html;
+
+                // Show single view, hide list view
+                document.getElementById('single-essay-view').style.display = 'block';
+                document.getElementById('essay-list-view').style.display = 'none';
+
+            } catch (error) {
+                console.error('Error loading essay:', error);
+                document.getElementById('essay-body').innerHTML = '<p class="error">Unable to load essay.</p>';
+            }
+        }
+
+        // Pagination handlers
+        document.getElementById('essay-prev-btn').addEventListener('click', () => {
+            if (currentPage > 1) {
+                renderEssayPage(currentPage - 1);
+            }
+        });
+
+        document.getElementById('essay-next-btn').addEventListener('click', () => {
+            const totalPages = Math.ceil(allEssays.length / ESSAYS_PER_PAGE);
+            if (currentPage < totalPages) {
+                renderEssayPage(currentPage + 1);
+            }
+        });
     </script>
+    <script src="/js/contact-modal.js"></script>
 </body>
 </html>

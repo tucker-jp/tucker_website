@@ -1,18 +1,19 @@
 # Tucker Pippin Personal Website
 
-A clean, editorial-style personal website with integrated CMS. Built with static HTML, vanilla JavaScript, and Decap CMS.
+A minimalist personal website for writing, projects, and photography. Built with static HTML, vanilla JavaScript, and Decap CMS for content management.
 
 ## Architecture
 
 - **Frontend**: Static HTML + CSS + JavaScript (vanilla, no frameworks)
-- **CMS**: Decap CMS at `/admin` for blog, essays, and photo management
+- **CMS**: Decap CMS at `/admin` for blog, essays, projects, and photo management
 - **Content**: Markdown files with YAML frontmatter
 - **Build Pipeline**:
-  - Image optimization (auto-generates mobile versions of bumper images)
+  - Image optimization (auto-generates mobile versions)
   - Index generation (creates searchable JSON indexes)
+  - Deploy preview disabling (saves Netlify build credits)
 - **Hosting**: Netlify (static deployment with automated builds)
 - **Auth**: Netlify Identity + Git Gateway
-- **Responsive Design**: Desktop-first with mobile enhancements at <1100px
+- **Responsive Design**: Desktop-first with mobile enhancements
 
 ## Features
 
@@ -24,11 +25,13 @@ A clean, editorial-style personal website with integrated CMS. Built with static
 - Smooth transitions and hover states throughout
 
 ### Content Management
-- CMS-driven Blog, Essays, and Photos sections
+- CMS-driven Blog, Essays, Projects, and Photos sections
+- Essays with pagination (5 per page) and individual essay pages
 - Client-side Markdown rendering with syntax highlighting
-- Automatic post/photo index generation on every deploy
-- Reading time calculation for blog posts
-- Photo gallery with lightbox modal and navigation
+- Automatic index generation on every deploy
+- Reading time calculation for blog posts and essays
+- Photo gallery with lightbox modal and keyboard navigation
+- Contact modal with email display and copy-to-clipboard
 
 ### Performance
 - Automatic image optimization at build time
@@ -47,16 +50,16 @@ A clean, editorial-style personal website with integrated CMS. Built with static
 
 You can edit these sections via the CMS at `/admin`:
 
-- **Blog** (`/blog.html`) — Shorter posts and updates
-- **Essays** (`/essays.html`) — Longer-form writing
+- **Blog** (`/blog.html`) — Shorter posts and updates (Marginal Revolution style full feed)
+- **Essays** (`/essays.html`) — Longer-form writing with pagination and individual essay pages
+- **Projects** (`/projects.html`) — Portfolio/work showcase with status badges
 - **Photos** (`/photos.html`) — Photography gallery with masonry layout
 
 ## Static Content
 
 These pages require code edits:
 
-- **Home** (`/index.html`) — Landing page with intro
-- **Projects** (`/projects.html`) — Portfolio/work showcase
+- **Home** (`/index.html`) — Landing page with intro and daily quote rotation
 
 ## Deployment
 
@@ -112,11 +115,15 @@ Then visit `http://localhost:8000`
 │   ├── essays/
 │   │   ├── index.json      # Auto-generated essay index
 │   │   └── *.md            # Essay files
+│   ├── projects/
+│   │   ├── index.json      # Auto-generated project index
+│   │   └── *.md            # Project files
 │   └── photos/
 │       ├── index.json      # Auto-generated photo index
 │       └── *.md            # Photo metadata files (one per photo)
 ├── js/
-│   └── utils.js            # Shared utilities (frontmatter parser, etc.)
+│   ├── utils.js            # Shared utilities (frontmatter parser, etc.)
+│   └── contact-modal.js    # Contact modal functionality
 ├── scripts/
 │   └── optimize-images.js  # Image optimization + mobile version generation
 ├── data/
@@ -125,10 +132,10 @@ Then visit `http://localhost:8000`
 │   ├── *.jpg               # Regular images (auto-optimized to max 2000px)
 │   └── *_mobile.jpg        # Mobile versions (800px wide, quality 75)
 ├── index.html              # Homepage (with mobile hero + nav buttons)
-├── blog.html               # Blog listing + single view
-├── essays.html             # Essay listing + single view
-├── projects.html           # Static projects page
-├── photos.html             # Photo gallery with lightbox
+├── blog.html               # Blog feed (Marginal Revolution style)
+├── essays.html             # Essay listing with pagination + single essay view
+├── projects.html           # Projects showcase with CMS integration
+├── photos.html             # Photo gallery with lightbox and hover overlays
 ├── 404.html                # 404 error page
 ├── style.css               # Site-wide styles (includes mobile enhancements)
 ├── content-loader.js       # Markdown parser + content loader
@@ -154,6 +161,23 @@ cover_image: /uploads/image.jpg  # optional
 ---
 
 Markdown content here...
+```
+
+### Projects
+
+```yaml
+---
+title: Project Name
+year: 2025
+status: Active  # Active, Completed, or Archived
+description: Brief project description
+technologies:
+  - Technology 1
+  - Technology 2
+cover_image: /uploads/project.jpg  # optional
+link: https://project-url.com  # optional
+github: https://github.com/user/repo  # optional
+---
 ```
 
 ### Photos
@@ -314,19 +338,24 @@ This reduces CSS duplication and makes styling consistent across the site.
 
 ## Recent Updates
 
-### December 31, 2025 - Major Refactoring
+### January 2026 - UI & Content Enhancements
+- ✅ **Essays pagination** - Changed to 5 essays per page with Previous/Next navigation
+- ✅ **Individual essay pages** - Essays now load on dedicated pages via URL parameters
+- ✅ **Font hierarchy** - Strict typography hierarchy for essays (page title > h2 > h3 > h4)
+- ✅ **Photo hover overlays** - Title and caption display on hover with gradient overlay
+- ✅ **Contact modal** - Email display with copy-to-clipboard functionality
+- ✅ **Navigation updates** - Changed Admin to Login, added Contact button
+- ✅ **UI refinements** - Increased line-height to 1.8, added subtle box shadows to photos
+- ✅ **Fade-in animation** - Subtle 0.3s fade-in for content
+- ✅ **Deploy optimization** - Disabled Netlify deploy previews to save build credits
+- ✅ **Projects CMS** - Added CMS integration for projects with status badges
+
+### December 2025 - Major Refactoring & Mobile Redesign
 - ✅ **Code cleanup** - Removed 326 net lines of duplicate/unused code (-16.6%)
 - ✅ **JavaScript refactoring** - Extracted shared frontmatter parser to `js/utils.js`
 - ✅ **CSS consolidation** - Created base button/quote classes, reduced style.css by 104 lines
-- ✅ **Bug fixes** - Fixed undefined CSS variable, improved Windows line ending support
-- ✅ **Code organization** - Reorganized media queries in logical descending order
-- ✅ **DRY principles** - Single source of truth for frontmatter parsing, consolidated duplicate styles
-
-### Earlier December 2025
 - ✅ **Mobile homepage redesign** - Hero background, large nav buttons, optimized UX
 - ✅ **Automatic image optimization** - Build-time compression and mobile version generation
-- ✅ **Performance improvements** - 90% smaller images on mobile, preloading, lazy loading
-- ✅ **Accessibility enhancements** - Focus states, semantic HTML, WCAG compliance
 - ✅ **Photo gallery** - Masonry layout with lightbox modal and keyboard navigation
 
 ## License

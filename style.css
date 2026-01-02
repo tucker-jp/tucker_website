@@ -253,33 +253,57 @@ blockquote {
     border-radius: 2px;
 }
 
-.nav-links a.contact-link {
-    color: var(--accent);
-}
-
-.nav-links a.contact-link:hover {
-    color: var(--accent-hover);
-    border-bottom-color: var(--accent-hover);
+.nav-links a.admin-link,
+.nav-links .contact-link {
+    color: var(--text-tertiary);
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent;
 }
 
 .nav-links a.admin-link {
-    color: var(--text-tertiary);
-    font-size: 0.875rem;
     margin-left: auto;
+    margin-right: 0.5rem;
+}
+
+.nav-links .contact-link {
+    cursor: pointer;
 }
 
 .nav-links a.admin-link::before {
-    content: '🔐 ';
+    content: '🔑 ';
     font-size: 0.875rem;
 }
 
-.nav-links a.admin-link:hover {
+.nav-links .contact-link::before {
+    content: '✉️ ';
+    font-size: 0.875rem;
+}
+
+.nav-links a.admin-link:hover,
+.nav-links .contact-link:hover {
     color: var(--accent);
+    border-bottom-color: var(--accent);
 }
 
 /* ===================================
    LAYOUT
    =================================== */
+
+/* Subtle fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 
 .container {
     max-width: var(--content-width);
@@ -288,6 +312,7 @@ blockquote {
     flex: 1;
     position: relative;
     z-index: 1;
+    animation: fadeIn 0.3s ease-in;
 }
 
 main {
@@ -710,7 +735,8 @@ main {
    =================================== */
 
 .blog-feed {
-    /* Removed max-width to match Projects/Photos alignment */
+    max-width: var(--content-width);
+    margin: 0 auto;
 }
 
 .blog-post-full {
@@ -742,7 +768,7 @@ main {
 .post-content {
     font-family: var(--font-serif);
     font-size: 1.125rem;
-    line-height: 1.7;
+    line-height: 1.8;
     color: var(--text-primary);
     margin-top: 0.75rem;
 }
@@ -999,6 +1025,35 @@ main {
     margin: var(--spacing-lg) 0;
 }
 
+/* Font hierarchy for essays - ensure page title is always larger than content headings */
+.single-post .post-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.single-post .post-body h2 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
+}
+
+.single-post .post-body h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.single-post .post-body h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
+}
+
 /* ===================================
    STATIC CONTENT
    =================================== */
@@ -1032,6 +1087,27 @@ main {
     color: var(--text-primary);
 }
 
+.project-title-clickable {
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project-title-clickable:hover {
+    color: var(--accent);
+}
+
+.expand-indicator {
+    font-family: var(--font-sans);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    margin-left: var(--spacing-sm);
+    transition: transform 0.2s ease;
+}
+
 .project-meta {
     display: flex;
     align-items: center;
@@ -1056,6 +1132,22 @@ main {
     line-height: 1.7;
     color: var(--text-secondary);
     margin-bottom: var(--spacing-md);
+}
+
+.project-details {
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.project-full-content {
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+    padding: var(--spacing-md);
+    background-color: var(--cream-light);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
 }
 
 .project-tech {
@@ -1190,11 +1282,12 @@ main {
     transition: all 0.2s ease;
     background-color: var(--cream-light);
     position: relative;
+    box-shadow: 0 1px 3px rgba(42, 37, 32, 0.08);
 }
 
 .photo-item:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
+    box-shadow: 0 4px 12px rgba(42, 37, 32, 0.15);
 }
 
 .photo-item img {
@@ -1208,7 +1301,7 @@ main {
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
     color: white;
     padding: 1.5rem 1rem 0.75rem;
     opacity: 0;
@@ -1220,11 +1313,20 @@ main {
     opacity: 1;
 }
 
+.photo-caption-overlay-title {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0 0 0.25rem 0;
+}
+
 .photo-caption-overlay-text {
     font-family: var(--font-sans);
     font-size: 0.875rem;
     line-height: 1.4;
     margin: 0;
+    opacity: 0.9;
 }
 
 /* Pagination Controls */
@@ -1256,6 +1358,106 @@ main {
 .photo-count-info {
     font-size: 0.875rem;
     color: var(--text-tertiary);
+}
+
+/* ===================================
+   CONTACT MODAL
+   =================================== */
+
+.contact-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(42, 37, 32, 0.8);
+    z-index: 1001;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact-modal-content {
+    background: var(--cream-light);
+    padding: var(--spacing-lg);
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.contact-modal-content h3 {
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.contact-modal-content p {
+    margin-bottom: var(--spacing-md);
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+}
+
+.email-display {
+    background: var(--cream-bg);
+    border: 2px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--accent);
+    user-select: all;
+    cursor: text;
+}
+
+.contact-modal-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+}
+
+.copy-email-btn,
+.close-modal-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid var(--border-subtle);
+}
+
+.copy-email-btn {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+.copy-email-btn:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.copy-email-btn.copied {
+    background: #4a7c59;
+    border-color: #4a7c59;
+}
+
+.close-modal-btn {
+    background: var(--cream-light);
+    color: var(--text-secondary);
+}
+
+.close-modal-btn:hover {
+    background: var(--cream-dark);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 /* ===================================
@@ -1415,7 +1617,8 @@ main {
         justify-content: center;
     }
 
-    .nav-links a {
+    .nav-links a,
+    .nav-links .contact-link {
         font-size: 0.875rem;
     }
 

@@ -26,8 +26,8 @@
                 <a href="/essays.html">Essays</a>
                 <a href="/projects.html">Projects</a>
                 <a href="/photos.html" class="active">Photos</a>
-                <a href="mailto:tuckerepippin@gmail.com" class="contact-link">Get in touch</a>
-                <a href="/admin" class="admin-link">Admin</a>
+                <a href="/admin" class="admin-link">Login</a>
+                <span class="contact-link" id="contact-btn">Contact</span>
             </div>
         </div>
     </nav>
@@ -71,6 +71,7 @@
             <div class="lightbox-info">
                 <h2 id="lightbox-title"></h2>
                 <p id="lightbox-caption"></p>
+                <p id="lightbox-description"></p>
                 <div class="lightbox-meta">
                     <span id="lightbox-location"></span>
                     <span id="lightbox-date"></span>
@@ -82,6 +83,19 @@
     <footer class="site-footer">
         <p>&copy; 2025 Tucker Pippin. All rights reserved.</p>
     </footer>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="contact-modal">
+        <div class="contact-modal-content">
+            <h3>Get in Touch</h3>
+            <p>Send me an email at:</p>
+            <div class="email-display" id="email-display">tuckerepippin@gmail.com</div>
+            <div class="contact-modal-buttons">
+                <button class="copy-email-btn" id="copy-email-btn">Copy Email</button>
+                <button class="close-modal-btn" id="close-modal-btn">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script src="/js/utils.js"></script>
     <script src="/content-loader.js"></script>
@@ -190,16 +204,25 @@
 
                 photoItem.appendChild(img);
 
-                // Add caption overlay if caption exists
+                // Add title/caption overlay on hover
+                const overlay = document.createElement('div');
+                overlay.className = 'photo-caption-overlay';
+
+                if (photo.title) {
+                    const titleElem = document.createElement('p');
+                    titleElem.className = 'photo-caption-overlay-title';
+                    titleElem.textContent = photo.title;
+                    overlay.appendChild(titleElem);
+                }
+
                 if (photo.caption) {
-                    const overlay = document.createElement('div');
-                    overlay.className = 'photo-caption-overlay';
                     const captionText = document.createElement('p');
                     captionText.className = 'photo-caption-overlay-text';
                     captionText.textContent = photo.caption;
                     overlay.appendChild(captionText);
-                    photoItem.appendChild(overlay);
                 }
+
+                photoItem.appendChild(overlay);
 
                 photoItem.addEventListener('click', () => openLightbox(i));
                 container.appendChild(photoItem);
@@ -271,6 +294,7 @@
             document.getElementById('lightbox-image').alt = photo.title;
             document.getElementById('lightbox-title').textContent = photo.title;
             document.getElementById('lightbox-caption').textContent = photo.caption;
+            document.getElementById('lightbox-description').textContent = photo.description || '';
             document.getElementById('lightbox-location').textContent = photo.location;
             document.getElementById('lightbox-date').textContent = formatDate(photo.date);
 
@@ -334,5 +358,6 @@
             if (touchEndX > touchStartX + swipeThreshold) prevPhoto();
         }
     </script>
+    <script src="/js/contact-modal.js"></script>
 </body>
 </html>
