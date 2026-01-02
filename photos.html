@@ -22,10 +22,10 @@
         <div class="nav-container">
             <a href="/" class="site-title">Tucker Pippin</a>
             <div class="nav-links">
-                <a href="/blog.html">Blog</a>
-                <a href="/essays.html">Essays</a>
-                <a href="/projects.html">Projects</a>
                 <a href="/photos.html" class="active">Photos</a>
+                <a href="/projects.html">Projects</a>
+                <a href="/essays.html">Essays</a>
+                <a href="/blog.html">Blog</a>
                 <a href="/admin" class="admin-link">Login</a>
                 <span class="contact-link" id="contact-btn">Contact</span>
             </div>
@@ -48,7 +48,6 @@
         </header>
 
         <div id="photo-grid" class="photo-grid">
-            <p class="loading">Loading photos...</p>
         </div>
 
         <div id="pagination-container" class="pagination-container" style="display: none;">
@@ -359,5 +358,8 @@
         }
     </script>
     <script src="/js/contact-modal.js"></script>
+
+    <!-- Instant page navigation - preloads links on hover -->
+    <script src="//instant.page/5.2.0" type="module" data-instant-intensity="mousedown"></script>
 </body>
 </html>
