@@ -730,10 +730,10 @@ main {
 
 .blog-post-full {
     margin-bottom: var(--spacing-xl);
-    padding: var(--spacing-lg);
-    background-color: var(--cream-light);
-    border-left: 4px solid var(--accent);
-    border-radius: 4px;
+    padding-left: var(--spacing-md);
+    padding-bottom: var(--spacing-lg);
+    border-left: 3px solid var(--accent);
+    background-color: transparent;
 }
 
 .blog-post-full:last-child {

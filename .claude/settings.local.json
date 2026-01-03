@@ -4,7 +4,16 @@
       "Bash(mkdir:*)",
       "Bash(git push:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(cat:*)",
+      "Bash(dir:*)",
+      "Bash(node generate-index.js:*)",
+      "Bash(for file in blog.html essays.html projects.html photos.html)",
+      "Bash(do grep -n \"</body>\" \"$file\")",
+      "Bash(done)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(git stash pop:*)"
     ]
   }
 }
