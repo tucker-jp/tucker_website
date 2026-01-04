@@ -24,7 +24,6 @@
             <div class="nav-links">
                 <a href="/photos.html">Photos</a>
                 <a href="/projects.html">Projects</a>
-                <a href="/essays.html">Essays</a>
                 <a href="/blog.html" class="active">Blog</a>
                 <a href="/admin" class="admin-link">Login</a>
                 <span class="contact-link" id="contact-btn">Contact</span>
@@ -43,6 +42,13 @@
                 <p class="photo-quote-text" style="margin-top: 0.5rem;">The trick is to be bored with a specific book, rather than with the act of reading. So the number of the pages absorbed could grow faster than otherwise. And you find gold, so to speak, effortlessly, just as in rational but undirected trial-and-error-based research...</p>
                 <p class="photo-quote-text" style="margin-top: 0.5rem;">Trial and error is freedom."</p>
                 <p class="photo-quote-author">— Nassim Taleb</p>
+            </div>
+
+            <!-- Reading Time Filters -->
+            <div class="blog-filters">
+                <button class="filter-btn active" data-filter="all">All Posts</button>
+                <button class="filter-btn" data-filter="short">Short Reads (< 10 min)</button>
+                <button class="filter-btn" data-filter="long">Long Reads (≥ 10 min)</button>
             </div>
         </header>
 
@@ -72,9 +78,13 @@
     <script src="/content-loader.js"></script>
     <script>
         const POSTS_PER_PAGE = 10;
+        const WORD_LIMIT = 250;
+        let allPosts = [];
+        let currentFilter = 'all';
 
         window.addEventListener('DOMContentLoaded', async () => {
             await loadBlogFeed();
+            setupFilters();
         });
 
         async function loadBlogFeed() {
@@ -94,32 +104,108 @@
                     recentPosts.map(post => loadSingleContent('blog', post.slug))
                 );
 
-                container.innerHTML = fullPosts.map(post => {
-                    let coverImageHtml = '';
-                    if (post.cover_image) {
-                        coverImageHtml = `<img src="${escapeHtml(post.cover_image)}" alt="${escapeHtml(post.title)}" class="blog-post-image">`;
-                    }
-
-                    return `
-                        <article class="blog-post-full">
-                            <h2 class="blog-post-title">${escapeHtml(post.title)}</h2>
-                            <div class="post-meta">
-                                <span>by Tucker Pippin</span>
-                                <span class="separator">•</span>
-                                <time>${formatDate(post.date)}</time>
-                            </div>
-                            ${coverImageHtml}
-                            <div class="post-content">
-                                ${post.html}
-                            </div>
-                        </article>
-                    `;
-                }).join('');
+                allPosts = fullPosts;
+                renderPosts(fullPosts);
 
             } catch (error) {
                 console.error('Error loading blog feed:', error);
                 container.innerHTML = '<p class="error">Unable to load posts.</p>';
             }
+        }
+
+        function truncateToWords(html, wordLimit) {
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            const text = temp.textContent || temp.innerText || '';
+            const words = text.trim().split(/\s+/);
+
+            if (words.length <= wordLimit) {
+                return { html, isTruncated: false };
+            }
+
+            const truncatedText = words.slice(0, wordLimit).join(' ');
+            return { html: truncatedText + '...', isTruncated: true };
+        }
+
+        function renderPosts(posts) {
+            const container = document.getElementById('blog-feed');
+
+            container.innerHTML = posts.map((post, index) => {
+                let coverImageHtml = '';
+                if (post.cover_image) {
+                    coverImageHtml = `<img src="${escapeHtml(post.cover_image)}" alt="${escapeHtml(post.title)}" class="blog-post-image">`;
+                }
+
+                const { html: truncatedContent, isTruncated } = truncateToWords(post.html, WORD_LIMIT);
+                const expandBtnHtml = isTruncated ?
+                    `<button class="read-more-btn" data-post-index="${index}">Read Further</button>` : '';
+
+                return `
+                    <article class="blog-post-full" data-reading-time="${post.readingTime}">
+                        <h2 class="blog-post-title">${escapeHtml(post.title)}</h2>
+                        <div class="post-meta">
+                            <span>by Tucker Pippin</span>
+                            <span class="separator">•</span>
+                            <time>${formatDate(post.date)}</time>
+                            <span class="separator">•</span>
+                            <span class="reading-time">${post.readingTime} min read</span>
+                        </div>
+                        ${coverImageHtml}
+                        <div class="post-content" id="post-content-${index}">
+                            ${truncatedContent}
+                        </div>
+                        <div class="full-content" id="full-content-${index}" style="display: none;">
+                            ${post.html}
+                        </div>
+                        ${expandBtnHtml}
+                    </article>
+                `;
+            }).join('');
+
+            // Add click handlers for expand buttons
+            document.querySelectorAll('.read-more-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = this.getAttribute('data-post-index');
+                    const truncatedDiv = document.getElementById(`post-content-${index}`);
+                    const fullDiv = document.getElementById(`full-content-${index}`);
+
+                    if (fullDiv.style.display === 'none') {
+                        truncatedDiv.style.display = 'none';
+                        fullDiv.style.display = 'block';
+                        this.textContent = 'Show Less';
+                    } else {
+                        truncatedDiv.style.display = 'block';
+                        fullDiv.style.display = 'none';
+                        this.textContent = 'Read Further';
+                    }
+                });
+            });
+        }
+
+        function setupFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active state
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Get filter type
+                    const filter = this.getAttribute('data-filter');
+                    currentFilter = filter;
+
+                    // Filter posts
+                    let filteredPosts = allPosts;
+                    if (filter === 'short') {
+                        filteredPosts = allPosts.filter(post => post.readingTime < 10);
+                    } else if (filter === 'long') {
+                        filteredPosts = allPosts.filter(post => post.readingTime >= 10);
+                    }
+
+                    renderPosts(filteredPosts);
+                });
+            });
         }
     </script>
     <script src="/js/contact-modal.js"></script>
