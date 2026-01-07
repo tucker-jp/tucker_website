@@ -4,7 +4,6 @@ date: 2026-01-07T14:28:00.000-05:00
 ---
 I am running the substantial, and unforgiveable, risk of sounding like a motivational self-help influencer so please bare with me.
 
-
 I recently listened to an interview recently that reiterated some of my favorite advice: if you want to go somewhere then just have to buy the damn ticket. 
 
 Put aside the crude nature of this [Yogi Berra ](https://www.goodreads.com/author/quotes/79014.Yogi_Berra) aphorism. The truth ingrained is tremendous if leveraged.
@@ -17,4 +16,4 @@ Coding, languages, photography, and every other skill are essentially the same i
 
 Its because we never take off the training wheels. Buy a real camera or start editing the raw photos on your phone. Your ugly photographs will drive you to learn within a week how important sensor size, aperture, timing, shutter speed, and ISO are to photography.
 
-My favorite example is walking up to a café in Lyon, FR and ordering an espresso. I forgot my *s'il vous plaît* at the door and the French gentleman working the counter taught me my fastest French lesson ever: if you forgetfully neglect greeting or requesting something politely in France you are flipping the bird.
+My favorite example is walking up to a café in Lyon, FR and ordering an espresso. I forgot my *s'il vous plaît* at the door and the French gentleman working the counter taught me my fastest French lesson ever: if you forgetfully neglect greeting or requesting something politely in France you are flipping the bird. Its for this reason and others that languages and food happen to be some of the highest compounding direct experiences given the frequency you can practice.
