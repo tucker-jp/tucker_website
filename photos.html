@@ -34,6 +34,13 @@
     <main class="container">
         <header class="page-header">
             <h1>Photos</h1>
+            <p class="photo-note"><em>I will also occasionally post artwork or other media.</em></p>
+
+            <div class="photo-filters">
+                <button class="filter-btn active" data-filter="mine">My Photos</button>
+                <button class="filter-btn" data-filter="not-mine">Not Mine</button>
+                <button class="filter-btn" data-filter="all">All</button>
+            </div>
 
             <!-- Photography Quote -->
             <div class="photo-quote quote-box" id="photo-quote" style="display: none;">
@@ -98,9 +105,19 @@
     <script src="/js/utils.js"></script>
     <script src="/content-loader.js"></script>
     <script>
+        function parseIsMine(value) {
+            if (value === undefined || value === null || value === '') {
+                return true;
+            }
+            const normalized = String(value).trim().toLowerCase();
+            return !(normalized === 'false' || normalized === 'no' || normalized === '0');
+        }
+
+        let allPhotos = [];
         let photos = [];
         let currentPhotoIndex = 0;
         let currentPage = 1;
+        let currentFilter = 'mine';
         const PHOTOS_PER_PAGE = 50;
 
         // Load and display photos
@@ -141,7 +158,8 @@
                             photo: frontmatter.photo || '',
                             caption: frontmatter.caption || '',
                             location: frontmatter.location || '',
-                            description: frontmatter.description || ''
+                            description: frontmatter.description || '',
+                            isMine: parseIsMine(frontmatter.is_mine)
                         };
                     } catch (error) {
                         console.error(`Error loading ${path}:`, error);
@@ -149,11 +167,11 @@
                     }
                 });
 
-                photos = (await Promise.all(photoPromises))
+                allPhotos = (await Promise.all(photoPromises))
                     .filter(photo => photo !== null && photo.photo)
                     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                if (photos.length === 0) {
+                if (allPhotos.length === 0) {
                     container.innerHTML = '<p class="empty">No photos yet. Check back soon!</p>';
                     return;
                 }
@@ -162,14 +180,52 @@
                 document.getElementById('photo-quote').style.display = 'block';
                 document.getElementById('random-photo-btn').style.display = 'inline-block';
 
-                // Render first page
-                renderPage(1);
+                setupFilters();
+                applyFilter();
 
             } catch (error) {
                 console.error('Error loading photos:', error);
                 container.innerHTML = '<p class="error">Unable to load photos.</p>';
             }
         });
+
+        function setupFilters() {
+            const filterBtns = document.querySelectorAll('.photo-filters .filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+                    applyFilter();
+                });
+            });
+        }
+
+        function renderEmptyState(message) {
+            const container = document.getElementById('photo-grid');
+            container.innerHTML = `<p class="empty">${message}</p>`;
+            document.getElementById('pagination-container').style.display = 'none';
+        }
+
+        function applyFilter() {
+            if (currentFilter === 'mine') {
+                photos = allPhotos.filter(photo => photo.isMine);
+            } else if (currentFilter === 'not-mine') {
+                photos = allPhotos.filter(photo => !photo.isMine);
+            } else {
+                photos = allPhotos.slice();
+            }
+
+            document.getElementById('random-photo-btn').style.display =
+                photos.length > 0 ? 'inline-block' : 'none';
+
+            if (photos.length === 0) {
+                renderEmptyState('No photos in this filter yet.');
+                return;
+            }
+
+            renderPage(1);
+        }
 
         // Render a specific page of photos
         function renderPage(pageNum) {
@@ -254,6 +310,8 @@
             // Show pagination if more than one page
             if (totalPages > 1) {
                 document.getElementById('pagination-container').style.display = 'flex';
+            } else {
+                document.getElementById('pagination-container').style.display = 'none';
             }
         }
 
