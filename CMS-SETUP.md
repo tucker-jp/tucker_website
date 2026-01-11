@@ -144,12 +144,13 @@ To use `tuckerpippin.com` instead of the Netlify subdomain:
 When uploading images via the CMS:
 
 - **Maximum size**: 2000–3000px on the long edge
-- **Format**: JPEG or PNG
+- **Format**: JPEG or PNG (NOT HEIC!)
 - **File size**: Keep under 500KB when possible
 
 **DO NOT upload**:
 - RAW files (CR2, NEF, DNG, etc.)
 - Full-resolution photos straight from your camera
+- HEIC files from iPhone (see below)
 - Files over 5MB
 
 **Photo Capacity Guidelines**:
@@ -167,6 +168,56 @@ When uploading images via the CMS:
 - **Mac**: Use Preview → Tools → Adjust Size
 - **Windows**: Use Paint or Photos app
 - **Online**: Use [Squoosh.app](https://squoosh.app) for compression
+
+---
+
+### For iPhone Users: Photo Upload Guidelines
+
+**⚠️ CRITICAL**: iPhones save photos in HEIC format by default, which is **not supported** by web browsers or the CMS. Attempting to upload HEIC files will result in broken previews and display issues.
+
+#### Option 1: Change iPhone Settings (Recommended)
+
+This will make all future photos compatible with the web:
+
+1. Open **Settings** on your iPhone
+2. Scroll down and tap **Camera**
+3. Tap **Formats**
+4. Select **"Most Compatible"** instead of "High Efficiency"
+5. All future photos will now be saved as JPEG
+
+#### Option 2: Convert Before Upload
+
+If you need to upload existing HEIC photos:
+
+1. Open the photo in the Photos app
+2. Tap the **Share** button (square with arrow)
+3. Choose **"Save to Files"**
+4. The photo will automatically convert to JPEG
+5. Upload the converted version from Files app
+
+#### Option 3: Use Third-Party Apps
+
+- **Squoosh.app** - Upload HEIC, download as JPEG
+- **HEIC to JPEG** apps from App Store
+- Photo editing apps that export as JPEG
+
+#### Why HEIC Doesn't Work
+
+HEIC (High Efficiency Image Format) offers better compression than JPEG, but:
+- Most web browsers cannot display HEIC files
+- Decap CMS cannot preview HEIC images
+- Your website visitors won't see the images
+- The CMS preview will show error messages
+
+**Always convert to JPEG before uploading!**
+
+#### File Size Recommendations for iPhone Photos
+
+After converting to JPEG:
+- **Ideal**: 2-5 MB per photo
+- **Maximum**: 10 MB per photo
+- Use Squoosh.app to compress if files are larger
+- iPhone photos are typically 2000-4000px, which is fine
 
 ---
 

@@ -127,6 +127,31 @@
             return { html: truncatedText + '...', isTruncated: true };
         }
 
+        function cleanPlaceholderText(html) {
+            // Remove placeholder characters like \-, \n-, -\n, or standalone -
+            // that appear as the only content or at the start of content
+            if (!html) return '';
+
+            // Trim whitespace
+            let cleaned = html.trim();
+
+            // Remove if content is just a placeholder
+            if (cleaned === '-' || cleaned === '\\-' || cleaned === '\n-' || cleaned === '-\n') {
+                return '';
+            }
+
+            // Remove leading placeholder patterns
+            cleaned = cleaned.replace(/^\\-\s*/, '');
+            cleaned = cleaned.replace(/^-\s*$/, '');
+
+            // If after cleaning there's nothing meaningful left, return empty
+            if (cleaned.length <= 2) {
+                return '';
+            }
+
+            return cleaned;
+        }
+
         function renderPosts(posts) {
             const container = document.getElementById('blog-feed');
 
@@ -136,7 +161,10 @@
                     coverImageHtml = `<img src="${escapeHtml(post.cover_image)}" alt="${escapeHtml(post.title)}" class="blog-post-image">`;
                 }
 
-                const { html: truncatedContent, isTruncated } = truncateToWords(post.html, WORD_LIMIT);
+                // Clean placeholder text from post HTML
+                const cleanedHtml = cleanPlaceholderText(post.html);
+
+                const { html: truncatedContent, isTruncated } = truncateToWords(cleanedHtml, WORD_LIMIT);
                 const expandBtnHtml = isTruncated ?
                     `<button class="read-more-btn" data-post-index="${index}">Read Further</button>` : '';
 
@@ -155,7 +183,7 @@
                             ${truncatedContent}
                         </div>
                         <div class="full-content" id="full-content-${index}" style="display: none;">
-                            ${post.html}
+                            ${cleanedHtml}
                         </div>
                         ${expandBtnHtml}
                     </article>

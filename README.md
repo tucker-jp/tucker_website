@@ -2,18 +2,26 @@
 
 A minimalist personal website for writing, projects, and photography. Built with static HTML, vanilla JavaScript, and Decap CMS for content management.
 
+## Overview
+
+This website takes a deliberately simple approach to web development—no frameworks, no bundlers, just clean HTML, CSS, and JavaScript. It features a cream editorial design, CMS-driven content management, and automatic image optimization.
+
+**Live Site**: https://your-site.netlify.app
+**Admin Panel**: https://your-site.netlify.app/admin
+
+---
+
 ## Architecture
 
 - **Frontend**: Static HTML + CSS + JavaScript (vanilla, no frameworks)
-- **CMS**: Decap CMS at `/admin` for blog, essays, projects, and photo management
-- **Content**: Markdown files with YAML frontmatter
-- **Build Pipeline**:
-  - Image optimization (auto-generates mobile versions)
-  - Index generation (creates searchable JSON indexes)
-  - Deploy preview disabling (saves Netlify build credits)
+- **CMS**: Decap CMS at `/admin` for blog, projects, and photo management
+- **Content**: Markdown files with YAML frontmatter stored in `/content`
+- **Build Pipeline**: Image optimization + index generation + automated deployment
 - **Hosting**: Netlify (static deployment with automated builds)
-- **Auth**: Netlify Identity + Git Gateway
-- **Responsive Design**: Desktop-first with mobile enhancements
+- **Auth**: Netlify Identity + Git Gateway for CMS access
+- **Design**: Desktop-first with mobile enhancements
+
+---
 
 ## Features
 
@@ -23,45 +31,153 @@ A minimalist personal website for writing, projects, and photography. Built with
 - Mobile-optimized homepage with hero background and large touch targets
 - Decorative photo rails on desktop (hidden on mobile/tablet)
 - Smooth transitions and hover states throughout
+- Accessible focus states and semantic HTML
 
 ### Content Management
-- CMS-driven Blog, Essays, Projects, and Photos sections
-- Essays with pagination (5 per page) and individual essay pages
-- Client-side Markdown rendering with syntax highlighting
+- **Blog** - Marginal Revolution-style full feed with reading time filters
+- **Projects** - Portfolio showcase with status badges and technology tags
+- **Photos** - Masonry gallery with lightbox, filters (My Media/Not Mine), and keyboard navigation
+- **Daily Quotes** - Rotation system with 876 curated quotes
+- Client-side markdown rendering
 - Automatic index generation on every deploy
-- Reading time calculation for blog posts and essays
-- Photo gallery with lightbox modal and keyboard navigation
 - Contact modal with email display and copy-to-clipboard
 
 ### Performance
 - Automatic image optimization at build time
 - Mobile-specific image versions (800px wide, quality 75)
 - Image preloading for critical assets
-- Lazy loading for gallery images
+- Incremental caching (only new/modified images are processed)
 - Static HTML with minimal JavaScript
+- No framework overhead
 
 ### Technical
-- No framework, no bundlers—just vanilla HTML/CSS/JS
+- No frameworks, no bundlers—just vanilla HTML/CSS/JS
 - CSS custom properties for easy theming
-- Accessible focus states and semantic HTML
+- Classic scripts (not ES modules) for maximum compatibility
 - SEO optimized with meta tags and semantic structure
+- WCAG AA color contrast compliance
 
-## CMS-Driven Content
+---
 
-You can edit these sections via the CMS at `/admin`:
+## Project Structure
 
-- **Blog** (`/blog.html`) — Shorter posts and updates (Marginal Revolution style full feed)
-- **Essays** (`/essays.html`) — Longer-form writing with pagination and individual essay pages
-- **Projects** (`/projects.html`) — Portfolio/work showcase with status badges
-- **Photos** (`/photos.html`) — Photography gallery with masonry layout
+```
+/
+├── admin/
+│   ├── index.html          # Decap CMS interface
+│   └── config.yml          # CMS configuration (collections, fields, media)
+├── content/
+│   ├── blog/
+│   │   ├── index.json      # Auto-generated post index
+│   │   └── *.md            # Blog post files (frontmatter + markdown)
+│   ├── projects/
+│   │   ├── index.json      # Auto-generated project index
+│   │   └── *.md            # Project files
+│   └── photos/
+│       ├── index.json      # Auto-generated photo index
+│       └── *.md            # Photo metadata files (one per photo)
+├── js/
+│   ├── utils.js            # Shared utilities (frontmatter parser, etc.)
+│   └── contact-modal.js    # Contact modal functionality
+├── scripts/
+│   └── optimize-images.js  # Image optimization + mobile version generation
+├── data/
+│   └── quotes.json         # Daily quote rotation data (876 quotes)
+├── uploads/                # CMS-uploaded images (optimized at build time)
+│   ├── *.jpg               # Regular images (auto-optimized to max 2000px)
+│   └── *_mobile.jpg        # Mobile versions (800px wide, quality 75)
+├── index.html              # Homepage (with mobile hero + nav buttons)
+├── blog.html               # Blog feed (Marginal Revolution style)
+├── projects.html           # Projects showcase with CMS integration
+├── photos.html             # Photo gallery with lightbox and hover overlays
+├── 404.html                # 404 error page
+├── style.css               # Site-wide styles (includes mobile enhancements)
+├── content-loader.js       # Markdown parser + content loader
+├── generate-index.js       # Build script (creates index.json files)
+├── netlify.toml            # Netlify config (build command, redirects)
+├── package.json            # Node dependencies (sharp for image processing)
+├── .image-cache.json       # Image optimization cache (auto-generated)
+├── robots.txt              # SEO crawling instructions
+├── CMS-SETUP.md            # Deployment guide
+├── TODO.md                 # Task tracking
+├── .claude                 # Claude Code context file
+└── README.md               # This file
+```
 
-## Static Content
+---
 
-These pages require code edits:
+## Content Model
 
-- **Home** (`/index.html`) — Landing page with intro and daily quote rotation
+### Blog Posts
 
-## Deployment
+```yaml
+---
+title: Post Title
+date: 2026-01-15
+description: Short description for listings
+cover_image: /uploads/image.jpg  # optional
+---
+
+Markdown content here...
+```
+
+### Projects
+
+```yaml
+---
+title: Project Name
+year: 2026
+status: Active  # Active, Completed, or Archived
+description: Brief project description
+technologies:
+  - Technology 1
+  - Technology 2
+cover_image: /uploads/project.jpg  # optional
+link: https://project-url.com  # optional
+github: https://github.com/user/repo  # optional
+---
+
+Optional markdown details...
+```
+
+### Photos
+
+```yaml
+---
+title: Photo Title
+date: 2026-01-15
+photo: /uploads/photo.jpg  # required
+is_mine: true  # true for your photos, false for artwork/public domain
+caption: Optional caption text
+location: Optional location
+description: Optional longer description
+---
+```
+
+---
+
+## Getting Started
+
+### Local Development
+
+No build step needed for basic development. Just open `index.html` in a browser.
+
+**To test CMS functionality locally**, run a local server:
+
+```bash
+# Python 3
+python -m http.server 8000
+
+# Node.js
+npx http-server
+
+# PHP
+php -S localhost:8000
+```
+
+Then visit `http://localhost:8000`
+
+### Deployment
 
 See [CMS-SETUP.md](./CMS-SETUP.md) for complete deployment instructions.
 
@@ -82,120 +198,30 @@ See [CMS-SETUP.md](./CMS-SETUP.md) for complete deployment instructions.
 
 The build process is incremental—cached images are skipped, only new/modified images are processed.
 
-## Local Development
-
-No build step needed. Just open `index.html` in a browser.
-
-**Note**: To test CMS functionality locally, you'll need to run a local server:
-
-```bash
-# Python 3
-python -m http.server 8000
-
-# Node.js
-npx http-server
-
-# PHP
-php -S localhost:8000
-```
-
-Then visit `http://localhost:8000`
-
-## Project Structure
-
-```
-/
-├── admin/
-│   ├── index.html          # Decap CMS interface
-│   └── config.yml          # CMS configuration (collections, fields, media)
-├── content/
-│   ├── blog/
-│   │   ├── index.json      # Auto-generated post index
-│   │   └── *.md            # Blog post files (frontmatter + markdown)
-│   ├── essays/
-│   │   ├── index.json      # Auto-generated essay index
-│   │   └── *.md            # Essay files
-│   ├── projects/
-│   │   ├── index.json      # Auto-generated project index
-│   │   └── *.md            # Project files
-│   └── photos/
-│       ├── index.json      # Auto-generated photo index
-│       └── *.md            # Photo metadata files (one per photo)
-├── js/
-│   ├── utils.js            # Shared utilities (frontmatter parser, etc.)
-│   └── contact-modal.js    # Contact modal functionality
-├── scripts/
-│   └── optimize-images.js  # Image optimization + mobile version generation
-├── data/
-│   └── quotes.json         # Daily quote rotation data
-├── uploads/                # CMS-uploaded images (optimized at build time)
-│   ├── *.jpg               # Regular images (auto-optimized to max 2000px)
-│   └── *_mobile.jpg        # Mobile versions (800px wide, quality 75)
-├── index.html              # Homepage (with mobile hero + nav buttons)
-├── blog.html               # Blog feed (Marginal Revolution style)
-├── essays.html             # Essay listing with pagination + single essay view
-├── projects.html           # Projects showcase with CMS integration
-├── photos.html             # Photo gallery with lightbox and hover overlays
-├── 404.html                # 404 error page
-├── style.css               # Site-wide styles (includes mobile enhancements)
-├── content-loader.js       # Markdown parser + content loader
-├── generate-index.js       # Build script (creates index.json files)
-├── netlify.toml            # Netlify config (build command, redirects)
-├── package.json            # Node dependencies (sharp for image processing)
-├── .image-cache.json       # Image optimization cache (auto-generated)
-├── robots.txt              # SEO crawling instructions
-├── CMS-SETUP.md            # Deployment guide
-└── README.md               # This file
-```
-
-## Content Model
-
-### Blog Posts and Essays
-
-```yaml
----
-title: Post Title
-date: 2025-01-15
-description: Short description for listings
-cover_image: /uploads/image.jpg  # optional
 ---
 
-Markdown content here...
-```
+## Content Management
 
-### Projects
+### CMS-Driven Content
 
-```yaml
----
-title: Project Name
-year: 2025
-status: Active  # Active, Completed, or Archived
-description: Brief project description
-technologies:
-  - Technology 1
-  - Technology 2
-cover_image: /uploads/project.jpg  # optional
-link: https://project-url.com  # optional
-github: https://github.com/user/repo  # optional
----
-```
+You can edit these sections via the CMS at `/admin`:
 
-### Photos
+- **Blog** ([/blog.html](blog.html)) — Shorter posts and updates (Marginal Revolution style full feed with reading time filters)
+- **Projects** ([/projects.html](projects.html)) — Portfolio/work showcase with status badges
+- **Photos** ([/photos.html](photos.html)) — Photography gallery with masonry layout and lightbox
 
-```yaml
+### Static Content
+
+These require code edits:
+
+- **Home** ([/index.html](index.html)) — Landing page with intro and daily quote rotation
+
 ---
-title: Photo Title
-date: 2025-01-15
-photo: /uploads/photo.jpg  # required
-caption: Optional caption text
-location: Optional location
-description: Optional longer description
----
-```
 
 ## Image Guidelines & Optimization
 
 ### Automatic Optimization
+
 All images uploaded to `/uploads/` are automatically optimized at build time:
 - **Large images** (>2000px): Resized to 2000px wide
 - **Medium images** (>1600px): Resized to 1600px wide
@@ -206,30 +232,36 @@ All images uploaded to `/uploads/` are automatically optimized at build time:
 The optimization is **incremental** (cached) so rebuilds are fast.
 
 ### Upload Guidelines
+
 **Recommended**: Upload web-sized images (2000–3000px max)
 
-Do NOT upload:
+**Do NOT upload**:
 - RAW camera files (CR2, NEF, ARW, etc.)
 - Full-resolution photos from camera (6000px+)
 - Files over 10MB (will be optimized but slow to upload)
 
 **Photo Capacity**:
+- **Current usage**: 42.43 MB (17 files)
 - **Recommended**: 50-150 curated photos for optimal performance
 - **Maximum**: 500+ photos before bandwidth concerns
 - **Each photo**: ~200-500 KB after optimization
 - **Netlify limits**: 100 GB/month bandwidth (free tier)
+- **Status**: ✅ Well within limits - you can safely add 200-300 more photos
 
 Pre-compress before upload using [Squoosh.app](https://squoosh.app) for faster uploads.
 
-### Bulk Photo Upload
-**CMS limitation**: Decap CMS only supports one photo upload at a time.
+### iPhone Users: HEIC Format
 
-**Workarounds**:
-1. Upload images directly to `/uploads/` via Git
-2. Use CMS Media Library to upload multiple images
-3. Manually create markdown files in `content/photos/` for batch uploads
+iPhones save photos in HEIC format by default. **HEIC is not supported by web browsers or the CMS.**
 
-**Note**: The legacy `scripts/bulk-photo-upload.js` tool has been removed (superseded by Decap CMS). See `scripts/optimize-images.js` for image optimization details.
+**To upload iPhone photos**:
+1. Open Settings > Camera > Formats
+2. Select "Most Compatible" instead of "High Efficiency"
+3. All future photos will be saved as JPEG
+
+See [CMS-SETUP.md](./CMS-SETUP.md) for more details.
+
+---
 
 ## Responsive Design
 
@@ -247,6 +279,7 @@ The site uses a **desktop-first** approach with mobile enhancements.
 - Side rails hidden at <1400px
 
 ### Mobile Enhancements (<1100px)
+
 **Homepage only:**
 - Hero section with background image (`main_bumper_1_mobile.jpg`)
 - 92% opacity cream overlay for text readability
@@ -267,6 +300,8 @@ The site uses a **desktop-first** approach with mobile enhancements.
 - Adequate color contrast (WCAG AA compliant)
 - Touch targets ≥44px for mobile
 - Screen reader friendly with proper heading hierarchy
+
+---
 
 ## Customization
 
@@ -289,8 +324,8 @@ Change font stacks in `style.css`:
 
 ```css
 :root {
-    --font-serif: 'Georgia', serif;
-    --font-sans: -apple-system, sans-serif;
+    --font-serif: 'Lora', 'Georgia', serif;
+    --font-sans: 'Inter', -apple-system, sans-serif;
 }
 ```
 
@@ -302,17 +337,12 @@ Edit the nav links in each HTML file's `<nav class="site-nav">` section.
 
 Edit the `.intro` section in `index.html`.
 
-## Browser Support
-
-Works in all modern browsers:
-- Chrome/Edge (last 2 versions)
-- Firefox (last 2 versions)
-- Safari (last 2 versions)
-- Mobile Safari/Chrome
+---
 
 ## Code Architecture
 
 ### JavaScript Organization
+
 The site uses **classic scripts** (not ES modules) for maximum compatibility with static hosting:
 
 - **`js/utils.js`** - Shared utility functions under `window.siteUtils` namespace
@@ -321,12 +351,16 @@ The site uses **classic scripts** (not ES modules) for maximum compatibility wit
 
 - **`content-loader.js`** - Content loading and rendering
   - Uses `window.siteUtils.parseFrontmatter()` for all markdown parsing
-  - Loads and caches blog/essay/photo content from JSON indexes
+  - Loads and caches blog/project/photo content from JSON indexes
+  - `markdownToHtml()` - Simple markdown parser
+  - `formatDate()` - Human-readable date formatting
+  - `calculateReadingTime()` - Estimates reading time (~200 words/min)
 
 - **Inline scripts** - Page-specific functionality (quotes, photo gallery, lightbox)
   - All pages load `js/utils.js` before `content-loader.js` to ensure proper load order
 
 ### CSS Architecture
+
 The site uses a **modular CSS** approach with base classes and variants:
 
 - **Base classes**: `.quote-box`, `.btn-base`, `.post-content`
@@ -336,12 +370,29 @@ The site uses a **modular CSS** approach with base classes and variants:
 
 This reduces CSS duplication and makes styling consistent across the site.
 
+---
+
+## Browser Support
+
+Works in all modern browsers:
+- Chrome/Edge (last 2 versions)
+- Firefox (last 2 versions)
+- Safari (last 2 versions)
+- Mobile Safari/Chrome
+
+---
+
 ## Recent Updates
 
+### January 2026 - Documentation & Mobile CMS Improvements
+- ✅ **Comprehensive README** - Complete project documentation with architecture details
+- ✅ **TODO tracking** - Task management system with TODO.md file
+- ✅ **Claude context file** - Added .claude file for AI-assisted development
+- ✅ **Mobile CMS CSS** - Responsive admin interface with 44px touch targets
+- ✅ **Photo preview template** - Custom preview for photo uploads with error handling
+- ✅ **iPhone documentation** - HEIC format workaround guide
+
 ### January 2026 - UI & Content Enhancements
-- ✅ **Essays pagination** - Changed to 5 essays per page with Previous/Next navigation
-- ✅ **Individual essay pages** - Essays now load on dedicated pages via URL parameters
-- ✅ **Font hierarchy** - Strict typography hierarchy for essays (page title > h2 > h3 > h4)
 - ✅ **Photo hover overlays** - Title and caption display on hover with gradient overlay
 - ✅ **Contact modal** - Email display with copy-to-clipboard functionality
 - ✅ **Navigation updates** - Changed Admin to Login, added Contact button
@@ -358,15 +409,13 @@ This reduces CSS duplication and makes styling consistent across the site.
 - ✅ **Automatic image optimization** - Build-time compression and mobile version generation
 - ✅ **Photo gallery** - Masonry layout with lightbox modal and keyboard navigation
 
-## License
-
-All content and code © 2025 Tucker Pippin. All rights reserved.
+---
 
 ## Future Enhancements
 
 Potential additions (not currently implemented):
 
-- **RSS feeds** - Auto-generate RSS for blog and essays
+- **RSS feeds** - Auto-generate RSS for blog and projects
 - **Search functionality** - Client-side search across posts
 - **Tags/categories** - Taxonomy system for posts and photos
 - **Related posts** - Algorithm to suggest similar content
@@ -376,3 +425,18 @@ Potential additions (not currently implemented):
 - **WebP support** - Modern image format alongside JPEG
 - **Photo EXIF data** - Auto-extract camera settings from photos
 - **Comments system** - Lightweight commenting (utterances, giscus, etc.)
+
+---
+
+## License
+
+All content and code © 2026 Tucker Pippin. All rights reserved.
+
+---
+
+## Support & Issues
+
+For questions or issues with this codebase, refer to:
+- [CMS-SETUP.md](./CMS-SETUP.md) - Deployment and CMS configuration
+- [TODO.md](./TODO.md) - Current tasks and known issues
+- [.claude](.claude) - Development context and guidelines

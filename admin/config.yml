@@ -18,7 +18,7 @@ collections:
       - { label: "Publish Date", name: "date", widget: "datetime" }
       - { label: "Description", name: "description", widget: "text", required: false }
       - { label: "Cover Image", name: "cover_image", widget: "image", required: false }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - { label: "Body", name: "body", widget: "markdown", required: false, default: "" }
 
   - name: "projects"
     label: "Projects"
