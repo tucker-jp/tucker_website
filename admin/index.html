@@ -74,37 +74,72 @@
   <script>
     var PhotoPreview = createClass({
       render: function() {
-        const entry = this.props.entry;
-        const photo = entry.getIn(['data', 'photo']);
-        const title = entry.getIn(['data', 'title']) || 'Untitled';
-        const caption = entry.getIn(['data', 'caption']);
-        const location = entry.getIn(['data', 'location']);
-        const description = entry.getIn(['data', 'description']);
-        const isMine = entry.getIn(['data', 'is_mine']);
+        var entry = this.props.entry;
+        var getAsset = this.props.getAsset;
 
-        // Handle in-memory uploads using getAsset
-        const imageUrl = this.props.getAsset(photo);
-        const imageSrc = imageUrl ? imageUrl.toString() : photo;
+        // Safely get values as strings
+        var photo = entry.getIn(['data', 'photo']);
+        var title = entry.getIn(['data', 'title']);
+        var caption = entry.getIn(['data', 'caption']);
+        var location = entry.getIn(['data', 'location']);
+        var description = entry.getIn(['data', 'description']);
+        var isMine = entry.getIn(['data', 'is_mine']);
 
-        return h('div', { style: 'padding: 20px; font-family: Inter, sans-serif; max-width: 800px; margin: 0 auto;' },
-          h('h1', { style: 'font-family: Lora, serif; font-size: 2rem; margin-bottom: 1rem; color: #2a2520;' }, title),
-          imageSrc ?
+        // Convert to safe string values
+        title = title ? String(title) : 'Untitled';
+        caption = caption ? String(caption) : '';
+        location = location ? String(location) : '';
+        description = description ? String(description) : '';
+
+        // Build image source
+        var imageSrc = null;
+        if (photo) {
+          var asset = getAsset(photo);
+          if (asset) {
+            imageSrc = asset.toString();
+          } else {
+            imageSrc = String(photo);
+          }
+        }
+
+        // Build children array
+        var children = [
+          h('h1', { style: 'font-family: Lora, serif; font-size: 2rem; margin-bottom: 1rem; color: #2a2520;' }, title)
+        ];
+
+        // Add image or placeholder
+        if (imageSrc) {
+          children.push(
             h('img', {
               src: imageSrc,
               alt: title,
-              style: 'max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(42, 37, 32, 0.1);',
-              onError: function(e) {
-                e.target.style.display = 'none';
-                e.target.insertAdjacentHTML('afterend', '<p style="color: #a85448; padding: 20px; background: #fef3f2; border-radius: 8px; border: 1px solid #fecdca;">⚠️ Image preview failed. This may be an unsupported format (HEIC) or the file is too large. Try converting to JPEG before uploading.</p>');
-              }
-            }) :
-            h('p', { style: 'color: #8a857f; font-style: italic; padding: 40px; text-align: center; background: #faf8f3; border-radius: 8px;' }, 'No image selected'),
-          caption ? h('p', { style: 'font-size: 1.125rem; color: #5a5550; margin-bottom: 0.5rem; line-height: 1.6;' }, caption) : null,
-          location ? h('p', { style: 'color: #6b5d52; margin-bottom: 0.5rem; font-weight: 500;' }, '📍 ' + location) : null,
-          description ? h('p', { style: 'color: #2a2520; line-height: 1.7; margin-top: 1rem;' }, description) : null,
+              style: 'max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(42, 37, 32, 0.1);'
+            })
+          );
+        } else {
+          children.push(
+            h('p', { style: 'color: #8a857f; font-style: italic; padding: 40px; text-align: center; background: #faf8f3; border-radius: 8px;' }, 'No image selected')
+          );
+        }
+
+        // Add optional fields
+        if (caption) {
+          children.push(h('p', { style: 'font-size: 1.125rem; color: #5a5550; margin-bottom: 0.5rem; line-height: 1.6;' }, caption));
+        }
+        if (location) {
+          children.push(h('p', { style: 'color: #6b5d52; margin-bottom: 0.5rem; font-weight: 500;' }, '📍 ' + location));
+        }
+        if (description) {
+          children.push(h('p', { style: 'color: #2a2520; line-height: 1.7; margin-top: 1rem;' }, description));
+        }
+
+        // Add ownership indicator
+        children.push(
           h('p', { style: 'font-size: 0.875rem; color: #8a857f; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #e8e4da;' },
             isMine ? '✓ Your photo' : '℗ Not your photo')
         );
+
+        return h('div', { style: 'padding: 20px; font-family: Inter, sans-serif; max-width: 800px; margin: 0 auto;' }, children);
       }
     });
 
