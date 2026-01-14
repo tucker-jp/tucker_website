@@ -72,6 +72,9 @@
 
   <!-- Custom photo preview template -->
   <script>
+    var h = window.h;
+    var createClass = window.createClass;
+
     var PhotoPreview = createClass({
       render: function() {
         var entry = this.props.entry;
@@ -104,7 +107,7 @@
 
         // Build children array
         var children = [
-          h('h1', { style: 'font-family: Lora, serif; font-size: 2rem; margin-bottom: 1rem; color: #2a2520;' }, title)
+          h('h1', { style: { fontFamily: 'Lora, serif', fontSize: '2rem', marginBottom: '1rem', color: '#2a2520' } }, title)
         ];
 
         // Add image or placeholder
@@ -113,33 +116,33 @@
             h('img', {
               src: imageSrc,
               alt: title,
-              style: 'max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(42, 37, 32, 0.1);'
+              style: { maxWidth: '100%', height: 'auto', borderRadius: '8px', marginBottom: '1rem', boxShadow: '0 2px 8px rgba(42, 37, 32, 0.1)' }
             })
           );
         } else {
           children.push(
-            h('p', { style: 'color: #8a857f; font-style: italic; padding: 40px; text-align: center; background: #faf8f3; border-radius: 8px;' }, 'No image selected')
+            h('p', { style: { color: '#8a857f', fontStyle: 'italic', padding: '40px', textAlign: 'center', background: '#faf8f3', borderRadius: '8px' } }, 'No image selected')
           );
         }
 
         // Add optional fields
         if (caption) {
-          children.push(h('p', { style: 'font-size: 1.125rem; color: #5a5550; margin-bottom: 0.5rem; line-height: 1.6;' }, caption));
+          children.push(h('p', { style: { fontSize: '1.125rem', color: '#5a5550', marginBottom: '0.5rem', lineHeight: '1.6' } }, caption));
         }
         if (location) {
-          children.push(h('p', { style: 'color: #6b5d52; margin-bottom: 0.5rem; font-weight: 500;' }, '📍 ' + location));
+          children.push(h('p', { style: { color: '#6b5d52', marginBottom: '0.5rem', fontWeight: 500 } }, 'Location: ' + location));
         }
         if (description) {
-          children.push(h('p', { style: 'color: #2a2520; line-height: 1.7; margin-top: 1rem;' }, description));
+          children.push(h('p', { style: { color: '#2a2520', lineHeight: '1.7', marginTop: '1rem' } }, description));
         }
 
         // Add ownership indicator
         children.push(
-          h('p', { style: 'font-size: 0.875rem; color: #8a857f; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #e8e4da;' },
-            isMine ? '✓ Your photo' : '℗ Shared with permission, public domain, or similar license')
+          h('p', { style: { fontSize: '0.875rem', color: '#8a857f', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid #e8e4da' } },
+            isMine ? 'Your photo' : 'Shared with permission, public domain, or similar license')
         );
 
-        return h('div', { style: 'padding: 20px; font-family: Inter, sans-serif; max-width: 800px; margin: 0 auto;' }, children);
+        return h('div', { style: { padding: '20px', fontFamily: 'Inter, sans-serif', maxWidth: '800px', margin: '0 auto' } }, children);
       }
     });
 
