@@ -1,5 +1,5 @@
 ---
-title: Eureka App
+title: CommonPlace (Formerly Eureka)
 year: 2025
 status: Active
 description: Live audio-to-transcript journaling iOS app with AI categorization and intelligent insights.
@@ -9,7 +9,8 @@ technologies:
   - Speech Recognition
   - CoreML
   - OpenAI API
-github: https://github.com/tuckerpippin
+link: https://www.commonplace.quest/
+github: https://github.com/tucker-jp/commonplaceapp
 ---
 
 Eureka is an iOS journaling app that captures thoughts through voice, transcribes them in real-time, and uses AI to automatically categorize and surface insights from your journal entries.

@@ -10,6 +10,7 @@ technologies:
   - PDF.js
   - ePub.js
   - Vector Search
+link: https://example.com
 github: https://github.com/tuckerpippin
 ---
 

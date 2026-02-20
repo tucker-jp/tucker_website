@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects — Tucker Pippin</title>
+    <title>Projects - Tucker Pippin</title>
     <meta name="description" content="Selected projects and work by Tucker Pippin.">
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -38,7 +38,7 @@
             <!-- Plutarch Quote -->
             <div class="photo-quote quote-box">
                 <p class="photo-quote-text">"The mind is not a vessel to be filled but a fire to be kindled."</p>
-                <p class="photo-quote-author">— Plutarch</p>
+                <p class="photo-quote-author">&mdash; Plutarch</p>
             </div>
         </header>
 
@@ -60,6 +60,16 @@
                 <button class="copy-email-btn" id="copy-email-btn">Copy Email</button>
                 <button class="close-modal-btn" id="close-modal-btn">Close</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Project Image Lightbox -->
+    <div id="project-lightbox" class="lightbox">
+        <button class="lightbox-close" id="project-lightbox-close" aria-label="Close image viewer">&times;</button>
+        <button class="lightbox-prev" id="project-lightbox-prev" aria-label="Previous image" style="display: none;">&#8249;</button>
+        <button class="lightbox-next" id="project-lightbox-next" aria-label="Next image" style="display: none;">&#8250;</button>
+        <div class="lightbox-content">
+            <img id="project-lightbox-image" src="" alt="">
         </div>
     </div>
 
@@ -86,18 +96,63 @@
                     projects.map(project => loadSingleContent('projects', project.slug))
                 );
 
-                // Sort by year (newest first), then by status (Active first)
-                fullProjects.sort((a, b) => {
-                    if (b.year !== a.year) return b.year - a.year;
+                // Normalize frontmatter-backed fields so metadata renders correctly
+                const normalizedProjects = fullProjects.map(project => {
+                    const frontmatter = project.frontmatter || {};
+
+                    return {
+                        ...project,
+                        status: project.status || frontmatter.status || '',
+                        year: project.year || frontmatter.year || '',
+                        technologies: project.technologies || frontmatter.technologies || [],
+                        link: project.link || frontmatter.link || '',
+                        github: project.github || frontmatter.github || '',
+                        cover_image: project.cover_image || frontmatter.cover_image || ''
+                    };
+                });
+
+                const projectPriority = {
+                    'eureka-app': 0,
+                    'veritas-reader': 1,
+                    'personal-website': 2
+                };
+
+                // Sort by custom priority first, then year, then status
+                normalizedProjects.sort((a, b) => {
+                    const priorityA = Object.prototype.hasOwnProperty.call(projectPriority, a.slug) ? projectPriority[a.slug] : 999;
+                    const priorityB = Object.prototype.hasOwnProperty.call(projectPriority, b.slug) ? projectPriority[b.slug] : 999;
+
+                    if (priorityA !== priorityB) return priorityA - priorityB;
+
+                    const yearA = Number(a.year) || 0;
+                    const yearB = Number(b.year) || 0;
+
+                    if (yearB !== yearA) return yearB - yearA;
                     const statusOrder = { 'Active': 0, 'Completed': 1, 'Archived': 2 };
                     return (statusOrder[a.status] || 999) - (statusOrder[b.status] || 999);
                 });
 
-                container.innerHTML = fullProjects.map((project, index) => {
+                const projectGalleries = {
+                    'eureka-app': [
+                        { src: '/uploads/commonplace-home.png', alt: 'CommonPlace home capture screen' },
+                        { src: '/uploads/library-tracker-screen-common-place.png', alt: 'CommonPlace library tracker screen' },
+                        { src: '/uploads/asknotes-commonplace.png', alt: 'CommonPlace AskNotes screen' },
+                        { src: '/uploads/folder-view-commonplace.png', alt: 'CommonPlace folder view screen' },
+                        { src: '/uploads/folder-screen-note-view-commonplace.png', alt: 'CommonPlace folder note view screen' }
+                    ]
+                };
+
+                container.innerHTML = normalizedProjects.map((project, index) => {
+                    const isEurekaProject = project.slug === 'eureka-app';
+                    const isVeritasProject = project.slug === 'veritas-reader';
+                    const usesInlineLinkLayout = isEurekaProject || isVeritasProject;
+                    const inlinePreviewImage = isEurekaProject ? '/uploads/commonplace-home.png' : '';
+                    const hasInlinePreview = usesInlineLinkLayout;
+
                     // Determine if we have sidebar content (image or links)
-                    const hasCoverImage = project.cover_image;
+                    const hasCoverImage = project.cover_image && !hasInlinePreview;
                     const hasLinks = project.link || project.github;
-                    const hasSidebar = hasCoverImage || hasLinks;
+                    const hasSidebar = hasCoverImage || (hasLinks && !hasInlinePreview);
 
                     let coverImageHtml = '';
                     if (hasCoverImage) {
@@ -113,16 +168,53 @@
                         `;
                     }
 
-                    let linksHtml = '';
                     const links = [];
                     if (project.link) {
-                        links.push(`<a href="${escapeHtml(project.link)}" target="_blank" rel="noopener">View Project →</a>`);
+                        links.push(`<a href="${escapeHtml(project.link)}" target="_blank" rel="noopener">Website &rarr;</a>`);
                     }
                     if (project.github) {
-                        links.push(`<a href="${escapeHtml(project.github)}" target="_blank" rel="noopener">GitHub →</a>`);
+                        links.push(`<a href="${escapeHtml(project.github)}" target="_blank" rel="noopener">GitHub &rarr;</a>`);
                     }
+
+                    let linksHtml = '';
                     if (links.length > 0) {
                         linksHtml = `<div class="project-links">${links.join('')}</div>`;
+                    }
+
+                    let inlinePreviewHtml = '';
+                    if (hasInlinePreview) {
+                        const inlineLinksHtml = links.length > 0
+                            ? `<div class="project-links project-inline-links">${links.join('')}</div>`
+                            : '';
+                        const inlineMediaHtml = isEurekaProject
+                            ? `
+                                <div class="project-inline-preview-media">
+                                    <button
+                                        type="button"
+                                        class="project-inline-preview-image-btn"
+                                        data-lightbox-src="${escapeHtml(inlinePreviewImage)}"
+                                        data-lightbox-alt="${escapeHtml(project.title)} screenshot"
+                                        aria-label="Open ${escapeHtml(project.title)} screenshot"
+                                    >
+                                        <img src="${escapeHtml(inlinePreviewImage)}" alt="${escapeHtml(project.title)} screenshot" class="project-inline-preview-image">
+                                    </button>
+                                    <div class="project-inline-preview-actions">
+                                        <button
+                                            type="button"
+                                            class="btn-base btn-small project-inline-gallery-btn"
+                                            data-project-slug="${escapeHtml(project.slug)}"
+                                        >See More</button>
+                                    </div>
+                                </div>
+                            `
+                            : '';
+
+                        inlinePreviewHtml = `
+                            <div class="project-inline-preview">
+                                ${inlineLinksHtml}
+                                ${inlineMediaHtml}
+                            </div>
+                        `;
                     }
 
                     // Build sidebar HTML
@@ -140,17 +232,27 @@
                         <article class="project-item">
                             <div class="project-header${hasSidebar ? ' has-sidebar' : ''}">
                                 <div class="project-main">
-                                    <h2 class="project-title-clickable" data-project-index="${index}">
-                                        ${escapeHtml(project.title)}
-                                        <span class="expand-indicator">+</span>
-                                    </h2>
+                                    <h2>${escapeHtml(project.title)}</h2>
+                                    ${inlinePreviewHtml}
                                     <div class="project-meta">
                                         <span class="project-status">${escapeHtml(project.status)}</span>
-                                        <span class="separator">•</span>
+                                        <span class="separator">&bull;</span>
                                         <span class="project-year">${project.year}</span>
                                     </div>
                                     <p class="project-description">${escapeHtml(project.description)}</p>
                                     ${techTagsHtml}
+                                    <div class="project-expand-row">
+                                        <button
+                                            type="button"
+                                            class="project-expand-toggle"
+                                            data-project-index="${index}"
+                                            aria-expanded="false"
+                                            aria-controls="project-details-${index}"
+                                        >
+                                            <span class="expand-indicator">+</span>
+                                            <span class="project-expand-label">Expand Details</span>
+                                        </button>
+                                    </div>
                                 </div>
                                 ${sidebarHtml}
                             </div>
@@ -161,21 +263,122 @@
                     `;
                 }).join('');
 
-                // Add click handlers for expandable projects
-                document.querySelectorAll('.project-title-clickable').forEach(title => {
-                    title.addEventListener('click', () => {
-                        const index = title.getAttribute('data-project-index');
+                // Add click handlers for expandable project details
+                document.querySelectorAll('.project-expand-toggle').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const index = button.getAttribute('data-project-index');
                         const details = document.getElementById(`project-details-${index}`);
-                        const indicator = title.querySelector('.expand-indicator');
+                        const indicator = button.querySelector('.expand-indicator');
+                        const label = button.querySelector('.project-expand-label');
+                        const isOpening = details.style.display === 'none';
 
-                        if (details.style.display === 'none') {
-                            details.style.display = 'block';
-                            indicator.textContent = '−';
-                        } else {
-                            details.style.display = 'none';
-                            indicator.textContent = '+';
-                        }
+                        details.style.display = isOpening ? 'block' : 'none';
+                        indicator.textContent = isOpening ? '-' : '+';
+                        label.textContent = isOpening ? 'Collapse Details' : 'Expand Details';
+                        button.setAttribute('aria-expanded', isOpening ? 'true' : 'false');
                     });
+                });
+
+                const projectLightbox = document.getElementById('project-lightbox');
+                const projectLightboxImage = document.getElementById('project-lightbox-image');
+                const projectLightboxClose = document.getElementById('project-lightbox-close');
+                const projectLightboxPrev = document.getElementById('project-lightbox-prev');
+                const projectLightboxNext = document.getElementById('project-lightbox-next');
+                let currentProjectGallery = [];
+                let currentProjectGalleryIndex = 0;
+
+                function updateProjectLightboxImage() {
+                    if (!currentProjectGallery.length) return;
+                    const currentImage = currentProjectGallery[currentProjectGalleryIndex];
+                    projectLightboxImage.src = currentImage.src;
+                    projectLightboxImage.alt = currentImage.alt || 'Project screenshot';
+                }
+
+                function updateProjectLightboxNav() {
+                    const showNav = currentProjectGallery.length > 1;
+                    projectLightboxPrev.style.display = showNav ? 'flex' : 'none';
+                    projectLightboxNext.style.display = showNav ? 'flex' : 'none';
+                }
+
+                function openProjectLightbox(src, alt) {
+                    currentProjectGallery = [{ src, alt: alt || 'Project screenshot' }];
+                    currentProjectGalleryIndex = 0;
+                    updateProjectLightboxImage();
+                    updateProjectLightboxNav();
+                    projectLightbox.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function openProjectGallery(images, startIndex = 0) {
+                    if (!Array.isArray(images) || images.length === 0) return;
+                    currentProjectGallery = images;
+                    currentProjectGalleryIndex = Math.max(0, Math.min(startIndex, images.length - 1));
+                    updateProjectLightboxImage();
+                    updateProjectLightboxNav();
+                    projectLightbox.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function showPrevProjectImage() {
+                    if (currentProjectGallery.length <= 1) return;
+                    currentProjectGalleryIndex = (currentProjectGalleryIndex - 1 + currentProjectGallery.length) % currentProjectGallery.length;
+                    updateProjectLightboxImage();
+                }
+
+                function showNextProjectImage() {
+                    if (currentProjectGallery.length <= 1) return;
+                    currentProjectGalleryIndex = (currentProjectGalleryIndex + 1) % currentProjectGallery.length;
+                    updateProjectLightboxImage();
+                }
+
+                function closeProjectLightbox() {
+                    projectLightbox.style.display = 'none';
+                    projectLightboxImage.src = '';
+                    projectLightboxImage.alt = '';
+                    currentProjectGallery = [];
+                    currentProjectGalleryIndex = 0;
+                    updateProjectLightboxNav();
+                    document.body.style.overflow = '';
+                }
+
+                document.querySelectorAll('.project-inline-preview-image-btn').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        openProjectLightbox(button.dataset.lightboxSrc, button.dataset.lightboxAlt || 'Project screenshot');
+                    });
+                });
+
+                document.querySelectorAll('.project-inline-gallery-btn').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        const projectSlug = button.dataset.projectSlug || '';
+                        openProjectGallery(projectGalleries[projectSlug] || [], 0);
+                    });
+                });
+
+                projectLightboxPrev.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    showPrevProjectImage();
+                });
+
+                projectLightboxNext.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    showNextProjectImage();
+                });
+
+                projectLightboxClose.addEventListener('click', closeProjectLightbox);
+
+                projectLightbox.addEventListener('click', (event) => {
+                    if (event.target === projectLightbox) {
+                        closeProjectLightbox();
+                    }
+                });
+
+                document.addEventListener('keydown', (event) => {
+                    if (projectLightbox.style.display !== 'flex') return;
+                    if (event.key === 'Escape') closeProjectLightbox();
+                    if (event.key === 'ArrowLeft') showPrevProjectImage();
+                    if (event.key === 'ArrowRight') showNextProjectImage();
                 });
 
             } catch (error) {
