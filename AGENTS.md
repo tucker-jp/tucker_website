@@ -1,6 +1,6 @@
-# Tucker Pippin Personal Website - Claude Code Context
+# Tucker Pippin Personal Website - Codex Context
 
-This file provides context and guidelines for Claude Code when working on this project.
+This file provides context and guidelines for Codex when working on this project.
 
 ## Project Overview
 
@@ -333,7 +333,7 @@ npm install
 ## Project History
 
 ### January 2026
-- Added comprehensive documentation (README, TODO, CLAUDE.md)
+- Added comprehensive documentation (README, TODO, AGENTS.md)
 - Implemented mobile-responsive CMS interface
 - Added custom photo preview template
 - Documented iPhone HEIC workaround
@@ -378,4 +378,4 @@ npm install
 **Last Updated**: January 2026
 
 **Maintainer**: Tucker Pippin
-**Primary Assistant**: Claude Code (Sonnet 4.5)
+**Primary Assistant**: Codex (Sonnet 4.5)

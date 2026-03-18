@@ -8,18 +8,6 @@ media_folder: "uploads"
 public_folder: "/uploads"
 
 collections:
-  - name: "blog"
-    label: "Blog"
-    folder: "content/blog"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Publish Date", name: "date", widget: "datetime" }
-      - { label: "Description", name: "description", widget: "text", required: false }
-      - { label: "Cover Image", name: "cover_image", widget: "image", required: false }
-      - { label: "Body", name: "body", widget: "markdown", required: false, default: "" }
-
   - name: "projects"
     label: "Projects"
     folder: "content/projects"

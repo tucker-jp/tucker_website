@@ -1,6 +1,6 @@
 # Tucker Pippin Personal Website
 
-A minimalist personal website for writing, projects, and photography. Built with static HTML, vanilla JavaScript, and Decap CMS for content management.
+A minimalist personal website for projects and photography. Built with static HTML, vanilla JavaScript, and Decap CMS for content management.
 
 ## Overview
 
@@ -14,7 +14,7 @@ This website takes a deliberately simple approach to web development—no framew
 ## Architecture
 
 - **Frontend**: Static HTML + CSS + JavaScript (vanilla, no frameworks)
-- **CMS**: Decap CMS at `/admin` for blog, projects, and photo management
+- **CMS**: Decap CMS at `/admin` for projects and photo management
 - **Content**: Markdown files with YAML frontmatter stored in `/content`
 - **Build Pipeline**: Image optimization + index generation + automated deployment
 - **Hosting**: Netlify (static deployment with automated builds)
@@ -34,7 +34,6 @@ This website takes a deliberately simple approach to web development—no framew
 - Accessible focus states and semantic HTML
 
 ### Content Management
-- **Blog** - Marginal Revolution-style full feed with reading time filters
 - **Projects** - Portfolio showcase with status badges and technology tags
 - **Photos** - Masonry gallery with lightbox, filters (My Media/Not Mine), and keyboard navigation
 - **Daily Quotes** - Rotation system with 876 curated quotes
@@ -67,9 +66,6 @@ This website takes a deliberately simple approach to web development—no framew
 │   ├── index.html          # Decap CMS interface
 │   └── config.yml          # CMS configuration (collections, fields, media)
 ├── content/
-│   ├── blog/
-│   │   ├── index.json      # Auto-generated post index
-│   │   └── *.md            # Blog post files (frontmatter + markdown)
 │   ├── projects/
 │   │   ├── index.json      # Auto-generated project index
 │   │   └── *.md            # Project files
@@ -87,7 +83,6 @@ This website takes a deliberately simple approach to web development—no framew
 │   ├── *.jpg               # Regular images (auto-optimized to max 2000px)
 │   └── *_mobile.jpg        # Mobile versions (800px wide, quality 75)
 ├── index.html              # Homepage (with mobile hero + nav buttons)
-├── blog.html               # Blog feed (Marginal Revolution style)
 ├── projects.html           # Projects showcase with CMS integration
 ├── photos.html             # Photo gallery with lightbox and hover overlays
 ├── 404.html                # 404 error page
@@ -107,19 +102,6 @@ This website takes a deliberately simple approach to web development—no framew
 ---
 
 ## Content Model
-
-### Blog Posts
-
-```yaml
----
-title: Post Title
-date: 2026-01-15
-description: Short description for listings
-cover_image: /uploads/image.jpg  # optional
----
-
-Markdown content here...
-```
 
 ### Projects
 
@@ -189,7 +171,7 @@ See [CMS-SETUP.md](./CMS-SETUP.md) for complete deployment instructions.
    - **Publish directory**: `.` (root)
 3. Enable Netlify Identity + Git Gateway
 4. Invite yourself as a CMS user
-5. Log in at `/admin` and start writing
+5. Log in at `/admin` and start managing projects or photos
 
 **Build pipeline** (runs automatically on every deploy):
 1. `npm install` - Installs Sharp for image processing
@@ -206,7 +188,6 @@ The build process is incremental—cached images are skipped, only new/modified 
 
 You can edit these sections via the CMS at `/admin`:
 
-- **Blog** ([/blog.html](blog.html)) — Shorter posts and updates (Marginal Revolution style full feed with reading time filters)
 - **Projects** ([/projects.html](projects.html)) — Portfolio/work showcase with status badges
 - **Photos** ([/photos.html](photos.html)) — Photography gallery with masonry layout and lightbox
 
@@ -351,7 +332,7 @@ The site uses **classic scripts** (not ES modules) for maximum compatibility wit
 
 - **`content-loader.js`** - Content loading and rendering
   - Uses `window.siteUtils.parseFrontmatter()` for all markdown parsing
-  - Loads and caches blog/project/photo content from JSON indexes
+  - Loads and caches project/photo content from JSON indexes
   - `markdownToHtml()` - Simple markdown parser
   - `formatDate()` - Human-readable date formatting
   - `calculateReadingTime()` - Estimates reading time (~200 words/min)
@@ -415,12 +396,11 @@ Works in all modern browsers:
 
 Potential additions (not currently implemented):
 
-- **RSS feeds** - Auto-generate RSS for blog and projects
-- **Search functionality** - Client-side search across posts
-- **Tags/categories** - Taxonomy system for posts and photos
-- **Related posts** - Algorithm to suggest similar content
+- **RSS feed** - Auto-generate RSS for projects
+- **Search functionality** - Client-side search across content
+- **Tags/categories** - Taxonomy system for projects and photos
 - **Dark mode** - Toggle between light and cream themes
-- **Print stylesheet** - Optimized for printing articles
+- **Print stylesheet** - Optimized for printing project pages
 - **PWA support** - Service worker and manifest.json
 - **WebP support** - Modern image format alongside JPEG
 - **Photo EXIF data** - Auto-extract camera settings from photos

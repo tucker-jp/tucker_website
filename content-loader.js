@@ -100,7 +100,7 @@ function getSlug(filename) {
     return filename.replace('.md', '');
 }
 
-// Load all posts from a collection (blog or essays)
+// Load all content items from a collection
 async function loadCollection(collectionName) {
     try {
         // Fetch the auto-generated index file

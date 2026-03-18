@@ -44,7 +44,7 @@ This guide walks you through deploying your personal website to Netlify with Dec
    - Select your `tucker-pippin-website` repository
 
 3. **Configure build settings**:
-   - **Build command**: `node generate-index.js` (auto-generates post indexes)
+   - **Build command**: `npm install && node scripts/optimize-images.js && node generate-index.js`
    - **Publish directory**: `.` (dot means root)
    - **Branch to deploy**: `main`
 
@@ -99,17 +99,15 @@ Netlify Identity is required for CMS authentication.
    - Log in with the email and password you just created
 
 2. **Start creating content**:
-   - Click "Blog", "Essays", or "Photos" to create new content
-   - Use the Markdown editor for blog/essay posts
-   - Upload photos with metadata (title, caption, location, date)
-   - Add cover images if desired (see image guidelines below)
+   - Click "Projects" or "Photos" to create new content
+   - Use the CMS fields to manage project details or photo metadata
    - Click "Publish" → "Publish now" to make it live
 
 3. **How it works**:
    - When you publish, Decap CMS commits the Markdown file to your GitHub repo
    - Netlify automatically rebuilds and deploys your site (usually within 30 seconds)
-   - The build step auto-generates post indexes—you never need to touch it
-   - Your new post appears on your live site automatically
+   - The build step auto-generates content indexes and optimized images
+   - Your updates appear on your live site automatically
 
 ---
 
@@ -223,22 +221,6 @@ After converting to JPEG:
 
 ## Updating Content via CMS
 
-### Creating a New Blog Post
-
-1. Go to `/admin`
-2. Click "Blog" → "New Blog"
-3. Fill in:
-   - **Title**: Post title
-   - **Publish Date**: When it should appear as published
-   - **Description**: Short summary (shows in listings)
-   - **Cover Image**: Optional header image
-   - **Body**: Your post content in Markdown
-4. Click "Publish" → "Publish now"
-
-### Creating a New Essay
-
-Same as blog posts, but click "Essays" instead.
-
 ### Uploading a New Photo
 
 1. Go to `/admin`
@@ -257,7 +239,7 @@ Photos appear in a masonry grid layout, sorted by date (newest first).
 ### Editing Existing Content
 
 1. Go to `/admin`
-2. Click "Blog" or "Essays"
+2. Click "Projects" or "Photos"
 3. Click on the post you want to edit
 4. Make changes
 5. Click "Publish" → "Publish now"
@@ -292,8 +274,7 @@ Photos appear in a masonry grid layout, sorted by date (newest first).
 ## What's CMS-Driven vs. Static
 
 ### CMS-Driven (Editable via /admin)
-- **Blog posts** (`content/blog/*.md`)
-- **Essays** (`content/essays/*.md`)
+- **Projects** (`content/projects/*.md`)
 - **Photos** (`content/photos/*.md`)
 
 ### Static (Edit code directly)
@@ -314,7 +295,7 @@ All your content is safely stored in your GitHub repository. Every change made t
 
 To view your content's version history:
 - Go to your GitHub repo
-- Click on any file in `content/blog/` or `content/essays/`
+- Click on any file in `content/projects/` or `content/photos/`
 - Click "History" to see all changes
 
 ---
@@ -322,8 +303,7 @@ To view your content's version history:
 ## Next Steps
 
 - **Customize the homepage**: Edit `index.html` to update your intro
-- **Add your own writing**: Create new blog posts and essays via `/admin`
-- **Update Projects/Photos**: When ready, edit `projects.html` and `photos.html`
+- **Update Projects/Photos**: Add or edit entries via `/admin`
 - **Tweak the design**: Modify `style.css` to adjust colors, fonts, spacing
 - **Add analytics** (optional): Integrate Netlify Analytics or privacy-friendly alternatives
 

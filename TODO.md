@@ -5,12 +5,12 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 ## Current Tasks
 
 - [ ] Test mobile admin panel after CSS improvements
-- [ ] Clean up existing blog posts with `\-` placeholder characters
 - [ ] Verify photo previews work correctly after template addition
 - [ ] Test iPhone photo upload workflow end-to-end
 
 ## Completed ✓
 
+- [x] Remove public writing section and blog CMS collection (Mar 2026)
 - [x] Create comprehensive README.md documentation (Jan 2026)
 - [x] Add mobile-responsive CSS to admin interface (Jan 2026)
 - [x] Document iPhone photo upload guidelines (Jan 2026)
@@ -21,12 +21,6 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Create .claude context file for development guidance (Jan 2026)
 
 ## Known Issues
-
-### Blog Post Body Field
-- **Issue**: Some older blog posts show `\-` placeholder text in rendered output
-- **Cause**: Users added `-` as placeholder when body field was required
-- **Status**: Fixed - body field now optional, filter added to remove placeholders
-- **Action**: Clean up existing posts manually or wait for next edit
 
 ### Mobile CMS Usability
 - **Issue**: Admin panel spacing may be inconsistent on mobile devices
@@ -41,14 +35,13 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 ## Future Enhancements
 
 ### High Priority
-- [ ] RSS feeds for blog and projects
+- [ ] RSS feed for projects
 - [ ] Client-side search functionality across all content
-- [ ] Tags/categories taxonomy for posts and photos
+- [ ] Tags/categories taxonomy for projects and photos
 
 ### Medium Priority
-- [ ] Related posts algorithm (based on content similarity)
 - [ ] Dark mode toggle (alternate cream color scheme)
-- [ ] Print stylesheet for articles
+- [ ] Print stylesheet for project pages
 - [ ] Photo EXIF data extraction and display
 
 ### Low Priority / Nice to Have
@@ -76,7 +69,6 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 ## Content Goals
 
 - [ ] Add 50+ more photos to gallery
-- [ ] Write 20+ blog posts
 - [ ] Add 3-5 more projects to portfolio
 - [ ] Expand quote rotation to 1000+ quotes
 
@@ -93,8 +85,8 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - **Bandwidth**: Currently using 42.43 MB of 100 GB/month (Netlify free tier). Safe to add 200-300 more photos.
 - **Build Time**: Typically 30-60 seconds with incremental caching
 - **Mobile Support**: Desktop-first design with mobile enhancements at <1100px breakpoint
-- **Content Storage**: 18 markdown files across blog, projects, and photos collections
+- **Content Storage**: Markdown files across projects and photos collections
 
 ---
 
-**Last Updated**: January 2026
+**Last Updated**: March 2026
