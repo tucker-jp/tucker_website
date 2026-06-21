@@ -41,7 +41,7 @@
         </div>
 
         <!-- Daily Quote Section -->
-        <section class="daily-quote quote-box" hidden>
+        <section class="daily-quote quote-box" hidden aria-hidden="true" style="display: none;">
             <div class="quote-content">
                 <p class="quote-text" id="quote-text">Loading quote...</p>
                 <p class="quote-author" id="quote-author"></p>
@@ -102,8 +102,13 @@
         // Daily Quote Rotation with Random Navigation
         let allQuotes = [];
         let usedQuoteIndices = new Set();
+        const quoteSection = document.querySelector('.daily-quote');
 
         window.addEventListener('DOMContentLoaded', async () => {
+            if (quoteSection && quoteSection.hidden) {
+                return;
+            }
+
             try {
                 const response = await fetch('/data/quotes.json?v=' + Date.now());
                 allQuotes = await response.json();
@@ -159,6 +164,9 @@
 
         // Event listener for next quote button
         document.addEventListener('DOMContentLoaded', () => {
+            if (quoteSection && quoteSection.hidden) {
+                return;
+            }
             document.getElementById('next-quote-btn').addEventListener('click', nextQuote);
         });
     </script>
