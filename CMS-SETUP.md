@@ -1,6 +1,8 @@
 # CMS Setup Guide
 
-This guide walks you through deploying your personal website to Netlify with Decap CMS for content management.
+This guide covers the public website, the legacy Decap content editor, and the private Tracker workspace.
+
+> **July 2026 status:** `/admin` still manages projects and photos through Decap CMS and Git Gateway. Git Gateway is deprecated, so it should be treated as a temporary legacy editor. `/tracker/` uses the preferred replacement pattern: invite-only Netlify Identity, a narrowly scoped Function, and private Netlify Blob storage. The public website remains static and the design is intended to stay within Netlify's free allowance at this site's low traffic and update rate.
 
 ## Prerequisites
 
@@ -44,7 +46,7 @@ This guide walks you through deploying your personal website to Netlify with Dec
    - Select your `tucker-pippin-website` repository
 
 3. **Configure build settings**:
-   - **Build command**: `npm install && node scripts/optimize-images.js && node generate-index.js`
+   - **Build command**: `npm ci && npm run build`
    - **Publish directory**: `.` (dot means root)
    - **Branch to deploy**: `main`
 
@@ -57,7 +59,7 @@ This guide walks you through deploying your personal website to Netlify with Dec
 
 ## Step 3: Enable Netlify Identity
 
-Netlify Identity is required for CMS authentication.
+Netlify Identity is required for both the legacy CMS and the private Tracker.
 
 1. **Go to Site Settings**:
    - From your site dashboard, click "Site settings"
@@ -70,10 +72,11 @@ Netlify Identity is required for CMS authentication.
    - Under "Registration preferences", select **Invite only**
    - This prevents random people from signing up to edit your site
 
-4. **Enable Git Gateway**:
+4. **Keep Git Gateway only while `/admin` is still in use**:
    - Scroll down to "Services" → "Git Gateway"
    - Click "Enable Git Gateway"
    - This allows Decap CMS to commit changes directly to your GitHub repo
+   - Git Gateway is deprecated; do not build new features around it
 
 ---
 
@@ -111,7 +114,36 @@ Netlify Identity is required for CMS authentication.
 
 ---
 
-## Step 6: Custom Domain (Optional)
+## Step 6: Activate the Private Tracker
+
+1. **Open the Tracker**:
+   - Visit `https://YOUR-SITE.netlify.app/tracker/`
+   - Sign in with the same invite-only Identity account
+
+2. **Restrict Tracker access to Tucker's account**:
+   - Copy the user's UUID from the Netlify Identity user list
+   - Add a Netlify environment variable named `TRACKER_ALLOWED_USER_IDS`
+   - Set its value to that UUID; multiple IDs may be comma-separated
+   - Trigger a deploy so the Function receives the new value
+
+3. **Migrate the existing private Tracker**:
+   - Keep the existing `~/tracker-data` Git repository unchanged as a recovery copy
+   - First run `TRACKER_MIGRATION_DRY_RUN=1 npm run migrate:tracker`; this validates and counts every source record without credentials or writes
+   - In a local terminal, set `NETLIFY_SITE_ID`, `NETLIFY_AUTH_TOKEN`, and `TRACKER_OWNER_ID`
+   - Never paste the Netlify token into chat, source files, or Git
+   - Run `npm run migrate:tracker`
+   - The script imports compatible records, preserves IDs and timestamps, skips conflicts by default, and prints counts without printing private record contents
+   - Compare the imported/indexed count with the source repository before relying on the new copy
+
+4. **Connect personal capture devices**:
+   - In Tracker, open **Settings** → **Connect a device**
+   - Use one token per Shortcut, browser extension, or personal device
+   - The token is shown once and can only add records; it cannot read, edit, export, or delete
+   - Revoke a token immediately if a device is lost or retired
+
+The capture endpoint is `POST /api/tracker/capture`. It accepts JSON plus `Authorization: Bearer YOUR_DEVICE_TOKEN`. Direct HTTPS capture is preferred over the old iCloud text-file relay because it records the real capture time, works from Windows and browser extensions, and reports success or failure immediately.
+
+## Step 7: Custom Domain (Optional)
 
 To use `tuckerpippin.com` instead of the Netlify subdomain:
 
@@ -297,6 +329,8 @@ To view your content's version history:
 - Go to your GitHub repo
 - Click on any file in `content/projects/` or `content/photos/`
 - Click "History" to see all changes
+
+Tracker data is additionally portable through **Tracker → Settings → Download JSON export**. Archived records are included. Before this migration began, the exact website state was preserved in Git as `website-before-tracker-migration-2026-07-09`; restoring that tag returns the code and public website to the pre-Tracker version. Tracker records stored after migration must be restored from their JSON export or the retained private Tracker repository, not from the website tag.
 
 ---
 

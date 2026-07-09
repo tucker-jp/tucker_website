@@ -4,12 +4,26 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 
 ## Current Tasks
 
+- [ ] Authorize the local Netlify CLI, link the existing production site, and verify a deploy preview
+- [ ] Confirm invite-only Identity in production and set `TRACKER_ALLOWED_USER_IDS` to Tucker's Identity user ID
+- [ ] Run the 20-record Tracker migration, compare counts, and keep the private Git repository as a recovery copy
+- [ ] Create one production capture token per personal device and replace the iCloud-file Shortcuts with direct HTTPS capture
+- [ ] Test each updated Shortcut once on macOS and iPhone, including the first-run Shortcuts network permission prompt
+- [ ] Add the small Chrome/Edge capture extension after the production endpoint is verified
+- [ ] Replace the deprecated Decap/Git Gateway photo and project editor with a custom section of the private workspace
 - [ ] Test mobile admin panel after CSS improvements
 - [ ] Verify photo previews work correctly after template addition
 - [ ] Test iPhone photo upload workflow end-to-end
 
 ## Completed ✓
 
+- [x] Preserve and push the exact pre-migration website as `website-before-tracker-migration-2026-07-09` (Jul 2026)
+- [x] Build the protected, responsive Tracker web app for seven categories (Jul 2026)
+- [x] Add private per-user Blob storage with version-safe writes, soft archive, and JSON export (Jul 2026)
+- [x] Add revocable capture-only device tokens and an HTTPS capture endpoint (Jul 2026)
+- [x] Add a migration script and dry-run validate all 20 existing private Tracker records (Jul 2026)
+- [x] Add automated Tracker schema/storage tests and verify desktop and 390px phone layouts (Jul 2026)
+- [x] Audit the generated and installed macOS Shortcuts and identify the iCloud relay limitations (Jul 2026)
 - [x] Remove public writing section and blog CMS collection (Mar 2026)
 - [x] Create comprehensive README.md documentation (Jan 2026)
 - [x] Add mobile-responsive CSS to admin interface (Jan 2026)
@@ -21,6 +35,21 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Create .claude context file for development guidance (Jan 2026)
 
 ## Known Issues
+
+### Tracker Production Activation
+- **Issue**: The local CLI is not yet authorized to the existing Netlify account, so the new API has not been exercised against production Identity or Blobs.
+- **Status**: Local schema/storage tests and browser demo flows pass; the live website remains unchanged.
+- **Action**: Complete the browser-based Netlify login, link the site, and use a deploy preview before production.
+
+### macOS Shortcut End-to-End Test
+- **Issue**: Running the installed Shortcuts from the command line stopped at an interactive Shortcuts prompt, and Mac UI automation was unavailable in the test session.
+- **Status**: Generated actions, parser behavior, input types, and output paths were inspected successfully; no test file was left behind.
+- **Action**: Approve the first-run prompt on the Mac, then rerun one harmless capture for each updated Shortcut.
+
+### Legacy CMS Dependency
+- **Issue**: Decap's Git Gateway authentication path is deprecated by Netlify and photo publishing still triggers a full Git build.
+- **Status**: It remains functional and unchanged for rollback safety.
+- **Action**: Move photo/project editing into the private workspace after Tracker production verification, then remove Git Gateway.
 
 ### Mobile CMS Usability
 - **Issue**: Admin panel spacing may be inconsistent on mobile devices
@@ -45,7 +74,7 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [ ] Photo EXIF data extraction and display
 
 ### Low Priority / Nice to Have
-- [ ] PWA support (service worker and manifest.json)
+- [x] PWA support for the private Tracker (Jul 2026)
 - [ ] WebP image format support alongside JPEG
 - [ ] Comments system (utterances or giscus integration)
 - [ ] Analytics integration (privacy-focused, e.g., Plausible)
@@ -89,4 +118,4 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 
 ---
 
-**Last Updated**: March 2026
+**Last Updated**: July 2026
