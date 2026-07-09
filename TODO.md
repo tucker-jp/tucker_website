@@ -9,7 +9,8 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Set `TRACKER_ALLOWED_USER_IDS` to Tucker's existing Identity user ID (Jul 2026)
 - [x] Migrate all 20 Tracker records, verify category counts, and retain the private Git recovery copy (Jul 2026)
 - [x] Create a capture-only Apple Shortcuts token and generate eight signed direct-HTTPS Shortcuts (Jul 2026)
-- [ ] Test each updated Shortcut once on macOS and iPhone, including the first-run Shortcuts network permission prompt
+- [x] Verify the authenticated deploy preview and complete one real macOS direct-capture Shortcut test (Jul 2026)
+- [ ] Import the production Shortcut set and test the remaining capture types on macOS and iPhone
 - [ ] Add the small Chrome/Edge capture extension after the production endpoint is verified
 - [ ] Replace the deprecated Decap/Git Gateway photo and project editor with a custom section of the private workspace
 - [ ] Test mobile admin panel after CSS improvements
@@ -39,14 +40,14 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 ## Known Issues
 
 ### Tracker Production Activation
-- **Issue**: The authenticated deploy-preview screen still needs Tucker's personal sign-in before the draft can be merged.
-- **Status**: Netlify is authorized and linked, Identity is invite-only, all 20 records are migrated, and the real preview capture endpoint passed a create-and-cleanup test. The live website remains unchanged.
-- **Action**: Sign in to the visible deploy preview, verify the private interface, then merge the draft.
+- **Issue**: No blocking issue remains; the reviewed draft is ready to merge.
+- **Status**: Netlify is authorized and linked, Identity is invite-only, all 20 records load in the authenticated preview, responsive layout checks pass, and the real Shortcut capture test passed. The test record was removed and the library returned to 20 records.
+- **Action**: Merge the draft and verify the production URL.
 
 ### macOS Shortcut End-to-End Test
 - **Issue**: Running the installed Shortcuts from the command line stopped at an interactive Shortcuts prompt, and Mac UI automation was unavailable in the test session.
-- **Status**: Eight direct-save Shortcuts compile and sign successfully, the Apple capture-only token is active, and a harmless clip-test Shortcut is ready to import. Mac UI automation is unavailable in this session.
-- **Action**: Import the test Shortcut and approve Apple's first-run network prompt, then run one harmless capture before replacing the existing iCloud versions.
+- **Status**: Eight direct-save Shortcuts compile and sign successfully. The Apple capture-only token is active, and `Tracker Direct Clip Test` completed a real capture through the deploy preview. The generated test record was then removed.
+- **Action**: Import the production set, replace the existing iCloud-file versions, and test the remaining capture types on macOS and iPhone.
 
 ### Legacy CMS Dependency
 - **Issue**: Decap's Git Gateway authentication path is deprecated by Netlify and photo publishing still triggers a full Git build.
