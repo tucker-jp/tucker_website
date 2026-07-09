@@ -5,7 +5,7 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 ## Current Tasks
 
 - [x] Authorize the local Netlify CLI, link the existing production site, and verify a deploy preview (Jul 2026)
-- [ ] Change Identity registration from open to invite-only after explicit access-control confirmation
+- [x] Change Identity registration from open to invite-only after explicit access-control confirmation (Jul 2026)
 - [x] Set `TRACKER_ALLOWED_USER_IDS` to Tucker's existing Identity user ID (Jul 2026)
 - [x] Migrate all 20 Tracker records, verify category counts, and retain the private Git recovery copy (Jul 2026)
 - [ ] Create one production capture token per personal device and replace the iCloud-file Shortcuts with direct HTTPS capture
