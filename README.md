@@ -91,7 +91,8 @@ The public website takes a deliberately simple approach—no frontend framework 
 │   └── contact-modal.js    # Contact modal functionality
 ├── scripts/
 │   ├── optimize-images.js  # Image optimization + mobile version generation
-│   └── migrate-tracker-data.mjs # One-time private Tracker migration
+│   ├── migrate-tracker-data.mjs # One-time private Tracker migration
+│   └── generate-tracker-shortcuts.py # Signed direct-capture Apple Shortcuts
 ├── netlify/
 │   ├── functions/tracker.mjs # Authenticated Tracker API
 │   └── lib/                # Tracker schema and Blob storage adapter
@@ -210,7 +211,17 @@ Git Gateway is deprecated by Netlify, so `/admin` is now considered a temporary 
 
 ### Tracker Data
 
-Tracker records are managed at `/tracker/`. Data is private to the signed-in Identity user. Cross-device capture uses a separate token per personal device; revoke a device from Tracker Settings if it is lost or retired.
+Tracker records are managed at `/tracker/`. Data is private to the signed-in Identity user. Cross-device capture uses a separate token per capture client or synced device group; revoke one from Tracker Settings if it is lost or retired.
+
+The Apple Shortcuts generator creates quick capture actions for books, movies, restaurants, ideas, to-dos, quotes, selected text, and shared web links. It embeds a revocable capture-only token and restricts generated files to the current macOS user:
+
+```bash
+pip install workflowpy-shortcuts
+export TRACKER_CAPTURE_TOKEN="paste-capture-only-token-here"
+python scripts/generate-tracker-shortcuts.py --output-dir dist/direct-shortcuts
+```
+
+Do not share the generated `.shortcut` files; create another device token instead. The generator source itself contains no secret.
 
 Adding, editing, or archiving a Tracker record calls the private Function and writes directly to Blob storage. These routine actions do not run the website build or create a production deploy; deploy usage occurs only when website code or public content is intentionally published.
 
