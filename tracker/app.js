@@ -106,13 +106,66 @@ function renderLogin() {
       <p class="eyebrow">Private workspace</p>
       <h1>Tucker Tracker</h1>
       <p>Clips, books, movies, ideas, quotes, restaurants, and to-dos—available only after you sign in.</p>
-      <div class="login-actions">
-        <button id="login-button" class="primary-button" type="button">Sign in</button>
-        <a class="secondary-button" href="/">Back to tuckerpippin.com</a>
+      <form id="tracker-login-form" class="login-form">
+        <label for="login-email">Email</label>
+        <input id="login-email" name="email" type="email" autocomplete="username" required>
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+        <button id="login-button" class="primary-button" type="submit">Sign in</button>
+      </form>
+      <p id="login-message" class="login-message hidden" role="status"></p>
+      <div class="login-links">
+        <button id="password-reset-button" class="text-button" type="button">Email me a password-reset link</button>
+        <a href="/">Back to tuckerpippin.com</a>
       </div>
+      <p class="login-help">This is an invite-only account. There is no public registration.</p>
     </section>
   `;
-  document.getElementById("login-button").addEventListener("click", () => window.netlifyIdentity.open("login"));
+  document.getElementById("tracker-login-form").addEventListener("submit", loginWithPassword);
+  document.getElementById("password-reset-button").addEventListener("click", requestPasswordReset);
+}
+
+async function loginWithPassword(event) {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  const button = document.getElementById("login-button");
+  button.disabled = true;
+  button.textContent = "Signing in…";
+  updateLoginMessage("");
+  try {
+    const user = await window.netlifyIdentity.gotrue.login(form.get("email"), form.get("password"), true);
+    await startSession(user);
+  } catch (error) {
+    button.disabled = false;
+    button.textContent = "Sign in";
+    updateLoginMessage(error.message || "Sign-in was not accepted.", true);
+  }
+}
+
+async function requestPasswordReset() {
+  const email = document.getElementById("login-email").value.trim();
+  if (!email) {
+    updateLoginMessage("Enter your email first, then request the reset link.", true);
+    document.getElementById("login-email").focus();
+    return;
+  }
+  const button = document.getElementById("password-reset-button");
+  button.disabled = true;
+  try {
+    await window.netlifyIdentity.gotrue.requestPasswordRecovery(email);
+    updateLoginMessage("Password-reset instructions are on the way if that account exists.");
+  } catch (error) {
+    updateLoginMessage(error.message || "The reset email could not be requested.", true);
+  } finally {
+    button.disabled = false;
+  }
+}
+
+function updateLoginMessage(message, isError = false) {
+  const element = document.getElementById("login-message");
+  if (!element) return;
+  element.textContent = message;
+  element.className = `login-message${message ? "" : " hidden"}${isError ? " error-notice" : ""}`;
 }
 
 function renderFailure(message) {
