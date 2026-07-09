@@ -141,7 +141,11 @@ Netlify Identity is required for both the legacy CMS and the private Tracker.
    - The token is shown once and can only add records; it cannot read, edit, export, or delete
    - Revoke a token immediately if a device is lost or retired
 
+The Tracker Function also applies a per-IP request limit before execution. This protects the free-plan allowance from accidental loops and ordinary single-source abuse without affecting normal personal use.
+
 The capture endpoint is `POST /api/tracker/capture`. It accepts JSON plus `Authorization: Bearer YOUR_DEVICE_TOKEN`. Direct HTTPS capture is preferred over the old iCloud text-file relay because it records the real capture time, works from Windows and browser extensions, and reports success or failure immediately.
+
+Tracker captures and edits write directly to private Blob storage. They do not trigger a site build or production deploy. Only an intentional code/content publication spends a production-deploy allowance.
 
 ## Step 7: Custom Domain (Optional)
 

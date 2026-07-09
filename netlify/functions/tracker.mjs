@@ -6,6 +6,15 @@ import { createTrackerRepository, TrackerStoreError } from "../lib/tracker-store
 const repository = createTrackerRepository();
 const MAX_JSON_BYTES = 256 * 1024;
 
+export const config = {
+  path: ["/api/tracker", "/api/tracker/*"],
+  rateLimit: {
+    windowLimit: 120,
+    windowSize: 60,
+    aggregateBy: ["ip", "domain"],
+  },
+};
+
 export default async function trackerFunction(request) {
   const route = routeSegments(request.url);
 

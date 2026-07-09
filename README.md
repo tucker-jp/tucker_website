@@ -51,6 +51,7 @@ The public website takes a deliberately simple approach—no frontend framework 
 - Responsive desktop and phone interface with installable PWA metadata
 - One-time device-token creation and revocation
 - Tokens are capture-only: they cannot browse, edit, export, or delete records
+- Per-IP rate limiting protects the private API and free-plan usage from request spikes
 - JSON export plus a migration script for the existing private Tracker repository
 - Version-safe updates so simultaneous edits do not silently overwrite each other
 
@@ -210,6 +211,8 @@ Git Gateway is deprecated by Netlify, so `/admin` is now considered a temporary 
 ### Tracker Data
 
 Tracker records are managed at `/tracker/`. Data is private to the signed-in Identity user. Cross-device capture uses a separate token per personal device; revoke a device from Tracker Settings if it is lost or retired.
+
+Adding, editing, or archiving a Tracker record calls the private Function and writes directly to Blob storage. These routine actions do not run the website build or create a production deploy; deploy usage occurs only when website code or public content is intentionally published.
 
 The old private Git-backed Tracker should remain untouched until the production migration is verified. The pre-migration website is permanently recoverable from the annotated Git tag `website-before-tracker-migration-2026-07-09`.
 

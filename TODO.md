@@ -4,9 +4,10 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 
 ## Current Tasks
 
-- [ ] Authorize the local Netlify CLI, link the existing production site, and verify a deploy preview
-- [ ] Confirm invite-only Identity in production and set `TRACKER_ALLOWED_USER_IDS` to Tucker's Identity user ID
-- [ ] Run the 20-record Tracker migration, compare counts, and keep the private Git repository as a recovery copy
+- [x] Authorize the local Netlify CLI, link the existing production site, and verify a deploy preview (Jul 2026)
+- [ ] Change Identity registration from open to invite-only after explicit access-control confirmation
+- [x] Set `TRACKER_ALLOWED_USER_IDS` to Tucker's existing Identity user ID (Jul 2026)
+- [x] Migrate all 20 Tracker records, verify category counts, and retain the private Git recovery copy (Jul 2026)
 - [ ] Create one production capture token per personal device and replace the iCloud-file Shortcuts with direct HTTPS capture
 - [ ] Test each updated Shortcut once on macOS and iPhone, including the first-run Shortcuts network permission prompt
 - [ ] Add the small Chrome/Edge capture extension after the production endpoint is verified
