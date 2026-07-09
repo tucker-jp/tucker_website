@@ -223,6 +223,7 @@ blockquote {
 
 .nav-links {
     display: flex;
+    align-items: center;
     gap: var(--spacing-md);
 }
 
@@ -248,13 +249,14 @@ blockquote {
     opacity: 1;
 }
 
-.nav-links a:focus-visible {
+.nav-links a:focus-visible,
+.nav-links .contact-link:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 4px;
     border-radius: 2px;
 }
 
-.nav-links a.admin-link,
+.nav-links a.private-link,
 .nav-links .contact-link {
     color: var(--text-tertiary);
     font-size: 0.875rem;
@@ -267,29 +269,69 @@ blockquote {
     border-bottom: 1px solid transparent;
 }
 
-.nav-links a.admin-link {
-    margin-left: auto;
-    margin-right: 0.5rem;
+.nav-links a.private-link {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--border-subtle);
+    border-radius: 50%;
 }
 
 .nav-links .contact-link {
+    appearance: none;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid transparent;
     cursor: pointer;
 }
 
-.nav-links a.admin-link::before {
-    content: '🔑 ';
-    font-size: 0.875rem;
+.private-login-icon {
+    position: relative;
+    width: 0.8rem;
+    height: 0.65rem;
+    display: inline-block;
+    margin-top: 0.25rem;
+    border: 1.5px solid currentColor;
+    border-radius: 2px;
 }
 
-.nav-links .contact-link::before {
-    content: '✉️ ';
-    font-size: 0.875rem;
+.private-login-icon::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -0.48rem;
+    width: 0.52rem;
+    height: 0.5rem;
+    border: 1.5px solid currentColor;
+    border-bottom: 0;
+    border-radius: 0.4rem 0.4rem 0 0;
+    transform: translateX(-50%);
 }
 
-.nav-links a.admin-link:hover,
+.private-login-icon::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2px;
+    height: 3px;
+    border-radius: 999px;
+    background: currentColor;
+    transform: translate(-50%, -35%);
+}
+
+.nav-links a.private-link:hover,
 .nav-links .contact-link:hover {
     color: var(--accent);
     border-bottom-color: var(--accent);
+}
+
+.nav-links a.private-link:hover {
+    background: var(--cream-bg);
+    border-color: var(--accent);
 }
 
 /* ===================================
@@ -297,6 +339,7 @@ blockquote {
    =================================== */
 
 .container {
+    width: 100%;
     max-width: var(--content-width);
     margin: 0 auto;
     padding: var(--spacing-xl) var(--spacing-md);
@@ -396,48 +439,6 @@ main {
         margin-bottom: 0;
     }
 
-    /* Mobile navigation buttons - large and tappable */
-    .mobile-nav-buttons {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: var(--spacing-sm);
-        margin-bottom: var(--spacing-xl);
-    }
-
-    .mobile-nav-button {
-        padding: var(--spacing-md);
-        background-color: var(--cream-light);
-        border: 2px solid var(--border-subtle);
-        border-radius: 12px;
-        text-align: center;
-        font-family: var(--font-serif);
-        font-size: 1.375rem;
-        font-weight: 600;
-        color: var(--text-primary);
-        text-decoration: none;
-        transition: all 0.2s ease;
-        box-shadow: var(--shadow-subtle);
-        min-height: 80px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .mobile-nav-button:hover,
-    .mobile-nav-button:active {
-        background-color: var(--cream-bg);
-        border-color: var(--accent);
-        color: var(--accent);
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-hover);
-    }
-
-    /* Keyboard focus styles for accessibility */
-    .mobile-nav-button:focus-visible {
-        outline: 3px solid var(--accent);
-        outline-offset: 2px;
-    }
-
     /* Daily quote mobile adjustments */
     .daily-quote {
         padding: var(--spacing-md);
@@ -482,11 +483,6 @@ main {
 
 .intro p {
     color: var(--text-secondary);
-}
-
-/* Mobile navigation buttons - hidden on desktop */
-.mobile-nav-buttons {
-    display: none;
 }
 
 /* Base Quote Box Styling */
@@ -1800,6 +1796,11 @@ main {
         font-size: 0.875rem;
     }
 
+    .nav-links a.private-link {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+
     .container {
         padding: var(--spacing-md) var(--spacing-sm);
     }
@@ -1956,4 +1957,3 @@ main {
         width: 100%;
     }
 }
-

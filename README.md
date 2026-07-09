@@ -289,16 +289,14 @@ The site uses a **desktop-first** approach with mobile enhancements.
 **Homepage only:**
 - Hero section with background image (`main_bumper_1_mobile.jpg`)
 - 92% opacity cream overlay for text readability
-- Large, tappable navigation buttons in a compact responsive grid
-- 80px minimum touch target height
+- Compact stacked header with consistent public navigation and a quiet private-login icon
 - Photo rails completely hidden
 - Optimized images loaded (800px wide instead of 2000px)
 
 **Implementation details:**
 - All mobile styles in `@media (max-width: 1099px)` block
 - Hero wrapper (`.hero`) added to `index.html` (invisible on desktop)
-- Mobile nav buttons hidden on desktop with `display: none`
-- Zero changes to desktop layout—pixel-identical
+- The private route has an accessible label but no public-facing product name
 
 ### Accessibility
 - Keyboard focus states with `:focus-visible` (3px outline)
@@ -396,6 +394,7 @@ Works in all modern browsers:
 - ✅ **Private portable storage** - Added per-user Netlify Blob storage, soft archive, JSON export, and conflict-safe writes
 - ✅ **Safe migration path** - Added tests, a Git-to-Blob migration script, and an immutable pre-migration website tag
 - ✅ **Zero-subscription architecture** - Kept the public site static and reused the site's existing Netlify hosting and Identity
+- ✅ **Quiet public integration** - Replaced the product-named login link with an accessible lock icon and removed unnecessary third-party scripts
 
 ### January 2026 - Documentation & Mobile CMS Improvements
 - ✅ **Comprehensive README** - Complete project documentation with architecture details

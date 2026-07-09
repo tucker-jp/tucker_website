@@ -25,6 +25,7 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Add a migration script and dry-run validate all 20 existing private Tracker records (Jul 2026)
 - [x] Add automated Tracker schema/storage tests and verify desktop and 390px phone layouts (Jul 2026)
 - [x] Audit the generated and installed macOS Shortcuts and identify the iCloud relay limitations (Jul 2026)
+- [x] Polish the public navigation, replace the Tracker label with a discreet private-login icon, and fix narrow-screen overflow (Jul 2026)
 - [x] Remove public writing section and blog CMS collection (Mar 2026)
 - [x] Create comprehensive README.md documentation (Jan 2026)
 - [x] Add mobile-responsive CSS to admin interface (Jan 2026)

@@ -29,7 +29,7 @@
   status = 200
 
 [[headers]]
-  for = "/tracker/*"
+  for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
