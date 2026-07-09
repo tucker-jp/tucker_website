@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Tucker Pippin</title>
+    <title>Projects — Tucker Pippin</title>
     <meta name="description" content="Selected projects and work by Tucker Pippin.">
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -24,8 +24,8 @@
             <div class="nav-links">
                 <a href="/photos.html">Photos</a>
                 <a href="/projects.html" class="active">Projects</a>
-                <a href="/admin" class="admin-link">Login</a>
-                <span class="contact-link" id="contact-btn">Contact</span>
+                <button type="button" class="contact-link" id="contact-btn">Contact</button>
+                <a href="/tracker/" class="private-link" aria-label="Private login" title="Private login"><span class="private-login-icon" aria-hidden="true"></span></a>
             </div>
         </div>
     </nav>
@@ -46,13 +46,13 @@
     </main>
 
     <footer class="site-footer">
-        <p>&copy; 2025 Tucker Pippin. All rights reserved.</p>
+        <p>&copy; 2026 Tucker Pippin. All rights reserved.</p>
     </footer>
 
     <!-- Contact Modal -->
-    <div id="contact-modal" class="contact-modal">
+    <div id="contact-modal" class="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" aria-hidden="true">
         <div class="contact-modal-content">
-            <h3>Get in Touch</h3>
+            <h3 id="contact-modal-title">Get in Touch</h3>
             <p>Send me an email at:</p>
             <div class="email-display" id="email-display">tuckerepippin@gmail.com</div>
             <div class="contact-modal-buttons">
@@ -388,7 +388,5 @@
     </script>
     <script src="/js/contact-modal.js"></script>
 
-    <!-- Instant page navigation - preloads links on hover -->
-    <script src="//instant.page/5.2.0" type="module" data-instant-intensity="mousedown"></script>
 </body>
 </html>

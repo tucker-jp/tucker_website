@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tucker Pippin</title>
-    <meta name="description" content="Personal website of Tucker Pippin — projects, photography, and notes from life.">
+    <meta name="description" content="Personal website of Tucker Pippin — photography, projects, and personal experiments.">
     <link rel="stylesheet" href="/style.css">
     <link rel="preload" as="image" href="/uploads/main_bumper_1_mobile.jpg" media="(max-width: 1099px)">
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
     <!-- Background photo rails (desktop only) -->
@@ -26,8 +25,8 @@
             <div class="nav-links">
                 <a href="/photos.html">Photos</a>
                 <a href="/projects.html">Projects</a>
-                <a href="/admin" class="admin-link">Login</a>
-                <span class="contact-link" id="contact-btn">Contact</span>
+                <button type="button" class="contact-link" id="contact-btn">Contact</button>
+                <a href="/tracker/" class="private-link" aria-label="Private login" title="Private login"><span class="private-login-icon" aria-hidden="true"></span></a>
             </div>
         </div>
     </nav>
@@ -49,12 +48,6 @@
             <button id="next-quote-btn" class="btn-base btn-small" style="display: none;">Next Quote →</button>
         </section>
 
-        <!-- Mobile-only navigation buttons -->
-        <nav class="mobile-nav-buttons">
-            <a href="/projects.html" class="mobile-nav-button">Projects</a>
-            <a href="/photos.html" class="mobile-nav-button">Photos</a>
-        </nav>
-
         <section class="about-section">
             <div class="about-content">
                 <div class="about-text">
@@ -69,13 +62,13 @@
     </main>
 
     <footer class="site-footer">
-        <p>&copy; 2025 Tucker Pippin. All rights reserved.</p>
+        <p>&copy; 2026 Tucker Pippin. All rights reserved.</p>
     </footer>
 
     <!-- Contact Modal -->
-    <div id="contact-modal" class="contact-modal">
+    <div id="contact-modal" class="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" aria-hidden="true">
         <div class="contact-modal-content">
-            <h3>Get in Touch</h3>
+            <h3 id="contact-modal-title">Get in Touch</h3>
             <p>Send me an email at:</p>
             <div class="email-display" id="email-display">tuckerepippin@gmail.com</div>
             <div class="contact-modal-buttons">
@@ -86,18 +79,6 @@
     </div>
 
     <script src="/js/utils.js"></script>
-    <script>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
-      }
-    </script>
-
     <script>
         // Daily Quote Rotation with Random Navigation
         let allQuotes = [];
@@ -173,7 +154,5 @@
 
     <script src="/js/contact-modal.js"></script>
 
-    <!-- Instant page navigation - preloads links on hover -->
-    <script src="//instant.page/5.2.0" type="module" data-instant-intensity="mousedown"></script>
 </body>
 </html>

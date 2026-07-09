@@ -4,18 +4,26 @@ const contactModal = document.getElementById('contact-modal');
 const closeModalBtn = document.getElementById('close-modal-btn');
 const copyEmailBtn = document.getElementById('copy-email-btn');
 const emailDisplay = document.getElementById('email-display');
+let previouslyFocusedElement = null;
 
 contactBtn.addEventListener('click', () => {
+    previouslyFocusedElement = document.activeElement;
     contactModal.style.display = 'flex';
+    contactModal.setAttribute('aria-hidden', 'false');
+    closeModalBtn.focus();
 });
 
-closeModalBtn.addEventListener('click', () => {
+function closeContactModal() {
     contactModal.style.display = 'none';
-});
+    contactModal.setAttribute('aria-hidden', 'true');
+    previouslyFocusedElement?.focus();
+}
+
+closeModalBtn.addEventListener('click', closeContactModal);
 
 contactModal.addEventListener('click', (e) => {
     if (e.target === contactModal) {
-        contactModal.style.display = 'none';
+        closeContactModal();
     }
 });
 
@@ -33,6 +41,6 @@ copyEmailBtn.addEventListener('click', () => {
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && contactModal.style.display === 'flex') {
-        contactModal.style.display = 'none';
+        closeContactModal();
     }
 });

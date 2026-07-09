@@ -4,7 +4,7 @@ This file provides context and guidelines for Codex when working on this project
 
 ## Project Overview
 
-This is a minimalist personal website built with vanilla HTML, CSS, and JavaScript. No frameworks, no bundlers—just clean, readable code. The site features a cream editorial design, CMS-driven content management via Decap CMS, and automatic image optimization.
+This is a minimalist personal website built with vanilla HTML, CSS, and JavaScript, plus a private Tracker web app backed by Netlify Functions and Netlify Blobs. The public site remains static and features a cream editorial design, legacy content management via Decap CMS, and automatic image optimization.
 
 **Key Philosophy**: Simplicity over complexity. Prefer readable, maintainable code over clever abstractions.
 
@@ -25,12 +25,21 @@ This is a minimalist personal website built with vanilla HTML, CSS, and JavaScri
 - **Shared utilities**: `window.siteUtils` namespace for global access
 - **No build step**: Open `index.html` and it just works
 
-### Why Decap CMS?
+### Why Decap CMS? (Legacy Only)
 - **Git-based**: Content stored as markdown files in repository
 - **No database**: Everything version controlled
 - **Free**: No CMS subscription costs
 - **Open source**: Full control and customization
 - **Editorial workflow**: Built-in draft/review/publish states
+
+Git Gateway is deprecated. Preserve `/admin` until the custom private content editor is verified, but do not build new features around Git Gateway.
+
+### Why Netlify Functions + Blobs for Tracker?
+- **No new subscription**: Reuses the site's existing low-volume Netlify footprint
+- **Cross-device**: A web app and HTTPS capture endpoint work on macOS, iOS, Windows, and browsers
+- **Narrow credentials**: Device tokens are insert-only and revocable
+- **Portable**: Records are JSON and can be exported at any time
+- **Safe updates**: ETag conditions prevent silent overwrites
 
 ---
 
@@ -81,21 +90,18 @@ This is a minimalist personal website built with vanilla HTML, CSS, and JavaScri
 
 ### Testing Locally
 ```bash
-# No build needed for basic testing
-# Just open index.html in browser
+npm ci
+npm test
+npm run dev
 
-# For CMS testing, run local server:
-python -m http.server 8000
-# or
-npx http-server
-
-# Then visit http://localhost:8000
+# Public site: http://localhost:8888
+# Local-only Tracker demo: http://localhost:8888/tracker/?demo=1
 ```
 
 ### Deploying
 - Push to GitHub
 - Netlify auto-builds and deploys
-- Build command: `npm install && node scripts/optimize-images.js && node generate-index.js`
+- Build command: `npm ci && npm run build`
 - Typical build time: 30-60 seconds
 
 ---
@@ -129,6 +135,17 @@ content/
 ```
 
 Each folder has auto-generated `index.json` for fast content discovery.
+
+### Tracker Structure
+```
+tracker/                    # Private Tracker PWA
+netlify/functions/tracker.mjs # Authenticated API and capture endpoint
+netlify/lib/                # Schema and version-safe Blob repository
+tests/                      # Node test suite
+scripts/migrate-tracker-data.mjs # One-time migration helper
+```
+
+Tracker records are private per Identity user. Never commit device tokens, Netlify access tokens, private Tracker data, or production exports. Keep the pre-migration website tag and old private Tracker repository until production counts are verified.
 
 ---
 
@@ -286,7 +303,7 @@ Each folder has auto-generated `index.json` for fast content discovery.
 ### CMS Login Issues
 1. Verify Netlify Identity is enabled
 2. Check user has been invited
-3. Confirm Git Gateway is configured
+3. For `/admin` only, confirm the legacy Git Gateway is still configured
 4. Try clearing browser cache/cookies
 
 ### Content Not Updating
@@ -307,7 +324,10 @@ Each folder has auto-generated `index.json` for fast content discovery.
 
 ```bash
 # Local development server
-python -m http.server 8000
+npm run dev
+
+# Automated Tracker checks
+npm test
 
 # Check upload folder size
 du -sh uploads
@@ -325,12 +345,18 @@ node generate-index.js
 node --version
 
 # Install dependencies
-npm install
+npm ci
 ```
 
 ---
 
 ## Project History
+
+### July 2026
+- Added the private Tracker web app, authenticated API, and per-user Blob storage
+- Added capture-only device tokens, JSON export, and the existing-data migration script
+- Preserved the exact pre-migration website in an annotated Git tag
+- Marked Decap/Git Gateway as a legacy surface pending custom replacement
 
 ### January 2026
 - Added comprehensive documentation (README, TODO, AGENTS.md)

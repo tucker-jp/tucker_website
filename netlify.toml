@@ -1,6 +1,6 @@
 [build]
   publish = "."
-  command = "npm install && node scripts/optimize-images.js && node generate-index.js"
+  command = "npm ci && npm run build"
 
 # Disable deploy previews to save build credits
 [context.deploy-preview]
@@ -22,3 +22,16 @@
   from = "/admin"
   to = "/admin/index.html"
   status = 200
+
+[[redirects]]
+  from = "/tracker"
+  to = "/tracker/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "camera=(), geolocation=(), microphone=()"

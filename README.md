@@ -1,24 +1,28 @@
 # Tucker Pippin Personal Website
 
-A minimalist personal website for projects and photography. Built with static HTML, vanilla JavaScript, and Decap CMS for content management.
+A minimalist personal website for projects and photography, plus a private cross-device Tracker for clips, to-dos, books, movies, restaurants, ideas, and quotes. The public site stays static; the private workspace uses small Netlify Functions and Netlify Blobs.
 
 ## Overview
 
-This website takes a deliberately simple approach to web development—no frameworks, no bundlers, just clean HTML, CSS, and JavaScript. It features a cream editorial design, CMS-driven content management, and automatic image optimization.
+The public website takes a deliberately simple approach—no frontend framework or bundler, just clean HTML, CSS, and JavaScript. It features a cream editorial design, CMS-driven content management, and automatic image optimization. The Tracker adds only the small server-side pieces needed for authentication and private storage.
 
-**Live Site**: https://your-site.netlify.app
-**Admin Panel**: https://your-site.netlify.app/admin
+**Live Site**: https://tuckerpippin.com
+**Legacy Content Admin**: https://tuckerpippin.com/admin
+**Private Tracker**: https://tuckerpippin.com/tracker/
 
 ---
 
 ## Architecture
 
-- **Frontend**: Static HTML + CSS + JavaScript (vanilla, no frameworks)
-- **CMS**: Decap CMS at `/admin` for projects and photo management
+- **Frontend**: Static HTML + CSS + JavaScript (vanilla, no framework runtime)
+- **Tracker**: Installable web app at `/tracker/`, backed by one authenticated API
+- **Tracker storage**: Netlify Blobs, separated by Identity user and stored as portable JSON
+- **Capture clients**: Revocable, insert-only device tokens for Shortcuts and browser extensions
+- **Legacy CMS**: Decap CMS at `/admin` for projects and photo management while its replacement is built
 - **Content**: Markdown files with YAML frontmatter stored in `/content`
 - **Build Pipeline**: Image optimization + index generation + automated deployment
 - **Hosting**: Netlify (static deployment with automated builds)
-- **Auth**: Netlify Identity + Git Gateway for CMS access
+- **Auth**: Invite-only Netlify Identity; Git Gateway is used only by the legacy CMS
 - **Design**: Desktop-first with mobile enhancements
 
 ---
@@ -41,6 +45,16 @@ This website takes a deliberately simple approach to web development—no framew
 - Automatic index generation on every deploy
 - Contact modal with email display and copy-to-clipboard
 
+### Private Tracker
+- Seven record types: clips, to-dos, books, movies, restaurants, ideas, and quotes
+- Search, status filters, editing, and recoverable soft archive
+- Responsive desktop and phone interface with installable PWA metadata
+- One-time device-token creation and revocation
+- Tokens are capture-only: they cannot browse, edit, export, or delete records
+- Per-IP rate limiting protects the private API and free-plan usage from request spikes
+- JSON export plus a migration script for the existing private Tracker repository
+- Version-safe updates so simultaneous edits do not silently overwrite each other
+
 ### Performance
 - Automatic image optimization at build time
 - Mobile-specific image versions (800px wide, quality 75)
@@ -50,9 +64,9 @@ This website takes a deliberately simple approach to web development—no framew
 - No framework overhead
 
 ### Technical
-- No frameworks, no bundlers—just vanilla HTML/CSS/JS
+- No frontend framework or bundler—just vanilla HTML/CSS/JS
 - CSS custom properties for easy theming
-- Classic scripts (not ES modules) for maximum compatibility
+- Classic scripts on the public pages; a native module keeps the isolated Tracker maintainable
 - SEO optimized with meta tags and semantic structure
 - WCAG AA color contrast compliance
 
@@ -76,7 +90,14 @@ This website takes a deliberately simple approach to web development—no framew
 │   ├── utils.js            # Shared utilities (frontmatter parser, etc.)
 │   └── contact-modal.js    # Contact modal functionality
 ├── scripts/
-│   └── optimize-images.js  # Image optimization + mobile version generation
+│   ├── optimize-images.js  # Image optimization + mobile version generation
+│   ├── migrate-tracker-data.mjs # One-time private Tracker migration
+│   └── generate-tracker-shortcuts.py # Signed direct-capture Apple Shortcuts
+├── netlify/
+│   ├── functions/tracker.mjs # Authenticated Tracker API
+│   └── lib/                # Tracker schema and Blob storage adapter
+├── tracker/                # Private Tracker web app and PWA assets
+├── tests/                  # Tracker schema and storage tests
 ├── data/
 │   └── quotes.json         # Daily quote rotation data (876 quotes)
 ├── uploads/                # CMS-uploaded images (optimized at build time)
@@ -142,22 +163,16 @@ description: Optional longer description
 
 ### Local Development
 
-No build step needed for basic development. Just open `index.html` in a browser.
-
-**To test CMS functionality locally**, run a local server:
+Install dependencies once, then use Netlify's local server so the Tracker Function is available:
 
 ```bash
-# Python 3
-python -m http.server 8000
-
-# Node.js
-npx http-server
-
-# PHP
-php -S localhost:8000
+npm ci
+npm run dev
 ```
 
-Then visit `http://localhost:8000`
+Visit `http://localhost:8888`. The public pages work normally. A local-only sample Tracker is available at `http://localhost:8888/tracker/?demo=1`; it uses invented in-memory data and never writes to production.
+
+Run automated checks with `npm test`.
 
 ### Deployment
 
@@ -167,14 +182,15 @@ See [CMS-SETUP.md](./CMS-SETUP.md) for complete deployment instructions.
 
 1. Push to GitHub
 2. Deploy to Netlify with these settings:
-   - **Build command**: `npm install && node scripts/optimize-images.js && node generate-index.js`
+   - **Build command**: `npm ci && npm run build`
    - **Publish directory**: `.` (root)
-3. Enable Netlify Identity + Git Gateway
+3. Enable invite-only Netlify Identity
 4. Invite yourself as a CMS user
-5. Log in at `/admin` and start managing projects or photos
+5. Set the optional `TRACKER_ALLOWED_USER_IDS` environment variable to your Identity user ID
+6. Log in at `/tracker/`; keep `/admin` only for legacy project/photo changes
 
 **Build pipeline** (runs automatically on every deploy):
-1. `npm install` - Installs Sharp for image processing
+1. `npm ci` - Reproduces the locked dependency set
 2. `node scripts/optimize-images.js` - Optimizes images and creates mobile versions
 3. `node generate-index.js` - Generates searchable JSON indexes
 
@@ -190,6 +206,26 @@ You can edit these sections via the CMS at `/admin`:
 
 - **Projects** ([/projects.html](projects.html)) — Portfolio/work showcase with status badges
 - **Photos** ([/photos.html](photos.html)) — Photography gallery with masonry layout and lightbox
+
+Git Gateway is deprecated by Netlify, so `/admin` is now considered a temporary legacy surface. The Tracker already uses the replacement pattern: Identity plus a narrowly scoped Function. A custom project/photo editor can move onto the same private workspace without changing the public site or adding a subscription.
+
+### Tracker Data
+
+Tracker records are managed at `/tracker/`. Data is private to the signed-in Identity user. Cross-device capture uses a separate token per capture client or synced device group; revoke one from Tracker Settings if it is lost or retired.
+
+The Apple Shortcuts generator creates quick capture actions for books, movies, restaurants, ideas, to-dos, quotes, selected text, and shared web links. It embeds a revocable capture-only token and restricts generated files to the current macOS user:
+
+```bash
+pip install workflowpy-shortcuts
+export TRACKER_CAPTURE_TOKEN="paste-capture-only-token-here"
+python scripts/generate-tracker-shortcuts.py --output-dir dist/direct-shortcuts
+```
+
+Do not share the generated `.shortcut` files; create another device token instead. The generator source itself contains no secret.
+
+Adding, editing, or archiving a Tracker record calls the private Function and writes directly to Blob storage. These routine actions do not run the website build or create a production deploy; deploy usage occurs only when website code or public content is intentionally published.
+
+The old private Git-backed Tracker should remain untouched until the production migration is verified. The pre-migration website is permanently recoverable from the annotated Git tag `website-before-tracker-migration-2026-07-09`.
 
 ### Static Content
 
@@ -264,16 +300,14 @@ The site uses a **desktop-first** approach with mobile enhancements.
 **Homepage only:**
 - Hero section with background image (`main_bumper_1_mobile.jpg`)
 - 92% opacity cream overlay for text readability
-- Large, tappable navigation buttons (2x2 grid)
-- 80px minimum touch target height
+- Compact stacked header with consistent public navigation and a quiet private-login icon
 - Photo rails completely hidden
 - Optimized images loaded (800px wide instead of 2000px)
 
 **Implementation details:**
 - All mobile styles in `@media (max-width: 1099px)` block
 - Hero wrapper (`.hero`) added to `index.html` (invisible on desktop)
-- Mobile nav buttons hidden on desktop with `display: none`
-- Zero changes to desktop layout—pixel-identical
+- The private route has an accessible label but no public-facing product name
 
 ### Accessibility
 - Keyboard focus states with `:focus-visible` (3px outline)
@@ -324,7 +358,7 @@ Edit the `.intro` section in `index.html`.
 
 ### JavaScript Organization
 
-The site uses **classic scripts** (not ES modules) for maximum compatibility with static hosting:
+The public pages use **classic scripts** for maximum compatibility with static hosting. The self-contained Tracker uses one native module and does not require a bundler:
 
 - **`js/utils.js`** - Shared utility functions under `window.siteUtils` namespace
   - `parseFrontmatter()` - YAML frontmatter parser (handles both Unix/Windows line endings)
@@ -365,6 +399,14 @@ Works in all modern browsers:
 
 ## Recent Updates
 
+### July 2026 - Private Tracker Foundation
+- ✅ **Protected Tracker workspace** - Added a responsive, login-only web app for all seven Tracker categories
+- ✅ **Cross-device capture API** - Added revocable insert-only tokens suitable for Shortcuts and browser extensions
+- ✅ **Private portable storage** - Added per-user Netlify Blob storage, soft archive, JSON export, and conflict-safe writes
+- ✅ **Safe migration path** - Added tests, a Git-to-Blob migration script, and an immutable pre-migration website tag
+- ✅ **Zero-subscription architecture** - Kept the public site static and reused the site's existing Netlify hosting and Identity
+- ✅ **Quiet public integration** - Replaced the product-named login link with an accessible lock icon and removed unnecessary third-party scripts
+
 ### January 2026 - Documentation & Mobile CMS Improvements
 - ✅ **Comprehensive README** - Complete project documentation with architecture details
 - ✅ **TODO tracking** - Task management system with TODO.md file
@@ -401,7 +443,7 @@ Potential additions (not currently implemented):
 - **Tags/categories** - Taxonomy system for projects and photos
 - **Dark mode** - Toggle between light and cream themes
 - **Print stylesheet** - Optimized for printing project pages
-- **PWA support** - Service worker and manifest.json
+- **Public-site PWA support** - The private Tracker already has a service worker and manifest
 - **WebP support** - Modern image format alongside JPEG
 - **Photo EXIF data** - Auto-extract camera settings from photos
 - **Comments system** - Lightweight commenting (utterances, giscus, etc.)

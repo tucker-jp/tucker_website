@@ -4,12 +4,29 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 
 ## Current Tasks
 
+- [x] Authorize the local Netlify CLI, link the existing production site, and verify a deploy preview (Jul 2026)
+- [x] Change Identity registration from open to invite-only after explicit access-control confirmation (Jul 2026)
+- [x] Set `TRACKER_ALLOWED_USER_IDS` to Tucker's existing Identity user ID (Jul 2026)
+- [x] Migrate all 20 Tracker records, verify category counts, and retain the private Git recovery copy (Jul 2026)
+- [x] Create a capture-only Apple Shortcuts token and generate eight signed direct-HTTPS Shortcuts (Jul 2026)
+- [x] Verify the authenticated deploy preview and complete one real macOS direct-capture Shortcut test (Jul 2026)
+- [ ] Import the production Shortcut set and test the remaining capture types on macOS and iPhone
+- [ ] Add the small Chrome/Edge capture extension after the production endpoint is verified
+- [ ] Replace the deprecated Decap/Git Gateway photo and project editor with a custom section of the private workspace
 - [ ] Test mobile admin panel after CSS improvements
 - [ ] Verify photo previews work correctly after template addition
 - [ ] Test iPhone photo upload workflow end-to-end
 
 ## Completed ✓
 
+- [x] Preserve and push the exact pre-migration website as `website-before-tracker-migration-2026-07-09` (Jul 2026)
+- [x] Build the protected, responsive Tracker web app for seven categories (Jul 2026)
+- [x] Add private per-user Blob storage with version-safe writes, soft archive, and JSON export (Jul 2026)
+- [x] Add revocable capture-only device tokens and an HTTPS capture endpoint (Jul 2026)
+- [x] Add a migration script and dry-run validate all 20 existing private Tracker records (Jul 2026)
+- [x] Add automated Tracker schema/storage tests and verify desktop and 390px phone layouts (Jul 2026)
+- [x] Audit the generated and installed macOS Shortcuts and identify the iCloud relay limitations (Jul 2026)
+- [x] Polish the public navigation, replace the Tracker label with a discreet private-login icon, and fix narrow-screen overflow (Jul 2026)
 - [x] Remove public writing section and blog CMS collection (Mar 2026)
 - [x] Create comprehensive README.md documentation (Jan 2026)
 - [x] Add mobile-responsive CSS to admin interface (Jan 2026)
@@ -21,6 +38,21 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Create .claude context file for development guidance (Jan 2026)
 
 ## Known Issues
+
+### Tracker Production Activation
+- **Issue**: No blocking issue remains; the reviewed draft is ready to merge.
+- **Status**: Netlify is authorized and linked, Identity is invite-only, all 20 records load in the authenticated preview, responsive layout checks pass, and the real Shortcut capture test passed. The test record was removed and the library returned to 20 records.
+- **Action**: Merge the draft and verify the production URL.
+
+### macOS Shortcut End-to-End Test
+- **Issue**: Running the installed Shortcuts from the command line stopped at an interactive Shortcuts prompt, and Mac UI automation was unavailable in the test session.
+- **Status**: Eight direct-save Shortcuts compile and sign successfully. The Apple capture-only token is active, and `Tracker Direct Clip Test` completed a real capture through the deploy preview. The generated test record was then removed.
+- **Action**: Import the production set, replace the existing iCloud-file versions, and test the remaining capture types on macOS and iPhone.
+
+### Legacy CMS Dependency
+- **Issue**: Decap's Git Gateway authentication path is deprecated by Netlify and photo publishing still triggers a full Git build.
+- **Status**: It remains functional and unchanged for rollback safety.
+- **Action**: Move photo/project editing into the private workspace after Tracker production verification, then remove Git Gateway.
 
 ### Mobile CMS Usability
 - **Issue**: Admin panel spacing may be inconsistent on mobile devices
@@ -45,7 +77,7 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [ ] Photo EXIF data extraction and display
 
 ### Low Priority / Nice to Have
-- [ ] PWA support (service worker and manifest.json)
+- [x] PWA support for the private Tracker (Jul 2026)
 - [ ] WebP image format support alongside JPEG
 - [ ] Comments system (utterances or giscus integration)
 - [ ] Analytics integration (privacy-focused, e.g., Plausible)
@@ -89,4 +121,4 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 
 ---
 
-**Last Updated**: March 2026
+**Last Updated**: July 2026
