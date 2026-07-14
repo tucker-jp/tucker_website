@@ -299,6 +299,14 @@ def parse_args() -> argparse.Namespace:
         default=[],
         help="Generate only shortcuts whose names contain this text (repeatable).",
     )
+    parser.add_argument(
+        "--include-manual-category-shortcuts",
+        action="store_true",
+        help=(
+            "Also generate the six standalone manual category shortcuts used for "
+            "diagnostics. The default output contains only the three production shortcuts."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -314,11 +322,16 @@ def main() -> int:
     output_dir.chmod(stat.S_IRWXU)
 
     filters = [value.casefold() for value in args.only]
-    specs = [
-        spec
-        for spec in SHORTCUT_SPECS
-        if not filters or any(value in spec.name.casefold() for value in filters)
-    ]
+    if filters:
+        specs = [
+            spec
+            for spec in SHORTCUT_SPECS
+            if any(value in spec.name.casefold() for value in filters)
+        ]
+    elif args.include_manual_category_shortcuts:
+        specs = list(SHORTCUT_SPECS)
+    else:
+        specs = [spec for spec in SHORTCUT_SPECS if spec.share_field]
     include_master = not filters or any(
         value in MASTER_SHORTCUT_NAME.casefold() for value in filters
     )

@@ -228,6 +228,8 @@ export TRACKER_CAPTURE_TOKEN="paste-capture-only-token-here"
 python scripts/generate-tracker-shortcuts.py --output-dir dist/direct-shortcuts
 ```
 
+The default output contains only the three production files. Use `--include-manual-category-shortcuts` only when generating the six standalone category shortcuts for diagnostics.
+
 Do not share the generated `.shortcut` files; create another device token instead. The generator source itself contains no secret.
 
 Adding, editing, or archiving a Tracker record calls the private Function and writes directly to Blob storage. These routine actions do not run the website build or create a production deploy; deploy usage occurs only when website code or public content is intentionally published.
