@@ -204,8 +204,34 @@ def _append_success_notification(shortcut: Shortcut, spec: ShortcutSpec) -> None
     )
 
 
+def _keep_optional_prompts_blankable(
+    shortcut: Shortcut, prompts: tuple[PromptSpec, ...]
+) -> None:
+    """Make an empty optional answer remain a text value in Shortcuts.
+
+    macOS otherwise emits no item at all when an Ask for Input action is left
+    blank. A later Dictionary action then fails before the capture request can
+    run. A single-space default looks blank in the prompt and is trimmed away
+    by Tracker's schema normalization.
+    """
+    ask_actions = [
+        action
+        for action in shortcut.WFWorkflowActions
+        if action.WFWorkflowActionIdentifier == "is.workflow.actions.ask"
+    ]
+    if len(ask_actions) != len(prompts):
+        raise ValueError(
+            f"Expected {len(prompts)} prompt actions, found {len(ask_actions)}."
+        )
+
+    for action, prompt in zip(ask_actions, prompts, strict=True):
+        if not prompt.required:
+            action.WFWorkflowActionParameters["WFAskActionDefaultAnswer"] = " "
+
+
 def build_shortcut(spec: ShortcutSpec, endpoint: str, token: str) -> Shortcut:
     shortcut = Compiler().compile(_source_for(spec, endpoint, token))
+    _keep_optional_prompts_blankable(shortcut, spec.prompts)
     _append_success_notification(shortcut, spec)
 
     if spec.share_field:
@@ -221,6 +247,10 @@ def build_shortcut(spec: ShortcutSpec, endpoint: str, token: str) -> Shortcut:
 
 def build_master_shortcut(endpoint: str, token: str) -> Shortcut:
     shortcut = Compiler().compile(_master_source(endpoint, token))
+    master_prompts = tuple(
+        prompt for spec in SHORTCUT_SPECS[:6] for prompt in spec.prompts
+    )
+    _keep_optional_prompts_blankable(shortcut, master_prompts)
     shortcut.WFWorkflowActions.append(
         Action(
             WFWorkflowActionIdentifier="is.workflow.actions.notification",
