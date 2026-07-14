@@ -4,7 +4,7 @@ This file provides context and guidelines for Codex when working on this project
 
 ## Project Overview
 
-This is a minimalist personal website built with vanilla HTML, CSS, and JavaScript, plus a private Tracker web app backed by Netlify Functions and Netlify Blobs. The public site remains static and features a cream editorial design, legacy content management via Decap CMS, and automatic image optimization.
+This is a minimalist personal website built with vanilla HTML, CSS, and JavaScript, plus a private Tracker and private Site Studio backed by Netlify Functions and Netlify Blobs. The public site remains static and features a cream editorial design. Decap CMS is retained only as the rollback path for the original Markdown content.
 
 **Key Philosophy**: Simplicity over complexity. Prefer readable, maintainable code over clever abstractions.
 
@@ -34,12 +34,14 @@ This is a minimalist personal website built with vanilla HTML, CSS, and JavaScri
 
 Git Gateway is deprecated. Preserve `/admin` until the custom private content editor is verified, but do not build new features around Git Gateway.
 
-### Why Netlify Functions + Blobs for Tracker?
+### Why Netlify Functions + Blobs for Tracker and Site Studio?
 - **No new subscription**: Reuses the site's existing low-volume Netlify footprint
 - **Cross-device**: A web app and HTTPS capture endpoint work on macOS, iOS, Windows, and browsers
 - **Narrow credentials**: Device tokens are insert-only and revocable
 - **Portable**: Records are JSON and can be exported at any time
 - **Safe updates**: ETag conditions prevent silent overwrites
+- **Low-cost publishing**: Tracker and Site Studio writes do not trigger Git commits or website builds
+- **Image handling**: Site Studio converts HEIC and common image formats to web-sized WebP variants
 
 ---
 
@@ -75,10 +77,10 @@ Git Gateway is deprecated. Preserve `/admin` until the custom private content ed
 ## Common Operations
 
 ### Adding Photos
-1. User logs into `/admin`
-2. Uploads image to Photos collection (must be JPEG, not HEIC)
+1. User logs into `/studio/`
+2. Uploads a supported image up to 10 MB (HEIC is accepted)
 3. Sets `is_mine` to true for personal photos, false for artwork
-4. Build process optimizes image automatically
+4. Site Studio creates desktop and mobile WebP copies automatically
 5. Photo appears on `/photos.html`
 
 ### Optimizing Images
@@ -96,6 +98,7 @@ npm run dev
 
 # Public site: http://localhost:8888
 # Local-only Tracker demo: http://localhost:8888/tracker/?demo=1
+# Local-only Site Studio demo: http://localhost:8888/studio/?demo=1
 ```
 
 ### Deploying
@@ -147,6 +150,16 @@ scripts/migrate-tracker-data.mjs # One-time migration helper
 
 Tracker records are private per Identity user. Never commit device tokens, Netlify access tokens, private Tracker data, or production exports. Keep the pre-migration website tag and old private Tracker repository until production counts are verified.
 
+### Site Studio Structure
+```
+studio/                         # Private photo/project editor
+netlify/functions/content.mjs  # Authenticated editor + public content/assets
+netlify/lib/content-store.mjs  # Version-safe content and image Blob repository
+tests/content-store.test.mjs   # Content normalization and storage tests
+```
+
+Original Markdown content remains in Git. Studio entries and reversible overrides live in Netlify Blobs and should be backed up with the Studio export. Keep `/admin` and Git Gateway available until the Studio workflow is verified on Tucker's normal devices.
+
 ---
 
 ## Responsive Design Approach
@@ -197,9 +210,8 @@ Tracker records are private per Identity user. Never commit device tokens, Netli
 ## Known Limitations and Workarounds
 
 ### iPhone HEIC Photos
-**Problem**: iPhones save photos as HEIC by default, which browsers don't support
-**Solution**: Document in CMS-SETUP.md to change iPhone settings to "Most Compatible"
-**Location**: Settings > Camera > Formats
+**Site Studio**: Converts HEIC/HEIF automatically
+**Legacy Decap**: Still requires JPEG/PNG; the conversion workaround remains in CMS-SETUP.md
 
 ### Decap CMS Mobile Usability
 **Problem**: Default UI not optimized for mobile
@@ -254,10 +266,10 @@ Tracker records are private per Identity user. Never commit device tokens, Netli
 - [ ] Check that new content appears correctly
 
 ### CMS Testing Checklist
-- [ ] Create new project entry
-- [ ] Upload photo (JPEG format)
+- [ ] Create new project entry in Site Studio
+- [ ] Upload JPEG and HEIC photos in Site Studio
 - [ ] Edit existing content
-- [ ] Test preview functionality
+- [ ] Verify mine/not-mine credits and public rendering
 - [ ] Verify save and publish workflow
 - [ ] Check that changes appear on live site
 
@@ -295,10 +307,10 @@ Tracker records are private per Identity user. Never commit device tokens, Netli
 4. Check for corrupted images in `/uploads`
 
 ### Images Not Displaying
-1. Verify path starts with `/uploads/`
-2. Check file format (JPEG/PNG only, no HEIC)
-3. Ensure image exists in uploads folder
-4. Check browser console for 404 errors
+1. For legacy content, verify the path starts with `/uploads/` and the file exists
+2. For Site Studio content, confirm the upload finished and the asset URL starts with `/api/content/assets/`
+3. Site Studio accepts HEIC/JPEG/PNG/WebP/TIFF; legacy Decap accepts JPEG/PNG
+4. Check the browser console for 404 errors
 
 ### CMS Login Issues
 1. Verify Netlify Identity is enabled
@@ -307,10 +319,10 @@ Tracker records are private per Identity user. Never commit device tokens, Netli
 4. Try clearing browser cache/cookies
 
 ### Content Not Updating
-1. Check if `index.json` was regenerated
-2. Verify markdown frontmatter is valid YAML
-3. Clear browser cache
-4. Check Netlify deploy log for build errors
+1. For Site Studio changes, wait up to 30 seconds for the public cache and hard refresh
+2. For legacy Decap changes, check if `index.json` was regenerated and frontmatter is valid YAML
+3. Clear the browser cache
+4. Check the Netlify deploy log only for legacy/code deployments
 
 ### Mobile Layout Issues
 1. Test actual device, not just DevTools
@@ -356,7 +368,9 @@ npm ci
 - Added the private Tracker web app, authenticated API, and per-user Blob storage
 - Added capture-only device tokens, JSON export, and the existing-data migration script
 - Preserved the exact pre-migration website in an annotated Git tag
-- Marked Decap/Git Gateway as a legacy surface pending custom replacement
+- Added private Site Studio with direct photo/project publishing, HEIC/WebP processing, credits, export, and reversible legacy overrides
+- Added the hybrid “Add to Tracker” Shortcut generator and kept fast share-sheet capture actions
+- Retained Decap/Git Gateway only as a verified rollback surface
 
 ### January 2026
 - Added comprehensive documentation (README, TODO, AGENTS.md)

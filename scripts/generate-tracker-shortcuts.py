@@ -21,6 +21,7 @@ except ImportError as exc:  # pragma: no cover - helper script
 
 DEFAULT_ENDPOINT = "https://tuckerpippin.com/api/tracker/capture"
 TOKEN_ENV_VAR = "TRACKER_CAPTURE_TOKEN"
+MASTER_SHORTCUT_NAME = "Add to Tracker"
 
 
 @dataclass(frozen=True, slots=True)
@@ -152,6 +153,44 @@ def _source_for(spec: ShortcutSpec, endpoint: str, token: str) -> str:
     return "\n".join(lines)
 
 
+def _master_source(endpoint: str, token: str) -> str:
+    choices = [(spec.name.removesuffix(" Capture for Tracker"), spec) for spec in SHORTCUT_SPECS[:6]]
+    lines = [
+        "from workflowpy.magic import *",
+        "from workflowpy.magic.custom import action, attachment",
+        "from workflowpy.magic.types import text",
+        f"options = {[label for label, _ in choices]!r}",
+        "choice: str = action(",
+        "    'is.workflow.actions.choosefromlist',",
+        "    {'WFInput': attachment(options), 'WFChooseFromListActionPrompt': 'What are you adding?', 'WFSelectMultiple': False},",
+        "    ('Chosen Item', text),",
+        ")",
+    ]
+    authorization = f"Bearer {token}"
+
+    for index, (label, spec) in enumerate(choices):
+        lines.append(f"{'if' if index == 0 else 'elif'} choice == {label!r}:")
+        payload_parts = [f"'category': {spec.category!r}"]
+        for prompt in spec.prompts:
+            lines.append(f"    {prompt.variable} = input({prompt.prompt!r})")
+            if prompt.required:
+                lines.extend(
+                    [
+                        f"    if {prompt.variable} == '':",
+                        "        exit()",
+                    ]
+                )
+            payload_parts.append(f"{prompt.field_name!r}: {prompt.variable}")
+        payload = "{" + ", ".join(payload_parts) + "}"
+        lines.append(
+            "    fetch("
+            f"{endpoint!r}, method='POST', "
+            f"headers={{'Authorization': {authorization!r}}}, "
+            f"json={payload})"
+        )
+    return "\n".join(lines)
+
+
 def _append_success_notification(shortcut: Shortcut, spec: ShortcutSpec) -> None:
     shortcut.WFWorkflowActions.append(
         Action(
@@ -180,9 +219,31 @@ def build_shortcut(spec: ShortcutSpec, endpoint: str, token: str) -> Shortcut:
     return shortcut
 
 
+def build_master_shortcut(endpoint: str, token: str) -> Shortcut:
+    shortcut = Compiler().compile(_master_source(endpoint, token))
+    shortcut.WFWorkflowActions.append(
+        Action(
+            WFWorkflowActionIdentifier="is.workflow.actions.notification",
+            WFWorkflowActionParameters={
+                "WFNotificationActionTitle": "Tracker",
+                "WFNotificationActionBody": "Saved to Tracker.",
+                "WFNotificationActionSound": False,
+            },
+        )
+    )
+    return shortcut
+
+
 def write_shortcut(spec: ShortcutSpec, output_dir: Path, endpoint: str, token: str) -> Path:
     output_path = output_dir / f"{spec.name}.shortcut"
     output_path.write_bytes(sign_shortcut(build_shortcut(spec, endpoint, token)))
+    output_path.chmod(stat.S_IRUSR | stat.S_IWUSR)
+    return output_path
+
+
+def write_master_shortcut(output_dir: Path, endpoint: str, token: str) -> Path:
+    output_path = output_dir / f"{MASTER_SHORTCUT_NAME}.shortcut"
+    output_path.write_bytes(sign_shortcut(build_master_shortcut(endpoint, token)))
     output_path.chmod(stat.S_IRUSR | stat.S_IWUSR)
     return output_path
 
@@ -228,9 +289,14 @@ def main() -> int:
         for spec in SHORTCUT_SPECS
         if not filters or any(value in spec.name.casefold() for value in filters)
     ]
-    if not specs:
+    include_master = not filters or any(
+        value in MASTER_SHORTCUT_NAME.casefold() for value in filters
+    )
+    if not specs and not include_master:
         raise SystemExit("No Shortcut names matched --only.")
 
+    if include_master:
+        print(write_master_shortcut(output_dir, endpoint, token))
     for spec in specs:
         print(write_shortcut(spec, output_dir, endpoint, token))
     return 0
