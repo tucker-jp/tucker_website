@@ -12,7 +12,6 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Verify the authenticated deploy preview and complete one real macOS direct-capture Shortcut test (Jul 2026)
 - [x] Import the production Shortcut set and test all eight direct-capture workflows on macOS (Jul 2026)
 - [ ] Verify the production Shortcut workflows on iPhone and iPad, including first-run privacy prompts
-- [ ] Update the Mac to macOS Tahoe 26.5.2, confirm Shortcuts iCloud sync is restored, and then verify the three production workflows on iPhone and iPad
 - [x] Install the corrected “Add to Tracker” Shortcut, assign Control–Option–A, verify a blank-optional Idea capture end-to-end, and remove obsolete category/test Shortcuts (Jul 2026)
 - [ ] Add the small Chrome/Edge capture extension after the production endpoint is verified
 - [ ] Verify Site Studio sign-in and one HEIC photo upload on iPhone after production deployment
@@ -33,6 +32,7 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Build the private Site Studio for photo/project publishing, automatic HEIC/WebP processing, ownership credits, reversible legacy overrides, and portable export (Jul 2026)
 - [x] Generate and structurally verify the hybrid “Add to Tracker” Shortcut while retaining fast clip/selection share-sheet actions (Jul 2026)
 - [x] Remove 20 obsolete exported/test Shortcut files and make the generator produce only the three production shortcuts by default (Jul 2026)
+- [x] Upgrade the Mac to macOS Tahoe 26.5.2 and confirm Shortcuts iCloud sync and the clean manual launch flow are restored (Jul 2026)
 - [x] Remove public writing section and blog CMS collection (Mar 2026)
 - [x] Create comprehensive README.md documentation (Jan 2026)
 - [x] Add mobile-responsive CSS to admin interface (Jan 2026)
@@ -52,8 +52,8 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 
 ### iPhone and iPad Shortcut Verification
 - **Issue**: Apple privacy approvals are local to each device, so the successful Mac tests do not prove the first-run experience on iPhone or iPad.
-- **Status**: The final three-Shortcut production setup passed macOS testing and generated test records were removed, but this Mac currently reports that iCloud Shortcut sync is unavailable on macOS 15.7.4.
-- **Action**: Upgrade to macOS Tahoe 26.5.2, confirm iCloud sync is restored, then run the three production workflows once on iPhone and iPad and approve only the expected first-run access prompts.
+- **Status**: The Mac now runs macOS Tahoe 26.5.2. The iCloud sync warning is gone, the final three production shortcuts are present, both Share Sheet actions are registered, and a launch-and-cancel check opened the manual category menu without requesting Chrome access.
+- **Action**: Confirm the three shortcuts appear on iPhone and iPad, then run each production workflow once and approve only the expected first-run access prompts.
 
 ### Legacy CMS Dependency
 - **Issue**: Decap's Git Gateway authentication path is deprecated by Netlify and photo publishing still triggers a full Git build.
