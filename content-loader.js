@@ -10,7 +10,9 @@
 // Simple Markdown to HTML converter
 // Supports: headings, paragraphs, lists, links, images, bold, italic, code
 function markdownToHtml(markdown) {
-    let html = markdown;
+    // Treat Markdown as text before adding the small supported HTML vocabulary.
+    // This keeps content entered in Site Studio from becoming executable markup.
+    let html = escapeHtml(markdown);
 
     // Code blocks
     html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
@@ -19,10 +21,16 @@ function markdownToHtml(markdown) {
     html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
 
     // Images: ![alt](url)
-    html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+    html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, url) => {
+        const safeURL = safeMarkdownURL(url, false);
+        return safeURL ? `<img src="${escapeHtml(safeURL)}" alt="${alt}">` : alt;
+    });
 
     // Links: [text](url)
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, url) => {
+        const safeURL = safeMarkdownURL(url, true);
+        return safeURL ? `<a href="${escapeHtml(safeURL)}">${label}</a>` : label;
+    });
 
     // Bold: **text** or __text__
     html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
@@ -80,6 +88,20 @@ function markdownToHtml(markdown) {
     }).join('\n');
 
     return html;
+}
+
+function safeMarkdownURL(value, allowMailto) {
+    const decoded = String(value || '').replaceAll('&amp;', '&').trim();
+    if (decoded.startsWith('/') || decoded.startsWith('#')) return decoded;
+    try {
+        const url = new URL(decoded);
+        if (url.protocol === 'http:' || url.protocol === 'https:' || (allowMailto && url.protocol === 'mailto:')) {
+            return url.toString();
+        }
+    } catch {
+        return '';
+    }
+    return '';
 }
 
 // Fetch and parse a single markdown file

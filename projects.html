@@ -79,16 +79,50 @@
             await loadProjectsList();
         });
 
+        async function loadStudioProjects() {
+            try {
+                const response = await fetch('/api/content/public/projects');
+                if (!response.ok) return [];
+                const payload = await response.json();
+                return Array.isArray(payload.records) ? payload.records : [];
+            } catch (error) {
+                console.warn('Site Studio projects are temporarily unavailable:', error);
+                return [];
+            }
+        }
+
+        function mergeStudioProjects(staticProjects, studioProjects) {
+            const merged = new Map(staticProjects.map(project => [project.slug, project]));
+            studioProjects.forEach(record => {
+                if (!record?.id) return;
+                if (record.archived) {
+                    merged.delete(record.id);
+                    return;
+                }
+                merged.set(record.id, {
+                    slug: record.id,
+                    title: record.title || 'Untitled',
+                    status: record.status || 'Active',
+                    year: record.year || '',
+                    description: record.description || '',
+                    technologies: Array.isArray(record.technologies) ? record.technologies : [],
+                    link: record.link || '',
+                    github: record.github || '',
+                    cover_image: record.cover_image || '',
+                    cover_image_mobile: record.cover_image_mobile || '',
+                    html: markdownToHtml(record.body || ''),
+                    frontmatter: record
+                });
+            });
+            return [...merged.values()];
+        }
+
         async function loadProjectsList() {
             const container = document.getElementById('projects-list');
 
             try {
                 const projects = await loadCollection('projects');
-
-                if (projects.length === 0) {
-                    container.innerHTML = '<p class="empty">No projects yet.</p>';
-                    return;
-                }
+                const studioProjects = await loadStudioProjects();
 
                 // Load full content for all projects
                 const fullProjects = await Promise.all(
@@ -96,7 +130,7 @@
                 );
 
                 // Normalize frontmatter-backed fields so metadata renders correctly
-                const normalizedProjects = fullProjects.map(project => {
+                let normalizedProjects = fullProjects.map(project => {
                     const frontmatter = project.frontmatter || {};
 
                     return {
@@ -109,6 +143,13 @@
                         cover_image: project.cover_image || frontmatter.cover_image || ''
                     };
                 });
+
+                normalizedProjects = mergeStudioProjects(normalizedProjects, studioProjects);
+
+                if (normalizedProjects.length === 0) {
+                    container.innerHTML = '<p class="empty">No projects yet.</p>';
+                    return;
+                }
 
                 const projectPriority = {
                     'eureka-app': 0,
@@ -155,7 +196,11 @@
 
                     let coverImageHtml = '';
                     if (hasCoverImage) {
-                        coverImageHtml = `<img src="${escapeHtml(project.cover_image)}" alt="${escapeHtml(project.title)}" class="project-image">`;
+                        const coverSource = project.cover_image_mobile || project.cover_image;
+                        const sourceSet = project.cover_image_mobile && project.cover_image_mobile !== project.cover_image
+                            ? ` srcset="${escapeHtml(project.cover_image_mobile)} 900w, ${escapeHtml(project.cover_image)} 2000w" sizes="(max-width: 768px) 100vw, 40vw"`
+                            : '';
+                        coverImageHtml = `<img src="${escapeHtml(coverSource)}"${sourceSet} alt="${escapeHtml(project.title)}" class="project-image">`;
                     }
 
                     let techTagsHtml = '';
@@ -236,7 +281,7 @@
                                     <div class="project-meta">
                                         <span class="project-status">${escapeHtml(project.status)}</span>
                                         <span class="separator">&bull;</span>
-                                        <span class="project-year">${project.year}</span>
+                                        <span class="project-year">${escapeHtml(project.year)}</span>
                                     </div>
                                     <p class="project-description">${escapeHtml(project.description)}</p>
                                     ${techTagsHtml}

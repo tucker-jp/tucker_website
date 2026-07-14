@@ -7,6 +7,7 @@ A minimalist personal website for projects and photography, plus a private cross
 The public website takes a deliberately simple approach—no frontend framework or bundler, just clean HTML, CSS, and JavaScript. It features a cream editorial design, CMS-driven content management, and automatic image optimization. The Tracker adds only the small server-side pieces needed for authentication and private storage.
 
 **Live Site**: https://tuckerpippin.com
+**Private Site Studio**: https://tuckerpippin.com/studio/
 **Legacy Content Admin**: https://tuckerpippin.com/admin
 **Private Tracker**: https://tuckerpippin.com/tracker/
 
@@ -18,8 +19,9 @@ The public website takes a deliberately simple approach—no frontend framework 
 - **Tracker**: Installable web app at `/tracker/`, backed by one authenticated API
 - **Tracker storage**: Netlify Blobs, separated by Identity user and stored as portable JSON
 - **Capture clients**: Revocable, insert-only device tokens for Shortcuts and browser extensions
-- **Legacy CMS**: Decap CMS at `/admin` for projects and photo management while its replacement is built
-- **Content**: Markdown files with YAML frontmatter stored in `/content`
+- **Site Studio**: Private photo/project editor at `/studio/`, with optimized images and content stored in Netlify Blobs
+- **Legacy CMS**: Decap CMS at `/admin`, retained as a temporary rollback path
+- **Content**: Existing Markdown files remain the baseline; Site Studio records override or extend them without destructive migration
 - **Build Pipeline**: Image optimization + index generation + automated deployment
 - **Hosting**: Netlify (static deployment with automated builds)
 - **Auth**: Invite-only Netlify Identity; Git Gateway is used only by the legacy CMS
@@ -40,6 +42,9 @@ The public website takes a deliberately simple approach—no frontend framework 
 ### Content Management
 - **Projects** - Portfolio showcase with status badges and technology tags
 - **Photos** - Masonry gallery with lightbox, filters (My Media/Not Mine), and keyboard navigation
+- Private Site Studio for adding, editing, crediting, archiving, and restoring photos and projects
+- Automatic HEIC/JPEG/PNG/WebP/TIFF conversion into desktop and mobile WebP copies
+- Immediate publication without a Git commit or full Netlify deploy
 - **Daily Quotes** - Rotation system with 876 curated quotes
 - Client-side markdown rendering
 - Automatic index generation on every deploy
@@ -95,9 +100,11 @@ The public website takes a deliberately simple approach—no frontend framework 
 │   └── generate-tracker-shortcuts.py # Signed direct-capture Apple Shortcuts
 ├── netlify/
 │   ├── functions/tracker.mjs # Authenticated Tracker API
-│   └── lib/                # Tracker schema and Blob storage adapter
+│   ├── functions/content.mjs # Site Studio and public-content API
+│   └── lib/                # Version-safe Tracker and content storage adapters
+├── studio/                 # Private photo/project editor
 ├── tracker/                # Private Tracker web app and PWA assets
-├── tests/                  # Tracker schema and storage tests
+├── tests/                  # Tracker and Site Studio storage tests
 ├── data/
 │   └── quotes.json         # Daily quote rotation data (876 quotes)
 ├── uploads/                # CMS-uploaded images (optimized at build time)
@@ -170,7 +177,7 @@ npm ci
 npm run dev
 ```
 
-Visit `http://localhost:8888`. The public pages work normally. A local-only sample Tracker is available at `http://localhost:8888/tracker/?demo=1`; it uses invented in-memory data and never writes to production.
+Visit `http://localhost:8888`. The public pages work normally. Local-only demos are available at `http://localhost:8888/tracker/?demo=1` and `http://localhost:8888/studio/?demo=1`; they never write to production.
 
 Run automated checks with `npm test`.
 
@@ -187,7 +194,7 @@ See [CMS-SETUP.md](./CMS-SETUP.md) for complete deployment instructions.
 3. Enable invite-only Netlify Identity
 4. Invite yourself as a CMS user
 5. Set the optional `TRACKER_ALLOWED_USER_IDS` environment variable to your Identity user ID
-6. Log in at `/tracker/`; keep `/admin` only for legacy project/photo changes
+6. Log in at `/tracker/` and `/studio/`; keep `/admin` only as a temporary legacy fallback
 
 **Build pipeline** (runs automatically on every deploy):
 1. `npm ci` - Reproduces the locked dependency set
@@ -200,20 +207,20 @@ The build process is incremental—cached images are skipped, only new/modified 
 
 ## Content Management
 
-### CMS-Driven Content
+### Site Studio
 
-You can edit these sections via the CMS at `/admin`:
+Use the private editor at `/studio/` for:
 
 - **Projects** ([/projects.html](projects.html)) — Portfolio/work showcase with status badges
 - **Photos** ([/photos.html](photos.html)) — Photography gallery with masonry layout and lightbox
 
-Git Gateway is deprecated by Netlify, so `/admin` is now considered a temporary legacy surface. The Tracker already uses the replacement pattern: Identity plus a narrowly scoped Function. A custom project/photo editor can move onto the same private workspace without changing the public site or adding a subscription.
+Site Studio accepts HEIC, JPEG, PNG, WebP, and TIFF images up to 10 MB, produces web-sized WebP copies, preserves the “mine/not mine” distinction and source credits, and publishes directly to Blob storage. These edits do not trigger a site build. Existing Markdown content stays in Git and can be overridden or hidden reversibly. `/admin` remains available as the Decap/Git rollback path until the new workflow has been verified in ordinary use.
 
 ### Tracker Data
 
 Tracker records are managed at `/tracker/`. Data is private to the signed-in Identity user. Cross-device capture uses a separate token per capture client or synced device group; revoke one from Tracker Settings if it is lost or retired.
 
-The Apple Shortcuts generator creates quick capture actions for books, movies, restaurants, ideas, to-dos, quotes, selected text, and shared web links. It embeds a revocable capture-only token and restricts generated files to the current macOS user:
+The Apple Shortcuts generator creates a single **Add to Tracker** menu for books, movies, restaurants, ideas, to-dos, and quotes, plus fast share-sheet actions for selected quotes and web links. The older one-category shortcuts remain available during the transition. Generated files embed a revocable capture-only token and are restricted to the current macOS user:
 
 ```bash
 pip install workflowpy-shortcuts
@@ -269,9 +276,9 @@ Pre-compress before upload using [Squoosh.app](https://squoosh.app) for faster u
 
 ### iPhone Users: HEIC Format
 
-iPhones save photos in HEIC format by default. **HEIC is not supported by web browsers or the CMS.**
+iPhones save photos in HEIC format by default. Site Studio converts HEIC automatically, so no phone setting change is required when uploading through `/studio/`. The legacy Decap editor at `/admin` still needs JPEG or PNG.
 
-**To upload iPhone photos**:
+**If using the legacy editor**:
 1. Open Settings > Camera > Formats
 2. Select "Most Compatible" instead of "High Efficiency"
 3. All future photos will be saved as JPEG
@@ -406,6 +413,13 @@ Works in all modern browsers:
 - ✅ **Safe migration path** - Added tests, a Git-to-Blob migration script, and an immutable pre-migration website tag
 - ✅ **Zero-subscription architecture** - Kept the public site static and reused the site's existing Netlify hosting and Identity
 - ✅ **Quiet public integration** - Replaced the product-named login link with an accessible lock icon and removed unnecessary third-party scripts
+
+### July 2026 - Site Studio & Unified Capture
+- ✅ **Private Site Studio** - Added login-only photo/project editing without a CMS subscription
+- ✅ **Automatic image delivery** - Added HEIC and common-image conversion to desktop/mobile WebP copies
+- ✅ **Ownership and credits** - Preserved mine/not-mine filtering with creator, rights, and source fields
+- ✅ **Reversible migration** - Kept Git/Decap content untouched as the baseline and rollback path
+- ✅ **Unified Shortcut** - Added one Add to Tracker menu while retaining fast clip and selected-quote actions
 
 ### January 2026 - Documentation & Mobile CMS Improvements
 - ✅ **Comprehensive README** - Complete project documentation with architecture details

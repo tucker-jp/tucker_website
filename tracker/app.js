@@ -104,8 +104,8 @@ function renderLogin() {
     <section class="login-card">
       <span class="brand-mark" aria-hidden="true">TP</span>
       <p class="eyebrow">Private workspace</p>
-      <h1>Tucker Tracker</h1>
-      <p>Clips, books, movies, ideas, quotes, restaurants, and to-dos—available only after you sign in.</p>
+      <h1>Sign in</h1>
+      <p>Open your private Tracker and Site Studio after authentication.</p>
       <form id="tracker-login-form" class="login-form">
         <label for="login-email">Email</label>
         <input id="login-email" name="email" type="email" autocomplete="username" required>
@@ -200,6 +200,7 @@ function renderApp() {
         ${navButton("settings", "Settings", "Devices and backup", "⚙")}
       </nav>
       <div class="sidebar-footer">
+        <a href="/studio/">Site Studio</a>
         <a href="/">← Public website</a>
         <button id="logout-button" class="text-button" type="button">Sign out</button>
       </div>
@@ -243,6 +244,11 @@ function homeMarkup() {
         <p class="card-note">The web app is ready first. Device tokens connect Shortcuts and browser extensions without giving them read access.</p>
         <button class="secondary-button" type="button" data-view="settings">Manage devices</button>
         <div class="notice">Your existing Git-backed Tracker remains the recovery copy until migration is verified.</div>
+      </article>
+      <article class="content-card">
+        <h3>Site Studio</h3>
+        <p class="card-note">Publish photos and projects with the same private login. Ownership filters and the public design stay intact.</p>
+        <a class="secondary-button" href="/studio/">Manage the public site</a>
       </article>
     </section>
   `;

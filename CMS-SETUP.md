@@ -1,8 +1,8 @@
 # CMS Setup Guide
 
-This guide covers the public website, the legacy Decap content editor, and the private Tracker workspace.
+This guide covers the public website, the private Site Studio, the legacy Decap fallback, and the private Tracker workspace.
 
-> **July 2026 status:** `/admin` still manages projects and photos through Decap CMS and Git Gateway. Git Gateway is deprecated, so it should be treated as a temporary legacy editor. `/tracker/` uses the preferred replacement pattern: invite-only Netlify Identity, a narrowly scoped Function, and private Netlify Blob storage. The public website remains static and the design is intended to stay within Netlify's free allowance at this site's low traffic and update rate.
+> **July 2026 status:** `/studio/` is the primary photo/project editor. It uses invite-only Netlify Identity, a narrowly scoped Function, and Netlify Blob storage—the same low-maintenance pattern as `/tracker/`. `/admin` and Git Gateway remain unchanged as a temporary rollback path. Routine Studio and Tracker saves do not trigger Netlify builds and are designed to fit this low-volume personal site within the free allowance.
 
 ## Prerequisites
 
@@ -59,7 +59,7 @@ This guide covers the public website, the legacy Decap content editor, and the p
 
 ## Step 3: Enable Netlify Identity
 
-Netlify Identity is required for both the legacy CMS and the private Tracker.
+Netlify Identity is required for Site Studio, the legacy CMS, and the private Tracker.
 
 1. **Go to Site Settings**:
    - From your site dashboard, click "Site settings"
@@ -95,22 +95,26 @@ Netlify Identity is required for both the legacy CMS and the private Tracker.
 
 ---
 
-## Step 5: Access the CMS
+## Step 5: Access Site Studio
 
-1. **Navigate to the CMS**:
-   - Go to `https://YOUR-SITE.netlify.app/admin`
+1. **Navigate to Site Studio**:
+   - Go to `https://YOUR-SITE.netlify.app/studio/`
    - Log in with the email and password you just created
 
 2. **Start creating content**:
-   - Click "Projects" or "Photos" to create new content
-   - Use the CMS fields to manage project details or photo metadata
-   - Click "Publish" → "Publish now" to make it live
+   - Choose **Photos** or **Projects**
+   - Add or edit the entry and click **Publish**
+   - For photos that are not yours, choose **Not mine** and add the creator, source link, and rights/credit
 
 3. **How it works**:
-   - When you publish, Decap CMS commits the Markdown file to your GitHub repo
-   - Netlify automatically rebuilds and deploys your site (usually within 30 seconds)
-   - The build step auto-generates content indexes and optimized images
-   - Your updates appear on your live site automatically
+   - Site Studio converts supported uploads to desktop and mobile WebP copies
+   - The entry is saved directly to Netlify Blobs and appears on the public site immediately
+   - No Git commit, rebuild, or new production deploy is created
+   - Existing Git/Decap entries are left untouched; Studio changes act as reversible overrides
+
+4. **Legacy rollback path**:
+   - `/admin` still opens Decap and can manage the original Markdown content
+   - Keep Git Gateway enabled until Site Studio has been used successfully on your normal devices
 
 ---
 
@@ -173,19 +177,17 @@ To use `tuckerpippin.com` instead of the Netlify subdomain:
 
 ## Important: Image Upload Guidelines
 
-**⚠️ UPLOAD WEB-SIZED IMAGES ONLY**
+**Site Studio handles web sizing automatically.**
 
-When uploading images via the CMS:
+When uploading images via `/studio/`:
 
-- **Maximum size**: 2000–3000px on the long edge
-- **Format**: JPEG or PNG (NOT HEIC!)
-- **File size**: Keep under 500KB when possible
+- **Maximum file size**: 10 MB
+- **Formats**: HEIC/HEIF, JPEG, PNG, WebP, or TIFF
+- **Output**: WebP copies sized for desktop (up to 2000px) and mobile (up to 900px)
 
 **DO NOT upload**:
 - RAW files (CR2, NEF, DNG, etc.)
-- Full-resolution photos straight from your camera
-- HEIC files from iPhone (see below)
-- Files over 5MB
+- Files over 10 MB
 
 **Photo Capacity Guidelines**:
 - **Recommended**: 50-150 curated photos for optimal performance
@@ -207,9 +209,9 @@ When uploading images via the CMS:
 
 ### For iPhone Users: Photo Upload Guidelines
 
-**⚠️ CRITICAL**: iPhones save photos in HEIC format by default, which is **not supported** by web browsers or the CMS. Attempting to upload HEIC files will result in broken previews and display issues.
+Site Studio accepts iPhone HEIC/HEIF photos and converts them automatically. You can select the photo normally from Safari or another personal browser; no Camera setting change is required.
 
-#### Option 1: Change iPhone Settings (Recommended)
+#### Legacy `/admin` only: Option 1
 
 This will make all future photos compatible with the web:
 
@@ -219,7 +221,7 @@ This will make all future photos compatible with the web:
 4. Select **"Most Compatible"** instead of "High Efficiency"
 5. All future photos will now be saved as JPEG
 
-#### Option 2: Convert Before Upload
+#### Legacy `/admin` only: Option 2
 
 If you need to upload existing HEIC photos:
 
@@ -229,7 +231,7 @@ If you need to upload existing HEIC photos:
 4. The photo will automatically convert to JPEG
 5. Upload the converted version from Files app
 
-#### Option 3: Use Third-Party Apps
+#### Legacy `/admin` only: Option 3
 
 - **Squoosh.app** - Upload HEIC, download as JPEG
 - **HEIC to JPEG** apps from App Store
@@ -243,7 +245,7 @@ HEIC (High Efficiency Image Format) offers better compression than JPEG, but:
 - Your website visitors won't see the images
 - The CMS preview will show error messages
 
-**Always convert to JPEG before uploading!**
+Only convert to JPEG first when using the legacy `/admin` editor. `/studio/` accepts HEIC directly.
 
 #### File Size Recommendations for iPhone Photos
 
@@ -255,63 +257,65 @@ After converting to JPEG:
 
 ---
 
-## Updating Content via CMS
+## Updating Content via Site Studio
 
 ### Uploading a New Photo
 
-1. Go to `/admin`
-2. Click "Photos" → "New Photos"
+1. Go to `/studio/`
+2. Choose **Photos** → **Add photo**
 3. Fill in:
    - **Title**: Photo title or subject
    - **Upload Date**: When the photo was taken or uploaded
-   - **Photo**: Upload the image file (web-sized!)
+   - **Photo**: Choose an image up to 10 MB; HEIC is accepted
+   - **Ownership**: Choose **My photo** or **Not mine**
    - **Caption**: Optional description or story
    - **Location**: Optional location where photo was taken
    - **Description**: Optional additional details
-4. Click "Publish" → "Publish now"
+4. Click **Publish**
 
 Photos appear in a masonry grid layout, sorted by date (newest first).
 
 ### Editing Existing Content
 
-1. Go to `/admin`
+1. Go to `/studio/`
 2. Click "Projects" or "Photos"
 3. Click on the post you want to edit
 4. Make changes
-5. Click "Publish" → "Publish now"
+5. Click **Publish**
 
 ---
 
 ## Troubleshooting
 
-### CMS won't load at /admin
+### Site Studio won't load at /studio
 - Check that Netlify Identity is enabled
-- Verify Git Gateway is enabled
+- Verify your user ID is included in `TRACKER_ALLOWED_USER_IDS` if that allowlist is set
 - Clear browser cache and try again
 
-### Can't log in to CMS
+### Can't log in to Site Studio
 - Make sure you accepted the email invitation
 - Check that you're using the correct email/password
 - Try "Forgot password" to reset
 
 ### Changes not appearing on site
-- Wait 30–60 seconds for Netlify to rebuild
-- Check the "Deploys" tab in Netlify dashboard
-- Look for failed builds
-- If a new post still doesn't appear, hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R)
+- Wait up to 30 seconds for the short public-content cache
+- Hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R)
+- If the Studio save itself failed, retry from the editor; no deployment is required
 
 ### Images not loading
-- Check that image paths start with `/uploads/`
-- Verify images were uploaded via CMS, not manually added
-- Make sure image files are web-sized (not RAW)
+- Confirm the upload finished and the entry reported **published**
+- Use a supported image format and keep the file under 10 MB
+- RAW camera files are not supported
 
 ---
 
-## What's CMS-Driven vs. Static
+## What's Studio-Managed vs. Static
 
-### CMS-Driven (Editable via /admin)
-- **Projects** (`content/projects/*.md`)
-- **Photos** (`content/photos/*.md`)
+### Site Studio (Editable via /studio)
+- **Projects** — new records and reversible overrides in Netlify Blobs
+- **Photos** — metadata plus optimized image copies in Netlify Blobs
+
+The original `content/projects/*.md` and `content/photos/*.md` files remain the Git/Decap baseline.
 
 ### Static (Edit code directly)
 - **Projects page** (`projects.html`)
@@ -323,7 +327,9 @@ Photos appear in a masonry grid layout, sorted by date (newest first).
 
 ## Backup and Version Control
 
-All your content is safely stored in your GitHub repository. Every change made through the CMS creates a Git commit, giving you:
+Original Decap content remains stored in GitHub with its full history. New Site Studio entries and overrides are stored in Netlify Blobs and can be downloaded from **Site Studio → Export**. This keeps the new editor fast while preserving portability and the original Git rollback path.
+
+Legacy Decap changes still create Git commits, giving you:
 
 - **Full version history**: See what changed and when
 - **Easy rollback**: Revert to previous versions if needed
@@ -334,14 +340,14 @@ To view your content's version history:
 - Click on any file in `content/projects/` or `content/photos/`
 - Click "History" to see all changes
 
-Tracker data is additionally portable through **Tracker → Settings → Download JSON export**. Archived records are included. Before this migration began, the exact website state was preserved in Git as `website-before-tracker-migration-2026-07-09`; restoring that tag returns the code and public website to the pre-Tracker version. Tracker records stored after migration must be restored from their JSON export or the retained private Tracker repository, not from the website tag.
+Tracker data is additionally portable through **Tracker → Settings → Download JSON export**. Archived records are included. Before this migration began, the exact website state was preserved in Git as `website-before-tracker-migration-2026-07-09`; restoring that tag returns the code and public website to the pre-Tracker version. Site Studio content must be restored from its export, and Tracker records must be restored from their export or the retained private Tracker repository—not from the website tag.
 
 ---
 
 ## Next Steps
 
 - **Customize the homepage**: Edit `index.html` to update your intro
-- **Update Projects/Photos**: Add or edit entries via `/admin`
+- **Update Projects/Photos**: Add or edit entries via `/studio/`
 - **Tweak the design**: Modify `style.css` to adjust colors, fonts, spacing
 - **Add analytics** (optional): Integrate Netlify Analytics or privacy-friendly alternatives
 

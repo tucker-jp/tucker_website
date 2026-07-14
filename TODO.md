@@ -10,12 +10,12 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Migrate all 20 Tracker records, verify category counts, and retain the private Git recovery copy (Jul 2026)
 - [x] Create a capture-only Apple Shortcuts token and generate eight signed direct-HTTPS Shortcuts (Jul 2026)
 - [x] Verify the authenticated deploy preview and complete one real macOS direct-capture Shortcut test (Jul 2026)
-- [ ] Import the production Shortcut set and test the remaining capture types on macOS and iPhone
+- [x] Import the production Shortcut set and test all eight direct-capture workflows on macOS (Jul 2026)
+- [ ] Verify the production Shortcut workflows on iPhone and iPad, including first-run privacy prompts
+- [ ] Import the signed “Add to Tracker” Shortcut, assign a Mac hotkey, and verify each menu branch end-to-end
 - [ ] Add the small Chrome/Edge capture extension after the production endpoint is verified
-- [ ] Replace the deprecated Decap/Git Gateway photo and project editor with a custom section of the private workspace
-- [ ] Test mobile admin panel after CSS improvements
-- [ ] Verify photo previews work correctly after template addition
-- [ ] Test iPhone photo upload workflow end-to-end
+- [ ] Verify Site Studio sign-in and one HEIC photo upload on iPhone after production deployment
+- [ ] Keep Decap/Git Gateway as the rollback path until Site Studio has been used successfully on normal devices, then retire it
 
 ## Completed ✓
 
@@ -27,6 +27,8 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Add automated Tracker schema/storage tests and verify desktop and 390px phone layouts (Jul 2026)
 - [x] Audit the generated and installed macOS Shortcuts and identify the iCloud relay limitations (Jul 2026)
 - [x] Polish the public navigation, replace the Tracker label with a discreet private-login icon, and fix narrow-screen overflow (Jul 2026)
+- [x] Build the private Site Studio for photo/project publishing, automatic HEIC/WebP processing, ownership credits, reversible legacy overrides, and portable export (Jul 2026)
+- [x] Generate and structurally verify the hybrid “Add to Tracker” Shortcut while retaining fast clip/selection share-sheet actions (Jul 2026)
 - [x] Remove public writing section and blog CMS collection (Mar 2026)
 - [x] Create comprehensive README.md documentation (Jan 2026)
 - [x] Add mobile-responsive CSS to admin interface (Jan 2026)
@@ -44,15 +46,15 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - **Status**: Netlify is authorized and linked, Identity is invite-only, all 20 records load in the authenticated preview, responsive layout checks pass, and the real Shortcut capture test passed. The test record was removed and the library returned to 20 records.
 - **Action**: Merge the draft and verify the production URL.
 
-### macOS Shortcut End-to-End Test
-- **Issue**: Running the installed Shortcuts from the command line stopped at an interactive Shortcuts prompt, and Mac UI automation was unavailable in the test session.
-- **Status**: Eight direct-save Shortcuts compile and sign successfully. The Apple capture-only token is active, and `Tracker Direct Clip Test` completed a real capture through the deploy preview. The generated test record was then removed.
-- **Action**: Import the production set, replace the existing iCloud-file versions, and test the remaining capture types on macOS and iPhone.
+### iPhone and iPad Shortcut Verification
+- **Issue**: Apple privacy approvals are local to each device, so the successful Mac tests do not prove the first-run experience on iPhone or iPad.
+- **Status**: All eight production Shortcuts passed end-to-end macOS tests and the generated test records were removed.
+- **Action**: Run the production share-sheet and prompted-capture workflows once on iPhone and iPad and approve the expected first-run access prompts.
 
 ### Legacy CMS Dependency
 - **Issue**: Decap's Git Gateway authentication path is deprecated by Netlify and photo publishing still triggers a full Git build.
-- **Status**: It remains functional and unchanged for rollback safety.
-- **Action**: Move photo/project editing into the private workspace after Tracker production verification, then remove Git Gateway.
+- **Status**: Site Studio now replaces the routine photo/project workflow; Decap remains functional and unchanged for rollback safety.
+- **Action**: Verify Site Studio on Tucker's normal Mac and iPhone workflows, then remove Git Gateway in a later change.
 
 ### Mobile CMS Usability
 - **Issue**: Admin panel spacing may be inconsistent on mobile devices
@@ -60,9 +62,9 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - **Action**: Test on actual mobile devices and adjust if needed
 
 ### iPhone Photo Uploads
-- **Issue**: HEIC format photos don't display in preview
-- **Status**: Documented workaround in CMS-SETUP.md
-- **Action**: Users should change iPhone settings to "Most Compatible"
+- **Issue**: The production iPhone upload flow still needs a real-device check.
+- **Status**: Site Studio accepts HEIC/HEIF and converts it to desktop/mobile WebP automatically; local HEIC conversion passed.
+- **Action**: Publish one ordinary iPhone HEIC photo through `/studio/` and verify it on the public gallery.
 
 ## Future Enhancements
 
@@ -106,8 +108,8 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 
 ## Technical Debt
 
-- [ ] Consider migrating to Sveltia CMS (modern Decap alternative with better mobile support)
-- [ ] Evaluate modern image formats (AVIF, WebP) support
+- [x] Replace routine Decap usage with the custom Site Studio while retaining a rollback path (Jul 2026)
+- [x] Add automatic WebP delivery for Site Studio uploads (Jul 2026)
 - [ ] Review and update dependencies (Sharp, etc.)
 - [ ] Add automated testing for markdown rendering
 - [ ] Set up pre-commit hooks for code quality
