@@ -12,7 +12,7 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Verify the authenticated deploy preview and complete one real macOS direct-capture Shortcut test (Jul 2026)
 - [x] Import the production Shortcut set and test all eight direct-capture workflows on macOS (Jul 2026)
 - [ ] Verify the production Shortcut workflows on iPhone and iPad, including first-run privacy prompts
-- [ ] Import the signed “Add to Tracker” Shortcut, assign a Mac hotkey, and verify each menu branch end-to-end
+- [x] Install the corrected “Add to Tracker” Shortcut, assign Control–Option–A, verify a blank-optional Idea capture end-to-end, and remove obsolete category/test Shortcuts (Jul 2026)
 - [ ] Add the small Chrome/Edge capture extension after the production endpoint is verified
 - [ ] Verify Site Studio sign-in and one HEIC photo upload on iPhone after production deployment
 - [ ] Keep Decap/Git Gateway as the rollback path until Site Studio has been used successfully on normal devices, then retire it

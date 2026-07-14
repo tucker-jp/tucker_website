@@ -370,6 +370,7 @@ npm ci
 - Preserved the exact pre-migration website in an annotated Git tag
 - Added private Site Studio with direct photo/project publishing, HEIC/WebP processing, credits, export, and reversible legacy overrides
 - Added the hybrid “Add to Tracker” Shortcut generator and kept fast share-sheet capture actions
+- Hardened optional Shortcut prompts, installed the unified Mac workflow with Control–Option–A, and removed obsolete category/test Shortcuts
 - Retained Decap/Git Gateway only as a verified rollback surface
 
 ### January 2026

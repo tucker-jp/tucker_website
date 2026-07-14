@@ -220,7 +220,7 @@ Site Studio accepts HEIC, JPEG, PNG, WebP, and TIFF images up to 10 MB, produces
 
 Tracker records are managed at `/tracker/`. Data is private to the signed-in Identity user. Cross-device capture uses a separate token per capture client or synced device group; revoke one from Tracker Settings if it is lost or retired.
 
-The Apple Shortcuts generator creates a single **Add to Tracker** menu for books, movies, restaurants, ideas, to-dos, and quotes, plus fast share-sheet actions for selected quotes and web links. The older one-category shortcuts remain available during the transition. Generated files embed a revocable capture-only token and are restricted to the current macOS user:
+The Apple Shortcuts generator creates a single **Add to Tracker** menu for books, movies, restaurants, ideas, to-dos, and quotes, plus fast share-sheet actions for selected quotes and web links. The production Mac setup intentionally keeps only those three Tracker Shortcuts: use **Control–Option–A** for manual entry, **Save Clip to Tracker** for a shared link, and **Quote From Selection for Tracker** for highlighted text. Optional prompt fields may be left blank. Generated files embed a revocable capture-only token and are restricted to the current macOS user:
 
 ```bash
 pip install workflowpy-shortcuts
