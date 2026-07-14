@@ -27,6 +27,7 @@ This file tracks ongoing tasks, known issues, and planned improvements for the w
 - [x] Add automated Tracker schema/storage tests and verify desktop and 390px phone layouts (Jul 2026)
 - [x] Audit the generated and installed macOS Shortcuts and identify the iCloud relay limitations (Jul 2026)
 - [x] Polish the public navigation, replace the Tracker label with a discreet private-login icon, and fix narrow-screen overflow (Jul 2026)
+- [x] Hide the Projects page from public navigation while keeping the page and private editor available (Jul 2026)
 - [x] Build the private Site Studio for photo/project publishing, automatic HEIC/WebP processing, ownership credits, reversible legacy overrides, and portable export (Jul 2026)
 - [x] Generate and structurally verify the hybrid “Add to Tracker” Shortcut while retaining fast clip/selection share-sheet actions (Jul 2026)
 - [x] Remove public writing section and blog CMS collection (Mar 2026)
